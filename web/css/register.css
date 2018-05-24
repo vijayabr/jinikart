@@ -1,0 +1,45 @@
+
+h2 {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
+    background-color: #5eb5e0;
+}
+
+input[type=password] {
+    margin: 10px;
+    min-width: 200px;
+    max-width: 500px;
+    border: 2px solid dodgerblue;
+    border-radius: 4px;
+}
+input[type=text]{
+    display:inline-block;
+    margin: 10px;
+    min-width: 200px;
+    max-width: 500px;
+    border: 2px solid dodgerblue;
+    border-radius: 4px;
+}
+
+
+.form-group{
+	
+    display:inline-block;
+    margin: 10px;
+    max-width: 500px;
+    width:200px;
+    border: 2px solid dodgerblue;
+    border-radius: 4px;
+}
+.drop-down{
+    border: 2px solid dodgerblue;
+    border-radius: 4px;
+    width:200px;
+}
+
+.drop-down-content {
+background-color:white;
+}
+
+.btn{
+    width: 30px;
+}

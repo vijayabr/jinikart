@@ -1,0 +1,13 @@
+{% extends "@Customer/Default/index.html.twig" %}
+{% block body %}
+    <div class="main" align="center">
+    <h2>Customer Login</h2>
+    <div class="customerlogin" style=" padding: 20px 15px 15px 20px; left: 100px " align="left">
+
+    {{ form_start(form) }}
+    {{ form_row(form.username, { 'attr': {'class': 'form-group'} }) }}
+    {{ form_row(form.password, { 'attr': {'class': 'form-group'} }) }}
+    <div>
+        <button type="submit">login</button>
+    </div>
+{% endblock %}
