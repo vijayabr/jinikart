@@ -4,8 +4,10 @@ namespace CustomerBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Bundle\TwigBundle\Controller\ExceptionController;
 
 class SecurityController extends Controller
 {
@@ -34,8 +36,8 @@ class SecurityController extends Controller
             ));
 
 
-        }
-        catch(\Exception $exception){
+        }        
+        catch(Exception $exception){
             var_dump($exception);die;
         }
     }

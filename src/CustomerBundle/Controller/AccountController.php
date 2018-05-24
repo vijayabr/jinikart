@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 
 class AccountController extends Controller
@@ -87,7 +88,8 @@ class AccountController extends Controller
 
             }
             return $this->render("@Customer/Account/register.html.twig", array('form' => $form->createView(),'message'=> '','errors'=>'', 'error1'=>'' ));
-        } catch (\Exception $exception) {
+        } 
+        catch (Exception $exception) {
             var_dump($exception);
             die;
         }

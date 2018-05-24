@@ -5,6 +5,7 @@ namespace Common\Model;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Customer
@@ -101,14 +102,14 @@ class Customer implements  UserInterface
     private $customerPlanId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime")
      */
@@ -122,8 +123,8 @@ class Customer implements  UserInterface
         $this->customerStatus=1;
 //        $this->addressId=1;
         $this->customerRole="ROLE_CUSTOMER";
-        $this->setUpdatedAt(new \DateTime());
-        $this->setCreatedAt(new \DateTime());
+        $this->setUpdatedAt(new DateTime());
+        $this->setCreatedAt(new DateTime());
     }
 
     /**
@@ -379,7 +380,7 @@ class Customer implements  UserInterface
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
+     * @param DateTime $createdAt
      *
      * @return Customer
      */
@@ -393,7 +394,7 @@ class Customer implements  UserInterface
     /**
      * Get createdAt
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -403,7 +404,7 @@ class Customer implements  UserInterface
     /**
      * Set updatedAt
      *
-     * @param \DateTime $updatedAt
+     * @param DateTime $updatedAt
      *
      * @return Customer
      */
@@ -417,7 +418,7 @@ class Customer implements  UserInterface
     /**
      * Get updatedAt
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdatedAt()
     {
