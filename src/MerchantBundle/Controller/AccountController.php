@@ -5,6 +5,9 @@ namespace MerchantBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use src\MerchantBundle\Form\MerchantType;
+use Symfony\Component\HttpFoundation\Request;
+use Common\Model\Address;
+use Common\Model\Merchant;
 
 class AccountController extends Controller
 {
@@ -21,7 +24,7 @@ class AccountController extends Controller
                 
                 $merchantPlan = $em->getRepository('Model:Merchant_plan')->findOneBy(['id' => 1]);
                 //get address
-                $name=$form->getData()["companyName"]
+                $name = $form->getData()["companyName"];
                 $addr1 = $form->getData()["address_line1"];
                 $addr2 = $form->getData()["address_line2"];
                 $pin = $form->getData()["pincode"];
@@ -104,4 +107,3 @@ class AccountController extends Controller
 }
         
     
-}

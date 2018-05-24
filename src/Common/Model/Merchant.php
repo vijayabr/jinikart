@@ -32,7 +32,7 @@ class Merchant
     /**
      * @var int
      *one customer has one default address
-     * @ORM\OneToOne(targetEntity="Common\Model\Address")
+     * @ORM\ManyToOne(targetEntity="Common\Model\Address")
      * @ORM\JoinColumn(name="addressId", referencedColumnName="id")
      */
     private $addressId;
@@ -82,7 +82,7 @@ class Merchant
     /**
      * @var int
      *one customer has one plan
-     * @ORM\OneToOne(targetEntity="Common\Model\Merchant_plan")
+     * @ORM\ManyToOne(targetEntity="Common\Model\Merchant_plan")
      * @ORM\JoinColumn(name="merchantPlanId", referencedColumnName="id")
      */
     private $merchantPlanId;
