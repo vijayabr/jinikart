@@ -1,0 +1,59 @@
+{% extends "@Merchant/Default/index.html.twig" %}
+{% block body %}
+    <div class=" main" align="center">
+        <h2>Merchant Signup</h2>
+    </div>
+       <div align="left">
+           {% if errors  %}
+               <ul>
+                   {%for er in errors  %}
+                    <li>
+                       {{ er.message }}
+                    </li>
+                   {% endfor %}
+               </ul>
+           {% endif %}
+           {% if error1 %}
+               <ul>
+                {% for er1 in error1 %}
+                    <li>
+                    {{ er1.message }}
+
+                    </li>
+                {% endfor %}
+               </ul>
+           {% endif %}
+
+           {% if message %}
+                {{ message }}
+               {{ "check your emailid or mobile number "}}
+            {% endif %}
+
+          </div>
+
+          <div class="merchantform" style=" padding: 20px 15px 15px 20px; left: 100px " align="left">
+
+            {{ form_start(form) }}
+            {{ form_row(form.companyName,  { 'attr': {'class': 'form-group'} }) }}
+            {{ form_row(form.contactPersonName,  { 'attr': {'class': 'form-group'} }) }}
+            {{ form_row(form.email,  { 'attr': {'class': 'form-group'} }) }}
+            {{ form_row(form.mobile_no,  { 'attr': {'class': 'form-group'} }) }}
+            {{ form_row(form.password,  { 'attr': {'class': 'form-group'} }) }}
+
+            {{ form_row(form.address_line1,  { 'attr': {'class': 'form-group'} }) }}
+            {{ form_row(form.address_line2,  { 'attr': {'class': 'form-group'} }) }}
+            {{ form_row(form.pincode,  { 'attr': {'class': 'form-group'} }) }}
+            {{ form_row(form.state,  { 'attr': {'class': 'drop-down'} }) }}
+            {{ form_row(form.country, { 'attr': {'class': 'drop-down'} }) }}
+
+            <br/>
+            {{ form_row(form.profile_photo,  { 'attr': {'class': 'form-group'} }) }}
+            <div id="buttons" class="btn">
+            <button type="submit">Register!</button>
+            <button type="reset">Clear</button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+        <a href="{{ path('login') }}">Already have an account? SignIn!!</a> #Check
+
+{% endblock %}
