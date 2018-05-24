@@ -2,5 +2,8 @@
 {% block body %}
     <div class="header" style="color-interpolation: linearRGB;background-color: #7DA0B1;color:white">
       <h1 align="center">Welcome to jinikart</h1>
-    
+      <h2>Merchant</h2>
+      <input type="button" value="SignIn" onclick="window.location.href='{{ path('merchant_login') }}'" />
+      <input type="button" value="Sign up" onclick="window.location.href='{{ path('merchant_registration') }}'" />   
+    </div>
 {% endblock %}

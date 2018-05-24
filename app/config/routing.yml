@@ -27,6 +27,10 @@ index_page:
 customer_registration:
     path: /customer/registration
     defaults: { _controller: 'CustomerBundle\Controller\AccountController::customerRegistrationAction' }
+    
+merchant_login:
+    path: /merchant/login
+    defaults: { _controller: 'MerchantBundle\Controller\SecurityController::merchantLoginAction' }
        
 login:
    path: /login
@@ -36,5 +40,5 @@ logout:
    path: /logout
    defaults: { _controller: 'CustomerBundle\Controller\SecurityController::logoutAction' }   
 
-   
+
        

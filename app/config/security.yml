@@ -3,20 +3,25 @@
 security:
     encoders:
         Common\Model\Customer: bcrypt
+        Common\Model\Merchant: bcrypt
 
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
+        chain_provider:
+            chain:
+                providers: [customer_db, merchant_db]
         customer_db:
             entity: { class: Common\Model\Customer, property: email }
+        merchant_db:
+            entity: { class: Common\Model\Merchant, property: email }
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
         main:
-            anonymous: ~
+            anonymous: ~            
             # activate different ways to authenticate
 
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
@@ -24,6 +29,7 @@ security:
 
             # https://symfony.com/doc/current/security/form_login_setup.html
             #form_login: ~
+        customer:    
             form_login:
                 login_path: login
                 check_path: login
@@ -32,5 +38,19 @@ security:
                 always_use_default_target_path: true
                 default_target_path: index_page
             logout:
-                path:   /logout
-                target: /login
+                path:   logout
+                target: login
+                
+        merchant:    
+            form_login:
+                login_path: merchant_login
+                check_path: merchant_login
+                username_parameter: email
+                password_parameter: password
+                always_use_default_target_path: true
+                default_target_path: merchant_index
+            logout:
+                path:   logout
+                target: login
+                               
+                

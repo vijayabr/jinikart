@@ -4,16 +4,27 @@ namespace MerchantBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use src\MerchantBundle\Form\MerchantType;
+
+use Symfony\Component\HttpFoundation\Request;
+use MerchantBundle\Form\MerchantType;
+use Common\Model\Address;
+use Common\Model\Merchant;
 
 class AccountController extends Controller
 {
+    
+    /**
+     * @Route("/merchant/registration", name="merchant_registration");
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response|\Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function merchantRegistrationAction(Request $request)
     {
         
         
         $form = $this->createForm(MerchantType::class);
         $form->handleRequest($request);
+        
         $validator=$this->get('validator');
         try {
             if ($form->isSubmitted() && $form->isValid()) {
@@ -21,7 +32,7 @@ class AccountController extends Controller
                 
                 $merchantPlan = $em->getRepository('Model:Merchant_plan')->findOneBy(['id' => 1]);
                 //get address
-                $name=$form->getData()["companyName"]
+                $name=$form->getData()["companyName"];
                 $addr1 = $form->getData()["address_line1"];
                 $addr2 = $form->getData()["address_line2"];
                 $pin = $form->getData()["pincode"];
@@ -35,7 +46,7 @@ class AccountController extends Controller
                 $address->setPincode($pin);
                 $error1=$validator->validate($address);
                 $em->persist($address);
-                $em->flush();
+               // $em->flush();
                 $customerMobileNoExist =$em->getRepository('Model:Merchant')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
                 $customerEmailExist =$em->getRepository('Model:Merchant')->findOneBy(['email'=>$form->getData()["email"]]);
                 if(!$customerEmailExist && !$customerMobileNoExist) {
@@ -66,7 +77,7 @@ class AccountController extends Controller
                         $entityManager = $this->getDoctrine()->getManager();
                         $entityManager->persist($merchant);
                         // $entityManager->flush();
-                        return $this->redirectToRoute("login"); //check
+                        return $this->redirectToRoute('merchant_login'); //check
                     }
                 }
                 else
@@ -77,7 +88,10 @@ class AccountController extends Controller
                 }
                 
             }
+            
             return $this->render("@Merchant/Account/register.html.twig", array('form' => $form->createView(),'message'=> '','errors'=>'', 'error1'=>'' ));
+          
+        
         } catch (\Exception $exception) {
             var_dump($exception);
             die;
@@ -86,7 +100,11 @@ class AccountController extends Controller
     }
     
     
-    
+    /**
+     * @Route("/merchant/index", name="merchant_index");
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     
     public function merchantIndexAction(Request $request)
     {
@@ -96,12 +114,20 @@ class AccountController extends Controller
         
         
     }
+    /**
+     * @Route("/merchant",name="merchant_landing");
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     
     public function merchantLandingAction(Request $request){
+       
+        
         return $this->render("@Merchant/Default/landing.html.twig");
     }
+   
     
 }
         
     
-}
+

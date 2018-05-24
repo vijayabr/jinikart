@@ -2,11 +2,11 @@
 {% block body %}
     <div class="main" align="center">
     <h2 class="header">Customer Login</h2>
-    <div class="merchantlogin" style=" padding: 20px 15px 15px 20px; left: 100px " align="left">
+    <div  style=" padding: 20px 15px 15px 20px; left: 100px " align="left">
         {% if error %}
             <div style="color: darkred">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
-        <form action="{{ path('login') }}" method="post">
+        <form action="{{ path('merchant_login') }}" method="post">
             <label for="username">Username:</label>
             <input type="text" id="username" name="email" value="{{ last_username }}" />
             <br/>

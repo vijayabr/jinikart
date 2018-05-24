@@ -1,6 +1,6 @@
 <?php
 
-namespace CustomerBundle\Controller;
+namespace MerchantBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -9,8 +9,12 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends Controller
 {
-
-    public function loginAction(Request $request)
+     /**
+      * @Route ("/merchant/login",name="merchant_login");
+      * @param Request $request
+      * @return \Symfony\Component\HttpFoundation\Response
+      */
+    public function merchantLoginAction(Request $request)
     {
          try {
 
@@ -34,11 +38,17 @@ class SecurityController extends Controller
             var_dump($exception);die;
         }
     }
-
+    
+    /**
+     * @Route("/logout", name="merchant_logout");
+     */
     public function logoutAction()
     {
-
+        
+        dump("123");die;
     }
+
+   
 
 }
 
