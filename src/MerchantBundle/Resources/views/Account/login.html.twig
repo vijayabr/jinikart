@@ -1,0 +1,21 @@
+{% extends "@Merchant/Default/index.html.twig" %}
+{% block body %}
+    <div class="main" align="center">
+    <h2 class="header">Customer Login</h2>
+    <div class="merchantlogin" style=" padding: 20px 15px 15px 20px; left: 100px " align="left">
+        {% if error %}
+            <div style="color: darkred">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+        <form action="{{ path('login') }}" method="post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="email" value="{{ last_username }}" />
+            <br/>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" />
+            <br/>
+        <button type="submit">login</button>
+        </form>
+        <a href="{{ path('merchant_registration') }}">New to Jinikart? SignUp!!</a>
+    </div>
+{% endblock %}
