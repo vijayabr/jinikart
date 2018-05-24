@@ -35,6 +35,7 @@ login:
 logout:
    path: /logout
    defaults: { _controller: 'CustomerBundle\Controller\SecurityController::logoutAction' }   
+   
 
    
        

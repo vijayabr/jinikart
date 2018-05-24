@@ -5,6 +5,9 @@ namespace MerchantBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use src\MerchantBundle\Form\MerchantType;
+use Symfony\Component\BrowserKit\Request;
+use Common\Model\Address;
+use Common\Model\Merchant;
 
 class AccountController extends Controller
 {
@@ -21,7 +24,7 @@ class AccountController extends Controller
                 
                 $merchantPlan = $em->getRepository('Model:Merchant_plan')->findOneBy(['id' => 1]);
                 //get address
-                $name=$form->getData()["companyName"]
+                $name=$form->getData()["companyName"];
                 $addr1 = $form->getData()["address_line1"];
                 $addr2 = $form->getData()["address_line2"];
                 $pin = $form->getData()["pincode"];
@@ -41,7 +44,7 @@ class AccountController extends Controller
                 if(!$customerEmailExist && !$customerMobileNoExist) {
                     
                     $merchant = new Merchant();
-                    $merchant->setFname($form->getData()["companyName"]);
+                    $merchant->setCompanyName($form->getData()["companyName"]);
                     $merchant->setcontactPersonName($form->getData()["contactPersonName"]);
                     $merchant->setEmail($form->getData()["email"]);
                     $merchant->setMobileNo($form->getData()["mobile_no"]);
@@ -88,7 +91,7 @@ class AccountController extends Controller
     
     
     
-    public function merchantIndexAction(Request $request)
+    public function merchantIndexAction(\Symfony\Component\HttpFoundation\Request $request)
     {
         
         $merchant = $this->getUser();
