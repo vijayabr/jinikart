@@ -20,22 +20,12 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        main:
-            anonymous: ~        
-            provider: customer_db
-            form_login:
-                login_path: login
-                check_path: login
-                username_parameter: email
-                password_parameter: password
-                always_use_default_target_path: true
-                default_target_path: index_page
-            logout:
-                path:   logout
-                target: login
+      
                 
-        merchant: 
+        merchant:
+            anonymous: ~   
             provider: merchant_db
+            pattern: ^/merchant
             form_login:
                 login_path: merchant_login
                 check_path: merchant_login
@@ -46,5 +36,34 @@ security:
             logout:
                 path:   merchant_logout
                 target: merchant_login
-                               
+                
+        customer:
+            anonymous: ~  
+            pattern: ^/customer
+            provider: customer_db
+            form_login:
+                login_path: login
+                check_path: login
+                username_parameter: email
+                password_parameter: password
+                always_use_default_target_path: true
+                default_target_path: index_page
+            logout:
+                path:   logout
+                target: login        
+
+        main:
+            anonymous: ~  
+            pattern: ^/
+#            provider: customer_db
+#            form_login:
+#                login_path: login
+#                check_path: login
+#                username_parameter: email
+#                password_parameter: password
+#                always_use_default_target_path: true
+#                default_target_path: index_page
+#            logout:
+#                path:   logout
+#                target: login                               
                 
