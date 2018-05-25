@@ -17,24 +17,12 @@ app:
     resource: '@AppBundle/Controller/'
     type: annotation
     
-langing_page:
-    path: /customer
-    defaults: { _controller: 'CustomerBundle\Controller\AccountController::customerLandingAction' }    
-index_page:
-    path: /customer/index
-    defaults: { _controller: 'CustomerBundle\Controller\AccountController::customerIndexAction' }
-    
-customer_registration:
-    path: /customer/registration
-    defaults: { _controller: 'CustomerBundle\Controller\AccountController::customerRegistrationAction' }
-       
-login:
-   path: /login
-   defaults: { _controller: 'CustomerBundle\Controller\SecurityController::loginAction' }
-   
-logout:
-   path: /logout
-   defaults: { _controller: 'CustomerBundle\Controller\SecurityController::logoutAction' }   
 
-   
+
+    
+
+       
+
+
+
        

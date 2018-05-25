@@ -19,6 +19,12 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 
 class AccountController extends Controller
 {
+    
+    /**
+     * @Route("/customer/registration",name="customer_registration");
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response|\Symfony\Component\HttpFoundation\RedirectResponse
+     */
    
     public function customerRegistrationAction(Request $request)
     {
@@ -96,7 +102,11 @@ class AccountController extends Controller
 
     }
 
-
+   /**
+    * @Route("/customer/index",name="index_page");
+    * @param Request $request
+    * @return \Symfony\Component\HttpFoundation\Response
+    */
     
 
     public function customerIndexAction(Request $request)
@@ -107,6 +117,11 @@ class AccountController extends Controller
    
 
     }
+    /**
+     * @Route("/customer",name="customer_landing");
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     
     public function customerLandingAction(Request $request){
         return $this->render("@Customer/Default/landing.html.twig");

@@ -4,7 +4,7 @@ namespace Common\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Constraints\DateTime;
+
 
 /**
  * Address
@@ -62,14 +62,14 @@ class Address
     private $pincode;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime")
      */
@@ -77,8 +77,8 @@ class Address
 
     public function __construct()
     {
-        $this->setUpdatedAt(new DateTime());
-        $this->setCreatedAt(new DateTime());
+        $this->setUpdatedAt(new \DateTime());
+        $this->setCreatedAt(new \DateTime());
     }
 
     /**

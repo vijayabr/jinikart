@@ -3,27 +3,44 @@
 security:
     encoders:
         Common\Model\Customer: bcrypt
+        Common\Model\Merchant: bcrypt
 
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
+        chain_provider:
+            chain:
+                providers: [customer_db, merchant_db]
         customer_db:
             entity: { class: Common\Model\Customer, property: email }
+        merchant_db:
+            entity: { class: Common\Model\Merchant, property: email }
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
-        main:
-            anonymous: ~
-            # activate different ways to authenticate
-
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
-
-            # https://symfony.com/doc/current/security/form_login_setup.html
-            #form_login: ~
+      
+                
+        merchant:
+            anonymous: ~   
+            provider: merchant_db
+            pattern: ^/merchant
+            form_login:
+                login_path: merchant_login
+                check_path: merchant_login
+                username_parameter: email
+                password_parameter: password
+                always_use_default_target_path: true
+                default_target_path: merchant_index
+            logout:
+                path:   merchant_logout
+                target: merchant_login
+                
+        customer:
+            anonymous: ~  
+            pattern: ^/customer
+            provider: customer_db
             form_login:
                 login_path: login
                 check_path: login
@@ -32,5 +49,21 @@ security:
                 always_use_default_target_path: true
                 default_target_path: index_page
             logout:
-                path:   /logout
-                target: /login
+                path:   logout
+                target: login        
+
+        main:
+            anonymous: ~  
+            pattern: ^/
+#            provider: customer_db
+#            form_login:
+#                login_path: login
+#                check_path: login
+#                username_parameter: email
+#                password_parameter: password
+#                always_use_default_target_path: true
+#                default_target_path: index_page
+#            logout:
+#                path:   logout
+#                target: login                               
+                

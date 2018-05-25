@@ -1,19 +1,24 @@
 <?php
 
-namespace CustomerBundle\Controller;
+namespace MerchantBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class SecurityController extends Controller
 {
-
-    public function loginAction(Request $request)
+     /**
+      * @Route ("/merchant/login",name="merchant_login");
+      * @param Request $request
+      * @return \Symfony\Component\HttpFoundation\Response
+      */
+    public function merchantLoginAction(Request $request)
     {
          try {
-
+          
             $authenticationUtils=$this->get('security.authentication_utils');
 
             // get the login error if there is one
@@ -34,11 +39,16 @@ class SecurityController extends Controller
             var_dump($exception);die;
         }
     }
-
+    
+    /**
+     * @Route("/merchant/logout", name="merchant_logout");
+     */
     public function logoutAction()
     {
-
+        return $this->redirectToRoute('merchant_login'); 
     }
+
+   
 
 }
 

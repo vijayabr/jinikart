@@ -13,7 +13,7 @@ class SecurityController extends Controller
 {
 
     /**
-     * 
+     * @Route("/customer/login", name="login");
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -41,6 +41,9 @@ class SecurityController extends Controller
             var_dump($exception);die;
         }
     }
+    /**
+     * @Route("/customer/logout", name="logout");
+     */
 
     public function logoutAction()
     {
