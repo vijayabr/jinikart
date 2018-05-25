@@ -21,7 +21,7 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: ~            
+            anonymous: ~        
             provider: customer_db
             form_login:
                 login_path: login
@@ -35,10 +35,6 @@ security:
                 target: login
                 
         merchant: 
-            remember_me:
-                secret:   '%secret%'
-                lifetime: 604800 # 1 week in seconds
-                path:     /   
             provider: merchant_db
             form_login:
                 login_path: merchant_login
