@@ -48,7 +48,7 @@ security:
                 always_use_default_target_path: true
                 default_target_path: merchant_index
             logout:
-                path:   logout
-                target: login
+                path:   merchant_logout
+                target: merchant_login
                                
                 

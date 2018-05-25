@@ -424,7 +424,7 @@ class Merchant implements UserInterface
     }
     public function getRoles()
     {
-        return array('ROLE_CUSTOMER');
+        return array('ROLE_MERCHANT');
         
     }
     
