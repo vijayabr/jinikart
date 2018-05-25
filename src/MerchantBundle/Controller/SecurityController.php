@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class SecurityController extends Controller
 {
@@ -40,12 +41,11 @@ class SecurityController extends Controller
     }
     
     /**
-     * @Route("/logout", name="merchant_logout");
+     * @Route("/merchant/logout", name="merchant_logout");
      */
     public function logoutAction()
     {
-        
-        dump("123");die;
+        return $this->redirectToRoute('merchant_login'); 
     }
 
    

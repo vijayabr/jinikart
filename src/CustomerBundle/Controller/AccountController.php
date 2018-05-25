@@ -14,10 +14,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 
 class AccountController extends Controller
 {
+    
+    /**
+     * @Route("/customer/registration",name="customer_registration");
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response|\Symfony\Component\HttpFoundation\RedirectResponse
+     */
    
     public function customerRegistrationAction(Request $request)
     {
@@ -87,14 +94,19 @@ class AccountController extends Controller
 
             }
             return $this->render("@Customer/Account/register.html.twig", array('form' => $form->createView(),'message'=> '','errors'=>'', 'error1'=>'' ));
-        } catch (\Exception $exception) {
+        } 
+        catch (Exception $exception) {
             var_dump($exception);
             die;
         }
 
     }
 
-
+   /**
+    * @Route("/customer/index",name="index_page");
+    * @param Request $request
+    * @return \Symfony\Component\HttpFoundation\Response
+    */
     
 
     public function customerIndexAction(Request $request)
@@ -105,6 +117,11 @@ class AccountController extends Controller
    
 
     }
+    /**
+     * @Route("/customer",name="customer_landing");
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     
     public function customerLandingAction(Request $request){
         return $this->render("@Customer/Default/landing.html.twig");

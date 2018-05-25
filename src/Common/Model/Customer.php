@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
 /**
  * Customer
  *
@@ -67,13 +68,13 @@ class Customer implements  UserInterface
 
     /**
      * @var string
+     * @Assert\NotBlank(message="please,upload the image")
      * @ORM\Column(name="profile_photo", type="string", length=50)
      */
     private $profilePhoto;
 
     /**
      * @var string
-     *@Assert\NotBlank(message="please,upload the image")
      * @ORM\Column(name="password", type="string", length=255)
      */
     private $password;

@@ -3,14 +3,16 @@
 namespace Common\Model;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * Merchant
  *
  * @ORM\Table(name="merchant")
  * @ORM\Entity(repositoryClass="Common\Model\Repository\MerchantRepository")
  */
-class Merchant
+class Merchant implements UserInterface
 {
     /**
      * @var int
@@ -23,7 +25,8 @@ class Merchant
 
     /**
      * @var string
-     *
+     *@Assert\NotBlank()
+     *@Assert\Regex("/^[a-z A-Z]+$/", message="Company name should only contain  alphabets")
      * @ORM\Column(name="company_name", type="string", length=100)
      */
     private $companyName;
@@ -38,14 +41,23 @@ class Merchant
 
     /**
      * @var string
-     *
+     *@Assert\NotBlank()
+     *@Assert\Regex("/^[a-z A-Z]+$/", message="Contact Person name should only contain  alphabets")
      * @ORM\Column(name="contact_person_name", type="string", length=100)
      */
     private $contactPersonName;
-
+    
+    /**
+     * @Assert\Regex("/^\d{10}$/", message="mobile number should be 10 digits")
+     * @var string
+     * @ORM\Column(name="mobile_no", type="string", length=15,unique=true)
+     */
+    private $mobileNo;
     /**
      * @var string
-     *
+     *@Assert\NotBlank()
+     *@Assert\Email(
+     *     message="the email is not valid email")
      * @ORM\Column(name="email", type="string", length=50,unique=true)
      */
     private $email;
@@ -53,13 +65,15 @@ class Merchant
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=15)
+     * @ORM\Column(name="password", type="string", length=255)
      */
     private $password;
 
+  
+   
     /**
      * @var string
-     *
+     *@Assert\NotBlank(message="please,upload the image")
      * @ORM\Column(name="company_logo", type="string", length=50)
      */
     private $companyLogo;
@@ -98,6 +112,7 @@ class Merchant
      *
      * @ORM\Column(name="updated_at", type="datetime")
      */
+   
     private $updatedAt;
 
 
@@ -106,8 +121,8 @@ class Merchant
         $this->merchantStatus=1;
         $this->merchantPlanId=1;
         $this->merchantRole="ROLE_MERCHANT";
-        $this->setUpdatedAt();
-        $this->setCreatedAt();
+        $this->setUpdatedAt(new \DateTime());
+        $this->setCreatedAt(new \DateTime());
     }
 
 
@@ -264,7 +279,30 @@ class Merchant
     {
         return $this->companyLogo;
     }
-
+    /**
+     * Set mobileNo
+     *
+     * @param string $mobileNo
+     *
+     * @return Customer
+     */
+    public function setMobileNo($mobileNo)
+    {
+        $this->mobileNo = $mobileNo;
+        
+        return $this;
+    }
+    
+    /**
+     * Get mobileNo
+     *
+     * @return string
+     */
+    public function getMobileNo()
+    {
+        return $this->mobileNo;
+    }
+    
     /**
      * Set merchantStatus
      *
@@ -354,7 +392,7 @@ class Merchant
     /**
      * Get createdAt
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -384,5 +422,26 @@ class Merchant
     {
         return $this->updatedAt;
     }
+    public function getRoles()
+    {
+        return array('ROLE_CUSTOMER');
+        
+    }
+    
+    public function getSalt()
+    {
+        return null;
+    }
+    
+    public function getUsername()
+    {
+        return $this->email;
+    }
+    
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+    
 }
 

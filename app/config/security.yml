@@ -22,14 +22,7 @@ security:
             security: false
         main:
             anonymous: ~            
-            # activate different ways to authenticate
-
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
-
-            # https://symfony.com/doc/current/security/form_login_setup.html
-            #form_login: ~
-        customer:    
+            provider: customer_db
             form_login:
                 login_path: login
                 check_path: login
@@ -41,7 +34,12 @@ security:
                 path:   logout
                 target: login
                 
-        merchant:    
+        merchant: 
+            remember_me:
+                secret:   '%secret%'
+                lifetime: 604800 # 1 week in seconds
+                path:     /   
+            provider: merchant_db
             form_login:
                 login_path: merchant_login
                 check_path: merchant_login

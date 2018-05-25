@@ -4,7 +4,6 @@ namespace MerchantBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-
 use Symfony\Component\HttpFoundation\Request;
 use MerchantBundle\Form\MerchantType;
 use Common\Model\Address;
@@ -24,15 +23,13 @@ class AccountController extends Controller
         
         $form = $this->createForm(MerchantType::class);
         $form->handleRequest($request);
-        
         $validator=$this->get('validator');
         try {
             if ($form->isSubmitted() && $form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
-                
                 $merchantPlan = $em->getRepository('Model:Merchant_plan')->findOneBy(['id' => 1]);
-                //get address
-                $name=$form->getData()["companyName"];
+                dump($form->getData()); //get address
+                $name=$form->getData()["companyName"];                
                 $addr1 = $form->getData()["address_line1"];
                 $addr2 = $form->getData()["address_line2"];
                 $pin = $form->getData()["pincode"];
@@ -47,12 +44,14 @@ class AccountController extends Controller
                 $error1=$validator->validate($address);
                 $em->persist($address);
                // $em->flush();
-                $customerMobileNoExist =$em->getRepository('Model:Merchant')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
-                $customerEmailExist =$em->getRepository('Model:Merchant')->findOneBy(['email'=>$form->getData()["email"]]);
-                if(!$customerEmailExist && !$customerMobileNoExist) {
+                $merchantMobileNoExist =$em->getRepository('Model:Merchant')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
+                $merchantEmailExist =$em->getRepository('Model:Merchant')->findOneBy(['email'=>$form->getData()["email"]]);
+               
+                if(!$merchantEmailExist && !$merchantMobileNoExist) {
                     
                     $merchant = new Merchant();
-                    $merchant->setFname($form->getData()["companyName"]);
+               
+                    $merchant->setCompanyName($form->getData()["companyName"]);
                     $merchant->setcontactPersonName($form->getData()["contactPersonName"]);
                     $merchant->setEmail($form->getData()["email"]);
                     $merchant->setMobileNo($form->getData()["mobile_no"]);
@@ -64,20 +63,20 @@ class AccountController extends Controller
                     /**
                      * @var uplodedFile images
                      */
-                    $image = $form->getData()["profile_photo"];
+                    $image = $form->getData()["companylogo"];
                     $imageName =  $merchant->getcontactPersonName(). '.' . $image->guessExtension();
-                    
-                    $image->move($this->getParameter('image_directory'),$imageName);
-                    $merchant->setProfilePhoto($imageName);
+                    $image->move($this->getParameter('company_image_directory'),$imageName);
+                    $merchant->setCompanyLogo($imageName);
                     $errors =$validator->validate($merchant);
+                  
                     if(count($errors) > 0 || count($error1)>0){
                         return $this->render("@Merchant/Account/register.html.twig", array( 'form' => $form->createView(), 'message'=> '','errors'=>$errors, 'error1'=>$error1 ));
                     }
                     else {
                         $entityManager = $this->getDoctrine()->getManager();
                         $entityManager->persist($merchant);
-                        // $entityManager->flush();
-                        return $this->redirectToRoute('merchant_login'); //check
+                        $entityManager->flush();
+                        return $this->redirectToRoute('merchant_login'); 
                     }
                 }
                 else
@@ -106,7 +105,7 @@ class AccountController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     
-    public function merchantIndexAction(Request $request)
+    public function merchantIndexAction(\Symfony\Component\HttpFoundation\Request $request)
     {
         
         $merchant = $this->getUser();
