@@ -109,7 +109,7 @@ class AccountController extends Controller
     {
         
         $merchant = $this->getUser();
-        return $this->render("@Merchant/Default/homepage.html.twig",['merchant'=>$merchant]);
+        return $this->render("@Merchant/Default/homepage.html.twig",array('merchant'=>$merchant));
         
         
     }
