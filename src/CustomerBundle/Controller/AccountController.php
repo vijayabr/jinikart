@@ -20,6 +20,7 @@ use Common\Model\SecretAnswer;
 use CustomerBundle\Form\ChangePasswordType;
 use CustomerBundle\Form\ProfileType;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
+use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 
 
 class AccountController extends Controller 
@@ -31,7 +32,7 @@ class AccountController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response|\Symfony\Component\HttpFoundation\RedirectResponse
      */
    
-    public function customerRegistrationAction(Request $request, UserPasswordEncoder $encoder)
+    public function customerRegistrationAction(Request $request)
     {
 
         $form = $this->createForm(CustomerType::class);
@@ -69,8 +70,9 @@ class AccountController extends Controller
                     $customer->setPassword($form->getData()["password"]);
                     $customer->setAddressId($address);
                     $customer->setCustomerPlanId($customerPlan);
-                   $customer->setPassword($this->container->get('security.encoder_factory')->getEncoder($customer)->encodePassword($form->getData()['password'], ''));
-//                      dump($this->container->get('security.encoder_factory'));die;
+               
+                    $customer->setPassword($this->get('security.encoder_factory.generic')->getEncoder($customer)->encodePassword($form->getData()['password'], ''));
+//                       dump($this->container);die;
                     /**
                      * @var uplodedFile images
                      */
@@ -130,7 +132,7 @@ class AccountController extends Controller
     
     public function customerLandingAction(Request $request){
         
-        //dump("cjyhgfikju");die;
+       
         return $this->render("@Customer/Default/landing.html.twig");
     }
     
@@ -144,6 +146,11 @@ class AccountController extends Controller
         
         $form = $this->createForm(ProfileType::class);
         $form->handleRequest($request);
+        $customer= $this->getUser();
+        $form->get('fname')->setData($customer->getFname());
+        $form->get('lname')->setData($customer->getLname());
+        
+        
         return $this->render("@Customer/Account/profile.html.twig",array('form' => $form->createView()));   
         
     }
@@ -213,7 +220,7 @@ class AccountController extends Controller
         try {
             if ($form->isSubmitted() && $form->isValid()) {
                 $customer=$this->getUser();
-                $customer->setPassword($this->get('security.encoder_factory')->getEncoder($customer)->encodePassword($form->getData()['password'], ''));
+                $customer->setPassword($this->get('security.encoder_factory.generic')->getEncoder($customer)->encodePassword($form->getData()['password'], ''));
                 
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($customer);
