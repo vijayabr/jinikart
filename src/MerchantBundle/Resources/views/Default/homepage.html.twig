@@ -1,20 +1,21 @@
 {% extends "@Merchant/Default/index.html.twig" %}
 {% block body %}
     <div class="header" style="color-interpolation: linearRGB;background-color: #7DA0B1;color:white">
-      <h1 align="center">Welcome to jinikart</h1>
-       <h5>Hello!!!!</h5>
+      <h1 align="center">Welcome to jinikart</h1><br/>
+    
+       <h5 style="font-size: 50px;text-align: center;">{{ merchant.CompanyName }}</h5>
      <header id="header">
       <div class="container">
         <nav id="nav">
           <ul>
             <li>
-              <a href="">Company Name</a>
+              <a href="{{ path('company_details') }}">Company Details</a>
             </li>
             <li>
-              <a href="">Add Products</a>
+              <a href="{{ path('add_products') }}">Add Products</a>
             </li>
             <li>
-              <a href="">List Products</a>
+              <a href="{{ path('list_products') }}">List Products</a>
             </li>
           </ul>
         </nav>

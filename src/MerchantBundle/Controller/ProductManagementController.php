@@ -35,6 +35,13 @@ class ProductManagementController extends Controller
         ->add('ram_size',TextType::class,array('label' => 'Ram Size','class'=>'Common\Model\Product_Description'))
         ->add('camera', TextType::class,array('label' => 'Camera','class'=>'Common\Model\Product_Description'))
         ->add('product_complete_info',TextareaType::class,array('label' => 'Description','class'=>'Common\Model\Product_Description'))
+        ->add('discount',PercentType::class,array('label' => 'Discount'))
+        ->add('category',TextType::class,array('label' => 'Category'))
+        ->add('brand',TextType::class,array('label' => 'Brand'))
+        ->add('color',TextType::class,array('label' => 'Color'))
+        ->add('ram_size',TextType::class,array('label' => 'Ram Size'))
+        ->add('camera', TextType::class,array('label' => 'Camera'))
+        ->add('product_complete_info',TextareaType::class,array('label' => 'Description'))
         ->add('add',SubmitType::class, array('label' => 'Add'))
         ->add('clear',ResetType::class, array('label' => 'Clear'))
         ->getForm();

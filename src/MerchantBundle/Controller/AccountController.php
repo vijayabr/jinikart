@@ -111,7 +111,6 @@ class AccountController extends Controller
         $merchant = $this->getUser();
         return $this->render("@Merchant/Default/homepage.html.twig",array('merchant'=>$merchant));
         
-        
     }
     /**
      * @Route("/merchant",name="merchant_landing");
@@ -124,7 +123,7 @@ class AccountController extends Controller
         
         return $this->render("@Merchant/Default/landing.html.twig");
     }
-   
+    
     
 }
         
