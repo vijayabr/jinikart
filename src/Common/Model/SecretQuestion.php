@@ -1,22 +1,21 @@
 <?php
-
 namespace Common\Model;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * State
+ * SecretQuestion
  *
- * @ORM\Table(name="state")
- * @ORM\Entity(repositoryClass="Common\Model\Repository\StateRepository")
+ * @ORM\Table(name="secret_question")
+ * @ORM\Entity(repositoryClass="Common\Model\Repository\SecretQuestionRepository")
  */
-class State
+class SecretQuestion
 {
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer",unique=true)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -25,25 +24,24 @@ class State
     /**
      * @var string
      *
-     * @ORM\Column(name="state_name", type="string", length=50,unique=true)
+     * @ORM\Column(name="question", type="string", length=255, unique=true)
      */
-    private $stateName;
-
+    private $question;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-
+    
     public function __construct() {
         // we set up "created"+"modified"
         $this->setCreatedAt(new \DateTime());
@@ -51,8 +49,9 @@ class State
             $this->setUpdatedAt(new \DateTime());
         }
     }
+    
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -62,39 +61,35 @@ class State
     }
 
     /**
-     * Set stateName
+     * Set question.
      *
-     * @param string $stateName
+     * @param string $question
      *
-     * @return State
+     * @return SecretQuestion
      */
-    public function setStateName($stateName)
+    public function setQuestion($question)
     {
-        $this->stateName = $stateName;
+        $this->question = $question;
 
         return $this;
     }
 
     /**
-     * Get stateName
+     * Get question.
      *
      * @return string
      */
-    public function getStateName()
+    public function getQuestion()
     {
-        return $this->stateName;
+        return $this->question;
     }
 
-
-
-
-
     /**
-     * Set createdAt
+     * Set createdAt.
      *
-     * @param DateTime $createdAt
+     * @param \DateTime $createdAt
      *
-     * @return State
+     * @return SecretQuestion
      */
     public function setCreatedAt($createdAt)
     {
@@ -104,9 +99,9 @@ class State
     }
 
     /**
-     * Get createdAt
+     * Get createdAt.
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -114,11 +109,11 @@ class State
     }
 
     /**
-     * Set updatedAt
+     * Set updatedAt.
      *
-     * @param DateTime $updatedAt
+     * @param \DateTime $updatedAt
      *
-     * @return State
+     * @return SecretQuestion
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -128,13 +123,12 @@ class State
     }
 
     /**
-     * Get updatedAt
+     * Get updatedAt.
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
         return $this->updatedAt;
     }
 }
-

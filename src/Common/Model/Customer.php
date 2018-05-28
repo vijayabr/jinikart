@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="customer")
  * @ORM\Entity(repositoryClass="Common\Model\Repository\CustomerRepository")
  */
-class Customer implements  UserInterface
+class Customer implements UserInterface
 {
     
     const ACTIVE=1;
@@ -125,7 +125,8 @@ class Customer implements  UserInterface
         $this->customerStatus=customer::ACTIVE;
 //        $this->addressId=1;
         $this->customerRole="ROLE_CUSTOMER";
-       $this->setCreated(new \DateTime());
+        
+        $this->setCreatedAt(new \DateTime());
             if ($this->getUpdatedAt() == null) {
                 $this->setUpdatedAt(new \DateTime());
             }

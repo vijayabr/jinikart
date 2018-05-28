@@ -3,18 +3,18 @@
 namespace Common\Model;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
- * Customer_plan
+ * SecretAnswer
  *
- * @ORM\Table(name="customer_plan")
- * @ORM\Entity(repositoryClass="Common\Model\Repository\Customer_planRepository")
+ * @ORM\Table(name="secret_answer")
+ * @ORM\Entity(repositoryClass="Common\Model\Repository\SecretAnswerRepository")
  */
-class Customer_plan
+class SecretAnswer
 {
-    const DEFAULTPLAN=1;
-    
     /**
      * @var int
      *
@@ -23,27 +23,28 @@ class Customer_plan
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    
+   
+    /**
+     * @var int
+     * @ORM\ManyToOne(targetEntity="Common\Model\SecretQuestion")
+     * @ORM\JoinColumn(name="questionId", referencedColumnName="id")
+     */
+    private $questionId;
+
+    /**
+     * @var int
+     * @ORM\ManyToOne(targetEntity="Common\Model\Customer")
+     * @ORM\JoinColumn(name="customerId", referencedColumnName="id")    
+     */
+    private $customerId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Customer_plan_name", type="string", length=50,unique=true)
+     * @ORM\Column(name="answer", type="string", length=255)
      */
-    private $customerPlanName;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="delivery_charge", type="integer")
-     */
-    private $deliveryCharge;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="validity", type="integer")
-     */
-    private $validity;
+    private $answer;
 
     /**
      * @var \DateTime
@@ -59,7 +60,6 @@ class Customer_plan
      */
     private $updatedAt;
     
-   
     public function __construct() {
         // we set up "created"+"modified"
         $this->setCreatedAt(new \DateTime());
@@ -68,11 +68,10 @@ class Customer_plan
         }
     }
     
-    
 
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -82,83 +81,83 @@ class Customer_plan
     }
 
     /**
-     * Set customerPlanName
+     * Set questionId.
      *
-     * @param string $customerPlanName
+     * @param int $questionId
      *
-     * @return Customer_plan
+     * @return SecretAnswer
      */
-    public function setCustomerPlanName($customerPlanName)
+    public function setQuestionId($questionId)
     {
-        $this->customerPlanName = $customerPlanName;
+        $this->questionId = $questionId;
 
         return $this;
     }
 
     /**
-     * Get customerPlanName
+     * Get questionId.
+     *
+     * @return int
+     */
+    public function getQuestionId()
+    {
+        return $this->questionId;
+    }
+
+    /**
+     * Set customerId.
+     *
+     * @param int $customerId
+     *
+     * @return SecretAnswer
+     */
+    public function setCustomerId($customerId)
+    {
+        $this->customerId = $customerId;
+
+        return $this;
+    }
+
+    /**
+     * Get customerId.
+     *
+     * @return int
+     */
+    public function getCustomerId()
+    {
+        return $this->customerId;
+    }
+
+    /**
+     * Set answer.
+     *
+     * @param string $answer
+     *
+     * @return SecretAnswer
+     */
+    public function setAnswer($answer)
+    {
+        $this->answer = $answer;
+
+        return $this;
+    }
+
+    /**
+     * Get answer.
      *
      * @return string
      */
-    public function getCustomerPlanName()
+    public function getAnswer()
     {
-        return $this->customerPlanName;
+        return $this->answer;
     }
 
     /**
-     * Set deliveryCharge
+     * Set createdAt.
      *
-     * @param integer $deliveryCharge
+     * @param \DateTime $createdAt
      *
-     * @return Customer_plan
-     */
-    public function setDeliveryCharge($deliveryCharge)
-    {
-        $this->deliveryCharge = $deliveryCharge;
-
-        return $this;
-    }
-
-    /**
-     * Get deliveryCharge
-     *
-     * @return int
-     */
-    public function getDeliveryCharge()
-    {
-        return $this->deliveryCharge;
-    }
-
-    /**
-     * Set validity
-     *
-     * @param integer $validity
-     *
-     * @return Customer_plan
-     */
-    public function setValidity($validity)
-    {
-        $this->validity = $validity;
-
-        return $this;
-    }
-
-    /**
-     * Get validity
-     *
-     * @return int
-     */
-    public function getValidity()
-    {
-        return $this->validity;
-    }
-
-    /**
-     * Set createdAt
-     *
-     * @param DateTime $createdAt
-     *
-     * @return Customer_plan
+     * @return SecretAnswer
      */
     public function setCreatedAt($createdAt)
     {
@@ -168,7 +167,7 @@ class Customer_plan
     }
 
     /**
-     * Get createdAt
+     * Get createdAt.
      *
      * @return \DateTime
      */
@@ -178,11 +177,11 @@ class Customer_plan
     }
 
     /**
-     * Set updatedAt
+     * Set updatedAt.
      *
      * @param \DateTime $updatedAt
      *
-     * @return Customer_plan
+     * @return SecretAnswer
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -192,7 +191,7 @@ class Customer_plan
     }
 
     /**
-     * Get updatedAt
+     * Get updatedAt.
      *
      * @return \DateTime
      */
@@ -201,4 +200,3 @@ class Customer_plan
         return $this->updatedAt;
     }
 }
-

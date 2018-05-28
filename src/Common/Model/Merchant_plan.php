@@ -67,7 +67,7 @@ class Merchant_plan
     private $updatedAt;
     public function __construct() {
         // we set up "created"+"modified"
-        $this->setCreated(new \DateTime());
+        $this->setCreatedAt(new \DateTime());
         if ($this->getUpdatedAt() == null) {
             $this->setUpdatedAt(new \DateTime());
         }

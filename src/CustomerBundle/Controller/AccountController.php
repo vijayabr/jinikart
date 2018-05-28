@@ -16,9 +16,13 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Common\Model\Customer_plan;
+use Common\Model\SecretAnswer;
+use CustomerBundle\Form\ChangePasswordType;
+use CustomerBundle\Form\ProfileType;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
 
 
-class AccountController extends Controller
+class AccountController extends Controller 
 {
     
     /**
@@ -27,7 +31,7 @@ class AccountController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response|\Symfony\Component\HttpFoundation\RedirectResponse
      */
    
-    public function customerRegistrationAction(Request $request)
+    public function customerRegistrationAction(Request $request, UserPasswordEncoder $encoder)
     {
 
         $form = $this->createForm(CustomerType::class);
@@ -65,8 +69,8 @@ class AccountController extends Controller
                     $customer->setPassword($form->getData()["password"]);
                     $customer->setAddressId($address);
                     $customer->setCustomerPlanId($customerPlan);
-                    $customer->setPassword($this->get('security.encoder_factory')->getEncoder($customer)->encodePassword($form->getData()['password'], ''));
-
+                   $customer->setPassword($this->container->get('security.encoder_factory')->getEncoder($customer)->encodePassword($form->getData()['password'], ''));
+//                      dump($this->container->get('security.encoder_factory'));die;
                     /**
                      * @var uplodedFile images
                      */
@@ -138,10 +142,93 @@ class AccountController extends Controller
     
     public function customerProfileAction(Request $request){
         
-        $form = $this->createForm(CustomerType::class);
+        $form = $this->createForm(ProfileType::class);
         $form->handleRequest($request);
         return $this->render("@Customer/Account/profile.html.twig",array('form' => $form->createView()));   
         
     }
+    
+    /**
+     * @Route("/customer/forgotpassword",name="customer_forgotpassword_page");
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    
+    
+    public function customerforgetpasswordAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+       $randomquestion=1;
+       $questionobj =$em->getRepository('Model:SecretQuestion')->findOneBy(['id'=>$randomquestion]);
+       $question=$questionobj->getQuestion();
+       
+            try {
+                             
+             if (isset($_POST['submit'])) {
+                $email= $_POST['email'];
+                $customer=$em->getRepository('Model:Customer')->findOneBy(['email'=>$email]);
+
+               if($customer){
+               $customerid=$customer->getId();
+               $answeredanswer=$_POST['answer'];
+               $existinganswerobj=$this->getDoctrine()->getRepository('Model:SecretAnswer')->getAnswerForAQuestion($randomquestion,$customerid);
+               $existinganswer=$existinganswerobj[0]->getAnswer();
+               $flag=strcmp(strtolower($existinganswer), strtolower($answeredanswer)); 
+               if($flag==0){
+                   return $this->redirectToRoute("customer_changepassword_page");
+               }
+               else{
+                   return $this->render("@Customer/Account/forgotpassword.html.twig",array('message'=> 'Please answer the question again?',
+                       'question'=>$question));
+               }
+               }else{
+                   return $this->render("@Customer/Account/forgotpassword.html.twig",array('message'=>'This emailid is not registered please try again..',
+                       'question'=>$question));
+                   
+               }
+                   
+           }
+           
+       }
+       catch (Exception $exception) {
+           var_dump($exception);
+           die;
+       }
+       
+       
+       return $this->render("@Customer/Account/forgotpassword.html.twig",array('message'=> '','question'=>$question));
+   
+      
+    }
+    /**
+     * @Route("/customer/changePassword",name="customer_changepassword_page");
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    
+    public function customerchangepasswordAction(Request $request){
+        
+        $form = $this->createForm(ChangePasswordType::class);
+        $form->handleRequest($request);
+        try {
+            if ($form->isSubmitted() && $form->isValid()) {
+                $customer=$this->getUser();
+                $customer->setPassword($this->get('security.encoder_factory')->getEncoder($customer)->encodePassword($form->getData()['password'], ''));
+                
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($customer);
+                $entityManager->flush();
+                return $this->redirectToRoute("login");
+            }
+        }
+        catch (Exception $exception) {
+            var_dump($exception);
+            die;
+        }
+        
+        return $this->render("@Customer/Account/changepassword.html.twig", array('form' => $form->createView()));
+        
+    }
+    
 
 }
