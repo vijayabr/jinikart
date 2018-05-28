@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Common\Model\Customer_plan;
 
 
 class AccountController extends Controller
@@ -36,7 +37,7 @@ class AccountController extends Controller
             if ($form->isSubmitted() && $form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
 
-                $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' => 1]);
+                $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' => Customer_plan::DEFAULTPLAN]);
                 //get address
                 $addr1 = $form->getData()["address_line1"];
                 $pin = $form->getData()["pincode"];
@@ -127,6 +128,20 @@ class AccountController extends Controller
         
         //dump("cjyhgfikju");die;
         return $this->render("@Customer/Default/landing.html.twig");
+    }
+    
+    /**
+     * @Route("/customer/profile",name="customer_profile_page");
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    
+    public function customerProfileAction(Request $request){
+        
+        $form = $this->createForm(CustomerType::class);
+        $form->handleRequest($request);
+        return $this->render("@Customer/Account/profile.html.twig",array('form' => $form->createView()));   
+        
     }
 
 }

@@ -13,6 +13,8 @@ use Symfony\Component\Validator\Constraints\DateTime;
  */
 class Customer_plan
 {
+    const DEFAULTPLAN=1;
+    
     /**
      * @var int
      *
@@ -44,18 +46,29 @@ class Customer_plan
     private $validity;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
+    
+   
+    public function __construct() {
+        // we set up "created"+"modified"
+        $this->setCreated(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
+    
+    
 
 
     /**
@@ -157,7 +170,7 @@ class Customer_plan
     /**
      * Get createdAt
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -167,7 +180,7 @@ class Customer_plan
     /**
      * Set updatedAt
      *
-     * @param DateTime $updatedAt
+     * @param \DateTime $updatedAt
      *
      * @return Customer_plan
      */
@@ -181,7 +194,7 @@ class Customer_plan
     /**
      * Get updatedAt
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {

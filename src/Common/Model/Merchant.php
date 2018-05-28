@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class Merchant implements UserInterface
 {
+    const ACTIVE=1;
     /**
      * @var int
      *
@@ -118,13 +119,17 @@ class Merchant implements UserInterface
 
     public function __construct()
     {
-        $this->merchantStatus=1;
-        $this->merchantPlanId=1;
+        $this->merchantStatus=Merchant::ACTIVE;
+        $this->merchantPlanId=Merchant_plan::DEFAULTMERCHANTPLAN;
         $this->merchantRole="ROLE_MERCHANT";
-        $this->setUpdatedAt(new \DateTime());
-        $this->setCreatedAt(new \DateTime());
-    }
-
+      
+            // we set up "created"+"modified"
+            $this->setCreated(new \DateTime());
+            if ($this->getModified() == null) {
+                $this->setModified(new \DateTime());
+            }
+        }
+        
 
     /**
      * Get id
@@ -392,7 +397,7 @@ class Merchant implements UserInterface
     /**
      * Get createdAt
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getCreatedAt()
     {

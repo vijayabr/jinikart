@@ -15,6 +15,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Customer implements  UserInterface
 {
+    
+    const ACTIVE=1;
     /**
      * @var int
      *
@@ -120,12 +122,15 @@ class Customer implements  UserInterface
     {
 
 //        $this->customerPlanId=1;
-        $this->customerStatus=1;
+        $this->customerStatus=customer::ACTIVE;
 //        $this->addressId=1;
         $this->customerRole="ROLE_CUSTOMER";
-        $this->setUpdatedAt(new \DateTime());
-        $this->setCreatedAt(new \DateTime());
-    }
+       $this->setCreated(new \DateTime());
+            if ($this->getUpdatedAt() == null) {
+                $this->setUpdatedAt(new \DateTime());
+            }
+     }
+        
 
     /**
      * Get id

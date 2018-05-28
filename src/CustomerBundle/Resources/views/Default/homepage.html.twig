@@ -2,6 +2,8 @@
 {% block body %}
     <div class="header" style="color-interpolation: linearRGB;background-color: #7DA0B1;color:white">
       <h1 align="center">Welcome to jinikart</h1>
-       <h5>Hello {{ customer.fname }}!!!!</h5>
+       <h5>Hello<a href="{{ path('customer_profile_page') }}">
+         {{ customer.fname }}</a>
+          !!!!</h5>
     </div>
 {% endblock %}

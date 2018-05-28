@@ -30,19 +30,29 @@ class Country
     private $countryName;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
 
+    
+    public function __construct() {
+        // we set up "created"+"modified"
+        $this->setCreated(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
+    
+    
 
     /**
      * Get id
@@ -81,7 +91,7 @@ class Country
     /**
      * Set createdAt
      *
-     * @param DateTime $createdAt
+     * @param \DateTime $createdAt
      *
      * @return Country
      */
@@ -95,7 +105,7 @@ class Country
     /**
      * Get createdAt
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -105,7 +115,7 @@ class Country
     /**
      * Set updatedAt
      *
-     * @param DateTime $updatedAt
+     * @param \DateTime $updatedAt
      *
      * @return Country
      */
@@ -119,7 +129,7 @@ class Country
     /**
      * Get updatedAt
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {

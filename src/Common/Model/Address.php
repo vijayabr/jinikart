@@ -75,11 +75,14 @@ class Address
      */
     private $updatedAt;
 
-    public function __construct()
-    {
-        $this->setUpdatedAt(new \DateTime());
-        $this->setCreatedAt(new \DateTime());
+    public function __construct() {
+        // we set up "created"+"modified"
+        $this->setCreated(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
     }
+    
 
     /**
      * Get id
@@ -213,7 +216,7 @@ class Address
     /**
      * Set createdAt
      *
-     * @param DateTime $createdAt
+     * @param \DateTime $createdAt
      *
      * @return Address
      */
@@ -227,7 +230,7 @@ class Address
     /**
      * Get createdAt
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -237,7 +240,7 @@ class Address
     /**
      * Set updatedAt
      *
-     * @param DateTime $updatedAt
+     * @param \DateTime $updatedAt
      *
      * @return Address
      */
@@ -251,7 +254,7 @@ class Address
     /**
      * Get updatedAt
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {

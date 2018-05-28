@@ -1,7 +1,30 @@
 {% extends "@Customer/Default/index.html.twig" %}
 {% block body %}
     <div class="header" style="color-interpolation: linearRGB;background-color: #7DA0B1;color:white">
-      <h1 align="center">jinikart</h1>
-       
+      <h1 align="center">jinikart</h1>       
     </div>
+    <div class="customerform" style=" padding: 20px 15px 15px 20px; left: 100px " align="left">
+
+            {{ form_start(form) }}
+            {{ form_row(form.fname,  { 'attr': {'class': 'form-group'} }) }}
+            {{ form_row(form.lname,  { 'attr': {'class': 'form-group'} }) }}
+            {{ form_row(form.email,  { 'attr': {'class': 'form-group'} }) }}
+            {{ form_row(form.mobile_no,  { 'attr': {'class': 'form-group'} }) }}
+            {{ form_row(form.password,  { 'attr': {'class': 'form-group'} }) }}
+
+            {{ form_row(form.address_line1,  { 'attr': {'class': 'form-group'} }) }}
+            {{ form_row(form.address_line2,  { 'attr': {'class': 'form-group'} }) }}
+            {{ form_row(form.pincode,  { 'attr': {'class': 'form-group'} }) }}
+            {{ form_row(form.state,  { 'attr': {'class': 'drop-down'} }) }}
+            {{ form_row(form.country, { 'attr': {'class': 'drop-down'} }) }}
+
+            <br/>
+            {{ form_row(form.profile_photo,  { 'attr': {'class': 'form-group'} }) }}
+            <div id="buttons" class="btn">
+            <button type="submit">Register!</button>
+            <button type="reset">Clear</button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    
 {% endblock %}
