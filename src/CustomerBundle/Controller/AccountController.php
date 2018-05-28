@@ -124,6 +124,8 @@ class AccountController extends Controller
      */
     
     public function customerLandingAction(Request $request){
+        
+        //dump("cjyhgfikju");die;
         return $this->render("@Customer/Default/landing.html.twig");
     }
 
