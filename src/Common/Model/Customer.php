@@ -123,18 +123,11 @@ class Customer implements  UserInterface
         $this->customerStatus=1;
 //        $this->addressId=1;
         $this->customerRole="ROLE_CUSTOMER";
-<<<<<<< Updated upstream
-        $this->setUpdatedAt(new \DateTime());
-        $this->setCreatedAt(new \DateTime());
-    }
-=======
        $this->setCreatedAt(new \DateTime());
             if ($this->getUpdatedAt() == null) {
                 $this->setUpdatedAt(new \DateTime());
             }
      }
-        
->>>>>>> Stashed changes
 
     /**
      * Get id
