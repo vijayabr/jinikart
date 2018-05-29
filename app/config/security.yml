@@ -14,7 +14,6 @@ security:
             entity: { class: Common\Model\Customer, property: email }
         merchant_db:
             entity: { class: Common\Model\Merchant, property: email }
-
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
@@ -23,6 +22,11 @@ security:
       
                 
         merchant:
+#            remember_me:
+#                  name: REME 
+#                  secret:   '%secret%'
+#                  lifetime: 604800 # 1 week in seconds
+#                  path:     ^/merchant
             anonymous: ~   
             provider: merchant_db
             pattern: ^/merchant
@@ -38,6 +42,11 @@ security:
                 target: merchant_login
                 
         customer:
+#            remember_me:
+#                name: REME 
+#                secret:   '%secret%'
+#                lifetime: 604800 # 1 week in seconds
+#                path:     ^/customer
             anonymous: ~  
             pattern: ^/customer
             provider: customer_db
@@ -48,6 +57,7 @@ security:
                 password_parameter: password
                 always_use_default_target_path: true
                 default_target_path: index_page
+                remember_me: true
             logout:
                 path:   logout
                 target: login        
@@ -55,15 +65,9 @@ security:
         main:
             anonymous: ~  
             pattern: ^/
-#            provider: customer_db
-#            form_login:
-#                login_path: login
-#                check_path: login
-#                username_parameter: email
-#                password_parameter: password
-#                always_use_default_target_path: true
-#                default_target_path: index_page
-#            logout:
-#                path:   logout
-#                target: login                               
-                
+            
+    access_control:
+#            - { path: ^/customer, roles: [ROLE_CUSTOMER,IS_AUTHENTICATED_FULLY,IS_AUTHENTICATED_REMEMBERED] }
+#            - { path: ^/merchant, roles: [ROLE_MERCHANT,IS_AUTHENTICATED_REMEMBERED] }
+           
+           

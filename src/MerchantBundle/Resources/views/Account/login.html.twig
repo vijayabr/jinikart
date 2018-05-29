@@ -14,11 +14,11 @@
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" />
             <br/>
-             <input type="checkbox" id="remember_me" name="remember_me" checked />
+             <input type="checkbox" id="remember_me" name="remember_me" />
              <label for="remember_me">Keep me logged in</label><br/>
-        <button type="submit">login</button><a href="{{ path('merchant_registration') }}">New to Jinikart? SignUp!!</a>
+        <button type="submit">login</button>
+        <a href="{{ path('merchant_registration') }}" style="color: blue">New to Jinikart? SignUp!!</a>
         </form>
-        
-    </div>
+   </div>
 {% endblock %}
 

@@ -122,11 +122,13 @@ class Customer implements UserInterface
     {
 
 //        $this->customerPlanId=1;
-        $this->customerStatus=customer::ACTIVE;
+        $this->customerStatus= Customer::ACTIVE;
 //        $this->addressId=1;
         $this->customerRole="ROLE_CUSTOMER";
+
         
         $this->setCreatedAt(new \DateTime());
+       
             if ($this->getUpdatedAt() == null) {
                 $this->setUpdatedAt(new \DateTime());
             }

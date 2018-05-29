@@ -1,0 +1,13 @@
+{% extends "@Merchant/Default/index.html.twig" %}
+{% block body %}
+   <div>
+      <h2>Company Details</h2>
+   </div> 
+   <br/><br/>
+   <div>
+       <p><label for="Id">Id:</label>&nbsp&nbsp&nbsp{{ merchant.id}}</p>
+       <p><label for="Contact Person">Contact Person Name:</label>&nbsp&nbsp&nbsp{{ merchant.contactPersonName }}</p>
+       <p><label for="email">Email:</label>&nbsp&nbsp&nbsp{{ merchant.email }}</p>
+       <p><label for="Mobile">Mobile Number:</label>&nbsp&nbsp&nbsp{{ merchant.mobileNo }}</p>
+   </div>
+{% endblock %}
