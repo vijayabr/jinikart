@@ -19,6 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Doctrine\ORM\Mapping\Entity;
 
 class ProfileType extends AbstractType
 {
@@ -41,6 +42,10 @@ class ProfileType extends AbstractType
             ->add('pincode',TextType::class, array('label' => 'Pincode:'))
             ->add('question1',TextType::class,array('label'=>'what is your favourite color?'))
             ->add('question2',TextType::class,array('label'=>'which is your favourite food?'))
-                    ;
-    }
+            ->add('plan', EntityType::class, array('class' => 'Common\Model\Customer_plan',
+                'choice_label' => function ($state) {
+                return $state->getCustomerPlanName();
+                }))
+            ;
+             }
 }

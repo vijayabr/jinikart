@@ -3,9 +3,16 @@
     <div class="header" style="color-interpolation: linearRGB;background-color: #7DA0B1;color:white">
       <h1 align="center">jinikart</h1>       
     </div>
-    <div class="customerform" style=" padding: 20px 15px 15px 20px; left: 100px ; margin-left:30em">
-
-            {{ form_start(form) }}
+    {% if message %}
+                {{ message }}
+               {{ "check your emailid or mobile number "}}
+    {% endif %}
+      
+ 	<table>
+  	 <tr>
+  		<td>
+        <div class="customerupdateform" style=" padding: 20px 15px 15px 20px; left: 100px ; margin-left:10em; color:blue">     
+            {{ form_start(form)}}
             {{ form_row(form.fname) }}
             {{ form_row(form.lname) }}
             {{ form_row(form.email) }}
@@ -15,15 +22,25 @@
             {{ form_row(form.pincode) }}
             {{ form_row(form.state) }}
             {{ form_row(form.country) }}
+            {{ form_row(form.plan) }}
             {{ form_row(form.question1) }}
             {{ form_row(form.question2) }}
-
-            <br/>
+		
+			
+                        <br/>
             <div id="buttons" class="btn">
-            <button type="submit">Register!</button>
-            <button type="reset">Clear</button>
+            <button type="update" style="margin-left:7em" >update</button>
             </div>
             {{ form_end(form) }}
-        </div>
+            </div>
+            </td>
+            <td>  
+          <p align="right" style="position: fixed; top: 6em;right: 4em; left:5em;">
+          <img src="/images/{{ image }}" alt="Customer Profile" height=100 width=100 >
+          </p>
+          </td>  
+         </tr>
+        </table>
+        
     
 {% endblock %}

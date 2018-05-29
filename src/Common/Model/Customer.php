@@ -70,7 +70,7 @@ class Customer implements UserInterface
 
     /**
      * @var string
-     * @Assert\NotBlank(message="please,upload the image")
+     * 
      * @ORM\Column(name="profile_photo", type="string", length=50)
      */
     private $profilePhoto;

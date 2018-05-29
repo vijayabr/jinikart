@@ -39,9 +39,9 @@ class AccountController extends Controller
         $form->handleRequest($request);
         $validator=$this->get('validator');
         try {
-            if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->isSubmitted() && $form->isValid()) { 
                 $em = $this->getDoctrine()->getManager();
-
+           
                 $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' => Customer_plan::DEFAULTPLAN]);
                 //get address
                 $addr1 = $form->getData()["address_line1"];
@@ -49,43 +49,65 @@ class AccountController extends Controller
                 $state = $form->getData()["state"];
                 $addr2 = $form->getData()["address_line2"];
                 $country = $form->getData()["country"];
-                $address = new Address();
-                $address->setAddressLine1($addr1);
-                $address->setAddressLine2($addr2);
-                $address->setStateId($state);
-                $address->setCountryId($country);
-                $address->setPincode($pin);
-                $error1=$validator->validate($address);
-                $em->persist($address);
-                $em->flush();
+                
                 $customerMobileNoExist =$em->getRepository('Model:Customer')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
                 $customerEmailExist =$em->getRepository('Model:Customer')->findOneBy(['email'=>$form->getData()["email"]]);
                 if(!$customerEmailExist && !$customerMobileNoExist) {
-
+                    $address = new Address();
                     $customer = new Customer();
+                    
+                   
+                    
                     $customer->setFname($form->getData()["fname"]);
                     $customer->setLname($form->getData()["lname"]);
                     $customer->setEmail($form->getData()["email"]);
                     $customer->setMobileNo($form->getData()["mobile_no"]);
                     $customer->setPassword($form->getData()["password"]);
-                    $customer->setAddressId($address);
-                    $customer->setCustomerPlanId($customerPlan);
-               
-                    $customer->setPassword($this->get('security.encoder_factory.generic')->getEncoder($customer)->encodePassword($form->getData()['password'], ''));
-//                       dump($this->container);die;
-                    /**
-                     * @var uplodedFile images
-                     */
-                    $image = $form->getData()["profile_photo"];
-                    $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();
-
-                    $image->move($this->getParameter('image_directory'),$imageName);
-                    $customer->setProfilePhoto($imageName);
-                    $errors =$validator->validate($customer);
+                   
+                    $errors =$validator->validate($customer); 
+                    $error1=$validator->validate($address);
                     if(count($errors) > 0 || count($error1)>0){
                         return $this->render("@Customer/Account/register.html.twig", array( 'form' => $form->createView(), 'message'=> '','errors'=>$errors, 'error1'=>$error1 ));
                     }
-                    else {
+                    else { 
+                   
+                        $address->setAddressLine1($addr1);
+                        $address->setAddressLine2($addr2);
+                        $address->setStateId($state);
+                        $address->setCountryId($country);
+                        $address->setPincode($pin);
+                        $em->persist($address);
+                        $em->flush();  
+                        
+                        $q1=$em->getRepository('Model:SecretQuestion')->find(1);
+                        $q2=$em->getRepository('Model:SecretQuestion')->find(2);
+                        $qA1=$em->getRepository('Model:SecretAnswer')->findOneBy(['questionId'=>$q1]);
+                        $qA2=$em->getRepository('Model:SecretAnswer')->findOneBy(['questionId'=>$q2]);
+                       
+                        $qA1->setAnswer($form->getData()['question1']);
+                        $entityManager = $this->getDoctrine()->getManager();
+                        $entityManager->persist($qA1);dump($qA1);
+                        $entityManager->flush();
+                        
+                        $qA2->setAnswer($form->getData()['question2']);
+                        $entityManager = $this->getDoctrine()->getManager();
+                        $entityManager->persist($qA2);
+                        $entityManager->flush();
+                        
+                        
+                        
+                        $customer->setAddressId($address);
+                        $customer->setCustomerPlanId($customerPlan);
+                        $customer->setPassword($this->get('security.encoder_factory.generic')->getEncoder($customer)->encodePassword($form->getData()['password'], ''));
+                        
+                        /**
+                         * @var uplodedFile images
+                         */
+                        $image = $form->getData()["profile_photo"];
+                        $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();
+                        
+                        $image->move($this->getParameter('image_directory'),$imageName);
+                        $customer->setProfilePhoto($imageName);
                         $entityManager = $this->getDoctrine()->getManager();
                         $entityManager->persist($customer);
                         $entityManager->flush();
@@ -101,30 +123,15 @@ class AccountController extends Controller
 
             }
             return $this->render("@Customer/Account/register.html.twig", array('form' => $form->createView(),'message'=> '','errors'=>'', 'error1'=>'' ));
-        } 
-        catch (Exception $exception) {
+        }
+        catch (\Exception $exception) {
             var_dump($exception);
             die;
         }
-
+        
     }
 
-   /**
-    * @Route("/customer/index",name="index_page");
-    * @param Request $request
-    * @return \Symfony\Component\HttpFoundation\Response
-    */
-    
-
-    public function customerIndexAction(Request $request)
-    {
-   
-            $customer = $this->getUser();
-            return $this->render("@Customer/Default/homepage.html.twig",['customer'=>$customer]);       
-   
-
-    }
-    /**
+     /**
      * @Route("/customer",name="customer_landing");
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
@@ -143,18 +150,131 @@ class AccountController extends Controller
      */
     
     public function customerProfileAction(Request $request){
-        
+        $customer= $this->getUser();
+        $image= $customer->getProfilePhoto();
+       // dump($image);die;
         $form = $this->createForm(ProfileType::class);
         $form->handleRequest($request);
-        $customer= $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        try{
+        
+            if ($form->isSubmitted()) {
+            $customerPlan =$form->getData()["plan"];
+            $state=$form->getData()["state"];
+            $country=$form->getData()["country"];
+                                  
+            $q1=$em->getRepository('Model:SecretQuestion')->find(1);
+            $q2=$em->getRepository('Model:SecretQuestion')->find(2);
+            $qA1=$em->getRepository('Model:SecretAnswer')->findOneBy(['questionId'=>$q1]);
+            $qA2=$em->getRepository('Model:SecretAnswer')->findOneBy(['questionId'=>$q2]);
+            
+            $customerMobileNoExist =$em->getRepository('Model:Customer')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
+            $customerEmailExist =$em->getRepository('Model:Customer')->findOneBy(['email'=>$form->getData()["email"]]);
+     
+             if($customerEmailExist || $customerMobileNoExist) {
+                        
+                 if(($customer->getEmail()== $form->getData()["email"]) && ($customer->getMobileNo()== $form->getData()["mobile_no"]) ){
+                    
+                    $address=$em->getRepository('Model:Address')->findOneBy(['id' => $customer->getaddressId()]);
+                    $address->setAddressLine1($form->getData()["address_line1"]);
+                    $address->setAddressLine2($form->getData()["address_line2"]);
+                    $address->setStateId($state);
+                    $address->setCountryId($country);
+                    $address->setPincode($form->getData()["pincode"]);
+                    $em->persist($address);
+                    $em->flush();
+                    
+                    $customer->setFname($form->getData()["fname"]);
+                    $customer->setLname($form->getData()["lname"]);
+                    $customer->setEmail($form->getData()["email"]);
+                    $customer->setMobileNo($form->getData()["mobile_no"]);
+                    $customer->setAddressId($address);
+                    $customer->setCustomerPlanId($customerPlan);
+                    
+                                           
+                  
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($customer);
+                    $entityManager->flush();
+                    
+                    $qA1->setAnswer($form->getData()['question1']);
+                    $entityManager->persist($qA1);
+                    $entityManager->flush();
+
+                    $qA2->setAnswer($form->getData()['question2']);
+                    $entityManager->persist($qA2);
+                    $entityManager->flush();
+                    
+                    return $this->redirectToRoute("customer_profile_page");
+                }
+                else{
+                $infomessage="you already have an account!!!";
+                return $this->render("@Customer/Account/profile.html.twig", array('form' => $form->createView(),'message'=> $infomessage ,'image'=> $image));
+                }
+            }
+            else
+            {
+            $customer->setFname($form->getData()["fname"]);
+            $customer->setLname($form->getData()["lname"]);
+            $customer->setEmail($form->getData()["email"]);
+            $customer->setMobileNo($form->getData()["mobile_no"]);
+            $customer->setAddressId($address);
+            $customer->setCustomerPlanId($customerPlan);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($customer);
+            $entityManager->flush();
+            
+            
+            $qA1->setAnswer($form->getData()['question1']);
+            $entityManager->persist($qA1);
+            $entityManager->flush();
+            
+            $qA2->setAnswer($form->getData()['question2']);
+            $entityManager->persist($qA2);
+            $entityManager->flush();
+            
+            return $this->redirectToRoute("customer_profile_page");
+            
+           }
+       }else{
+                 
         $form->get('fname')->setData($customer->getFname());
         $form->get('lname')->setData($customer->getLname());
+        $form->get('email')->setData($customer->getemail());
+        $form->get('mobile_no')->setData($customer->getmobileNo());
+        $address=$em->getRepository('Model:Address')->findOneBy(['id' => $customer->getaddressId()]);
         
+        $form->get('address_line1')->setData($address->getaddressLine1());
+        $form->get('address_line2')->setData($address->getaddressLine2());
+        $form->get('pincode')->setData($address->getpincode());
+        $state=$em->getRepository('Model:State')->findOneBy(['id' => $address->getstateId()]);
+        $form->get('state')->setData($state->getstateName());
+        $country=$em->getRepository('Model:Country')->findOneBy(['id' => $address->getcountryId()]);
+        ;
+        $form->get('country')->setData($state->getstateName());
+        $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' => Customer_plan::DEFAULTPLAN]);
         
-        return $this->render("@Customer/Account/profile.html.twig",array('form' => $form->createView()));   
+        $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' => $customer->getcustomerPlanId()]);
+       
+        $form->get('plan')->setData($customerPlan->getcustomerPlanName());
+        $answers=$this->getDoctrine()->getRepository('Model:SecretAnswer')->getQuestionAnswer($customer->getId());
+        $form->get('question1')->setData($answers[0]->getanswer());
+        $form->get('question2')->setData($answers[1]->getanswer());
+        
+       
+        }
+        }
+        catch (\Exception $exception) {
+            var_dump($exception);
+            die;
+        }
+//dump($image);die;
+        return $this->render("@Customer/Account/profile.html.twig",array('form' => $form->createView(),'message'=>"",'image'=>$image));   
         
     }
     
+   
+        
     /**
      * @Route("/customer/forgotpassword",name="customer_forgotpassword_page");
      * @param Request $request
@@ -173,28 +293,44 @@ class AccountController extends Controller
                              
              if (isset($_POST['submit'])) {
                 $email= $_POST['email'];
-                $customer=$em->getRepository('Model:Customer')->findOneBy(['email'=>$email]);
-
-               if($customer){
-               $customerid=$customer->getId();
-               $answeredanswer=$_POST['answer'];
-               $existinganswerobj=$this->getDoctrine()->getRepository('Model:SecretAnswer')->getAnswerForAQuestion($randomquestion,$customerid);
-               $existinganswer=$existinganswerobj[0]->getAnswer();
-               $flag=strcmp(strtolower($existinganswer), strtolower($answeredanswer)); 
-               if($flag==0){
-                   return $this->redirectToRoute("customer_changepassword_page");
-               }
-               else{
+                
+                $password=$_POST['password1'];
+                $confirmPassword=$_POST['password2'];
+                $same=strcmp($password, $confirmPassword);
+                if($same==0){
+                 $customer=$em->getRepository('Model:Customer')->findOneBy(['email'=>$email]);
+                  if($customer){
+                  $customerid=$customer->getId();
+                  $answeredanswer=$_POST['answer'];
+                  $existinganswerobj=$this->getDoctrine()->getRepository('Model:SecretAnswer')->getAnswerForAQuestion($randomquestion,$customerid);
+                  $existinganswer=$existinganswerobj[0]->getAnswer();
+                  $flag=strcmp(strtolower($existinganswer), strtolower($answeredanswer)); 
+                  if($flag==0){
+                 
+                    $encodedPassword=$this->get('security.encoder_factory.generic')->getEncoder($customer)->encodePassword($password, '');
+                     $customer->setPassword($encodedPassword);
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($customer);
+                    $entityManager->flush();
+                   return $this->redirectToRoute("login");                                   
+                  }
+                  else{
                    return $this->render("@Customer/Account/forgotpassword.html.twig",array('message'=> 'Please answer the question again?',
                        'question'=>$question));
-               }
-               }else{
+                   }
+                 }
+                 else{
                    return $this->render("@Customer/Account/forgotpassword.html.twig",array('message'=>'This emailid is not registered please try again..',
                        'question'=>$question));
                    
+                  }
+                }else{
+                    return $this->render("@Customer/Account/forgotpassword.html.twig",array('message'=>'password and confirm password is not matched, please try again..',
+                        'question'=>$question));
+                    
                }
-                   
            }
+          
            
        }
        catch (Exception $exception) {
@@ -207,35 +343,6 @@ class AccountController extends Controller
    
       
     }
-    /**
-     * @Route("/customer/changePassword",name="customer_changepassword_page");
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    
-    public function customerchangepasswordAction(Request $request){
-        
-        $form = $this->createForm(ChangePasswordType::class);
-        $form->handleRequest($request);
-        try {
-            if ($form->isSubmitted() && $form->isValid()) {
-                $customer=$this->getUser();
-                $customer->setPassword($this->get('security.encoder_factory.generic')->getEncoder($customer)->encodePassword($form->getData()['password'], ''));
-                
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($customer);
-                $entityManager->flush();
-                return $this->redirectToRoute("login");
-            }
-        }
-        catch (Exception $exception) {
-            var_dump($exception);
-            die;
-        }
-        
-        return $this->render("@Customer/Account/changepassword.html.twig", array('form' => $form->createView()));
-        
-    }
-    
+      
 
 }

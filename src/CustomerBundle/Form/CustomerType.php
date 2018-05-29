@@ -43,6 +43,9 @@ class CustomerType extends AbstractType
                 }))
             ->add('pincode',TextType::class, array('label' => 'Pincode:'))
             ->add('profile_photo', FileType::class, array('label' => 'Profile photo'))
+            ->add('question1',TextType::class,array('label'=>'what is your favourite color?'))
+            ->add('question2',TextType::class,array('label'=>'which is your favourite food?'))
+            
         ;
 
     }

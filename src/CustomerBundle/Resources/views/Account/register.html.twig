@@ -46,6 +46,9 @@
             {{ form_row(form.pincode,  { 'attr': {'class': 'form-group'} }) }}
             {{ form_row(form.state,  { 'attr': {'class': 'drop-down'} }) }}
             {{ form_row(form.country, { 'attr': {'class': 'drop-down'} }) }}
+            {{ form_row(form.question1, { 'attr': {'class': 'drop-down'} }) }}
+            {{ form_row(form.question2, { 'attr': {'class': 'drop-down'} }) }}
+            
 
             <br/>
             {{ form_row(form.profile_photo,  { 'attr': {'class': 'form-group'} }) }}
@@ -55,6 +58,6 @@
             </div>
             {{ form_end(form) }}
         </div>
-        <a href="{{ path('login') }}">Already have an account? SignIn!!</a>
+        <a href="{{ path('login') }}">Already have an account? Sign in!!</a>
 
 {% endblock %}
