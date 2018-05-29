@@ -34,6 +34,12 @@ class Product_Description
      * @ORM\Column(name="ram_size", type="string", length=50)
      */
     private $ramSize;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="camera", type="string", length=50)
+     */
+    private $camera;
 
     /**
      * @var string
@@ -114,6 +120,30 @@ class Product_Description
     {
         return $this->ramSize;
     }
+    /**
+     * Set color
+     *
+     * @param string $color
+     *
+     * @return Product_Description
+     */
+    public function setCamera($camera)
+    {
+        $this->camera = $camera;
+        
+        return $this;
+    }
+    
+    /**
+     * Get color
+     *
+     * @return string
+     */
+    public function getCamera()
+    {
+        return $this->camera;
+    }
+    
 
     /**
      * Set productCompleteInfo

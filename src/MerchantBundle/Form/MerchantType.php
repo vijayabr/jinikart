@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 class MerchantType extends AbstractType
 {
@@ -18,7 +19,7 @@ class MerchantType extends AbstractType
             ->add('contactPersonName', TextType::class, array('label' => 'Contact Person Name:'))
             ->add('address_line1', TextType::class, array('label' => 'Address_line1:'))
             ->add('address_line2', TextType::class, array('label' => 'Address_line2:'))
-            ->add('email', TextType::class, array('label' => 'Email Id:'))
+            ->add('email', EmailType::class, array('label' => 'Email Id:'))
             ->add('mobile_no', TextType::class, array('label' => 'Mobile Number:'))
             ->add('password', RepeatedType::class, array(
                 'type' => PasswordType::class,
@@ -38,4 +39,5 @@ class MerchantType extends AbstractType
             
          }
 }
+?>
 

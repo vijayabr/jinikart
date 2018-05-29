@@ -12,6 +12,12 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Common\Model\Product;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use MerchantBundle\Form\AddProductType;
+use Common\Model\Category;
+use Common\Model\Brand;
+use Common\Model\Product_Detail_List;
+use Common\Model\Product_Description;
 
 
 class ProductManagementController extends Controller
@@ -21,33 +27,76 @@ class ProductManagementController extends Controller
      * @param Request $Request
      */
     
-    public function addProductAction(Request $Request){
+    public function addProductAction(Request $request){
         
-        $product= new Product();
-        $form = $this->createFormBuilder($product)
-        ->add('product_name',TextType::class,array('label' => 'Product Name'))
-        ->add('product_price',IntegerType::class,array('label' => 'Product Name'))
-        ->add('productIMEI',IntegerType::class,array('label' => 'IMEI_NO','class'=>'Common\Model\Product_Detail_List'))
-        ->add('product_discount',PercentType::class,array('label' => 'Discount'))
-        ->add('category',TextType::class,array('label' => 'Category','class'=>'Common\Model\Category'))
-        ->add('brand',TextType::class,array('label' => 'Brand','class'=>'Common\Model\Brand'))
-        ->add('color',TextType::class,array('label' => 'Color','class'=>'Common\Model\Product_Description'))
-        ->add('ram_size',TextType::class,array('label' => 'Ram Size','class'=>'Common\Model\Product_Description'))
-        ->add('camera', TextType::class,array('label' => 'Camera','class'=>'Common\Model\Product_Description'))
-        ->add('product_complete_info',TextareaType::class,array('label' => 'Description','class'=>'Common\Model\Product_Description'))
-        ->add('product_discount',PercentType::class,array('label' => 'Discount','class'=>'Common\Model\Product'))
-        ->add('category_name',TextType::class,array('label' => 'Category','class'=>'Common\Model\Category'))
-        ->add('brand_name',TextType::class,array('label' => 'Brand','class'=>'Common\Model\Brand'))
-        ->add('color',TextType::class,array('label' => 'Color','class'=>'Common\Model\Product_Description'))
-        ->add('ram_size',TextType::class,array('label' => 'Ram Size','class'=>'Common\Model\Product_Description'))
-        ->add('camera', TextType::class,array('label' => 'Camera','class'=>'Common\Model\Product_Description'))
-        ->add('product_complete_info',TextareaType::class,array('label' => 'Description','class'=>'Common\Model\Product_Description'))
-        ->add('add',SubmitType::class, array('label' => 'Add'))
-        ->add('clear',ResetType::class, array('label' => 'Clear'))
-        ->getForm();
+        $form = $this->createForm(AddProductType::class);
+        $form->handleRequest($request);
+        try{
+            if ($form->isSubmitted() && $form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $name=$form->getData()["product_name"];
+                $price = $form->getData()["product_price"];
+                $imei = $form->getData()["productIMEI"];
+                $discount = $form->getData()["product_discount"];
+                $category = $form->getData()["category"];
+                $brand = $form->getData()["brand"];
+                $color = $form->getData()["color"];
+                $ram = $form->getData()["ram_size"];
+                $cam = $form->getData()["camera"];
+                $info = $form->getData()["product_complete_info"];
+                
+                $image = $form->getData()["product_photo"];
+                
+                $pro= new Product();
+                $pro->setProductName($name);
+                $pro->setProductDiscount($discount);
+                $pro->setProductPrice($price);
+                
+                $imageName =  $pro->getProductName(). '.' . $image->guessExtension();
+               // $image->move($this->getParameter('product_image_directory'),$imageName);
+                $pro->setPhotoName($imageName);
+                
+                $cat= new Category();
+                $cat->setCategoryName($category);
+                
+                $brand1= new Brand();
+                $brand1->setCategoryName($brand);
+                
+                $imei1= new Product_Detail_List();
+                $imei1->setProductIMEI($imei);
+                
+                $descp = new Product_Description();
+                $descp->setColor($color);
+                $descp->setRamSize($ram);
+                $descp->setCamera($cam);
+                $descp->setProductCompleteInfo($info);
+                
+//                 $em->persist($pro);
+//                 $em->flush(); 
+//                 $em->persist($imei1);
+//                 $em->flush();
+//                 $em->persist($descp);
+//                 $em->flush();
+//                 $em->persist($brand1);
+//                 $em->flush();
+//                 $em->persist($cat);
+//                 $em->flush();
+           }
+            return $this->render("@Merchant/Default/add.html.twig",array('form' => $form->createView()));
+            
+       }catch(\Exception $exception){
+                
+           var_dump($exception);
+           die;
        
-        return $this->render("@Merchant/Default/add.html.twig",array('form' => $form->createView()));
-    }
+       }
+       
+  }
+        
+       
+        
+      
+
     
     /**
      * @Route("/list",name="list_products");
@@ -55,6 +104,7 @@ class ProductManagementController extends Controller
      */
     
     public function listProductAction(Request $Request){
+        
         
         return $this->render("@Merchant/Default/list.html.twig");
     }

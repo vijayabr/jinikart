@@ -28,7 +28,7 @@ class AccountController extends Controller
             if ($form->isSubmitted() && $form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
                 $merchantPlan = $em->getRepository('Model:Merchant_plan')->findOneBy(['id' => 1]);
-                dump($form->getData()); //get address
+                //get address
                 $name=$form->getData()["companyName"];                
                 $addr1 = $form->getData()["address_line1"];
                 $addr2 = $form->getData()["address_line2"];
@@ -42,11 +42,11 @@ class AccountController extends Controller
                 $address->setCountryId($country);
                 $address->setPincode($pin);
                 $error1=$validator->validate($address);
-                $em->persist($address);
+              //  $em->persist($address);
                // $em->flush();
                 $merchantMobileNoExist =$em->getRepository('Model:Merchant')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
                 $merchantEmailExist =$em->getRepository('Model:Merchant')->findOneBy(['email'=>$form->getData()["email"]]);
-               
+                
                 if(!$merchantEmailExist && !$merchantMobileNoExist) {
                     
                     $merchant = new Merchant();
@@ -65,15 +65,16 @@ class AccountController extends Controller
                      */
                     $image = $form->getData()["companylogo"];
                     $imageName =  $merchant->getcontactPersonName(). '.' . $image->guessExtension();
-                    $image->move($this->getParameter('company_image_directory'),$imageName);
+                   // $image->move($this->getParameter('company_image_directory'),$imageName);
                     $merchant->setCompanyLogo($imageName);
                     $errors =$validator->validate($merchant);
                   
-                    if(count($errors) > 0 || count($error1)>0){
-                        return $this->render("@Merchant/Account/register.html.twig", array( 'form' => $form->createView(), 'message'=> '','errors'=>$errors, 'error1'=>$error1 ));
+                   if(count($errors) > 0 || count($error1)>0){
+                        return $this->render("@Merchant/Account/register.html.twig", array('form' => $form->createView(), 'message'=> '','errors'=>$errors, 'error1'=>$error1));
                     }
-                    else {
+                   else {
                         $entityManager = $this->getDoctrine()->getManager();
+                     
                         $entityManager->persist($merchant);
                         $entityManager->flush();
                         return $this->redirectToRoute('merchant_login'); 
@@ -85,20 +86,16 @@ class AccountController extends Controller
                     $infomessage="you already have an account!!!";
                     return $this->render("@Merchant/Account/register.html.twig", array('form' => $form->createView(),'message'=> $infomessage,'errors'=>'', 'error1'=>'' ));
                 }
-                
             }
-            
-            return $this->render("@Merchant/Account/register.html.twig", array('form' => $form->createView(),'message'=> '','errors'=>'', 'error1'=>'' ));
+                   
+                    return $this->render("@Merchant/Account/register.html.twig", array('form' => $form->createView(),'message'=> '','errors'=>'', 'error1'=>''));
           
-        
         } catch (\Exception $exception) {
             var_dump($exception);
             die;
-        }
-        
     }
     
-    
+ }
     /**
      * @Route("/merchant/index", name="merchant_index");
      * @param Request $request

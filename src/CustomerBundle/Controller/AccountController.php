@@ -49,7 +49,7 @@ class AccountController extends Controller
                 $address->setStateId($state);
                 $address->setCountryId($country);
                 $address->setPincode($pin);
-                $error1=$validator->validate($address);
+               $error1=$validator->validate($address);
                 $em->persist($address);
                 $em->flush();
                 $customerMobileNoExist =$em->getRepository('Model:Customer')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
