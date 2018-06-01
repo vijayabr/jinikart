@@ -36,7 +36,7 @@
             {{ form_row(form.companyName)}}
             {{ form_row(form.contactPersonName)}}
             {{ form_row(form.email, {'attr': {'id':'email'}} )}}
-            {{ form_row(form.mobile_no)}}
+            {{ form_row(form.mobileNo, {'attr': {'id':'mobile'}})}}
             {{ form_row(form.password )}}
             {{ form_row(form.address_line1) }}
             {{ form_row(form.address_line2) }}
@@ -47,8 +47,8 @@
             {{ form_row(form.companylogo,{ 'attr':{'class': 'drop-down'}}) }}
           
             <div id="buttons" class="btn">
-            <input type="button"  value="Submit" /><br/>
-            <input type="button" value="Clear"/>
+            <button type="submit">Register</button><br/>
+           <button type="reset">Clear</button><br/>
             </div>
            {{ form_end(form)}}
             <a href="{{ path('merchant_login') }}">Already have an account? SignIn!!</a>
