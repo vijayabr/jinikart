@@ -3,6 +3,7 @@
 namespace Common\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 
 
@@ -13,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="product")
  * @ORM\Entity(repositoryClass="Common\Model\Repository\ProductRepository")
  */
-class Product
+class Product 
 {
     /**
      * @var int
@@ -45,6 +46,12 @@ class Product
     private $productPrice;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="coupon", type="string", nullable=true)
+     */
+    private $coupon;
+    /**
      * @var float
      *
      * @ORM\Column(name="product_discount", type="float", nullable=true)
@@ -54,7 +61,7 @@ class Product
     /**
      * @var int
      * One Product can have one category.
-     * @ORM\OneToOne(targetEntity="Common\Model\Category")
+     * @ORM\ManyToOne(targetEntity="Common\Model\Category")
      * @ORM\JoinColumn(name="categoryId", referencedColumnName="id")
      */
     private $categoryId;
@@ -62,7 +69,7 @@ class Product
     /**
      * @var int
      * One Product can be of one brand.
-     * @ORM\OneToOne(targetEntity="Common\Model\Brand")
+     * @ORM\ManyToOne(targetEntity="Common\Model\Brand")
      * @ORM\JoinColumn(name="brandId", referencedColumnName="id")
      */
     private $brandId;
@@ -82,6 +89,14 @@ class Product
     private $updatedAt;
 
 
+    public function __construct() {
+        
+        $this->setCreatedAt(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
+    
     /**
      * Get id
      *
@@ -189,6 +204,29 @@ class Product
     }
 
     /**
+     * Set coupon
+     *
+     * @param string $coupon
+     *
+     * @return Product
+     */
+    public function setCoupon($coupon)
+    {
+        $this->coupon = $coupon;
+        
+        return $this;
+    }
+    
+    /**
+     * Get coupon
+     *
+     * @return string
+     */
+    public function getCoupon()
+    {
+        return $this->coupon;
+    }
+    /**
      * Set categoryId
      *
      * @param integer $categoryId
@@ -283,5 +321,20 @@ class Product
     {
         return $this->updatedAt;
     }
+    public function getPassword()
+    {}
+
+    public function eraseCredentials()
+    {}
+
+    public function getSalt()
+    {}
+
+    public function getRoles()
+    {}
+
+    public function getUsername()
+    {}
+
 }
 

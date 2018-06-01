@@ -3,6 +3,8 @@
 namespace Common\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\DBAL\Types\BigIntType;
 
 /**
  * Product_Detail_List
@@ -28,8 +30,8 @@ class Product_Detail_List
     private $productId;
 
     /**
-     * @var string
-     * @ORM\Column(name="product_IMEI", type="integer", unique=true)
+     * @var bigint
+     * @ORM\Column(name="product_IMEI", type="bigint", unique=true)
      */
     private $productIMEI;
 
@@ -47,6 +49,14 @@ class Product_Detail_List
      */
     private $updatedAt;
 
+    public function __construct() {
+        
+        $this->setCreatedAt(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
+    
 
     /**
      * Get id
@@ -85,7 +95,7 @@ class Product_Detail_List
     /**
      * Set productIMEI
      *
-     * @param string $productIMEI
+     * @param bigint $productIMEI
      *
      * @return Product_Detail_List
      */
@@ -99,7 +109,7 @@ class Product_Detail_List
     /**
      * Get productIMEI
      *
-     * @return string
+     * @return bigint
      */
     public function getProductIMEI()
     {

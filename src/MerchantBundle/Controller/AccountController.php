@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use MerchantBundle\Form\MerchantType;
 use Common\Model\Address;
 use Common\Model\Merchant;
+use Symfony\Component\HttpFoundation\Response;
 
 class AccountController extends Controller
 {
@@ -28,6 +29,7 @@ class AccountController extends Controller
             if ($form->isSubmitted() && $form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
                 $merchantPlan = $em->getRepository('Model:Merchant_plan')->findOneBy(['id' => 1]);
+                
                 //get address
                 $name=$form->getData()["companyName"];                
                 $addr1 = $form->getData()["address_line1"];
@@ -35,6 +37,7 @@ class AccountController extends Controller
                 $pin = $form->getData()["pincode"];
                 $state = $form->getData()["state"];
                 $country = $form->getData()["country"];
+                
                 $address = new Address();
                 $address->setAddressLine1($addr1);
                 $address->setAddressLine2($addr2);
@@ -42,9 +45,9 @@ class AccountController extends Controller
                 $address->setCountryId($country);
                 $address->setPincode($pin);
                 $error1=$validator->validate($address);
-              //  $em->persist($address);
-               // $em->flush();
-                $merchantMobileNoExist =$em->getRepository('Model:Merchant')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
+                $em->persist($address);
+                $em->flush();
+                $merchantMobileNoExist =$em->getRepository('Model:Merchant')->findOneBy(['mobileNo'=>$form->getData()["mobileNo"]]);
                 $merchantEmailExist =$em->getRepository('Model:Merchant')->findOneBy(['email'=>$form->getData()["email"]]);
                 
                 if(!$merchantEmailExist && !$merchantMobileNoExist) {
@@ -54,7 +57,7 @@ class AccountController extends Controller
                     $merchant->setCompanyName($form->getData()["companyName"]);
                     $merchant->setcontactPersonName($form->getData()["contactPersonName"]);
                     $merchant->setEmail($form->getData()["email"]);
-                    $merchant->setMobileNo($form->getData()["mobile_no"]);
+                    $merchant->setMobileNo($form->getData()["mobileNo"]);
                     $merchant->setPassword($form->getData()["password"]);
                     $merchant->setAddressId($address);
                     $merchant->setmerchantPlanId($merchantPlan);
@@ -65,7 +68,7 @@ class AccountController extends Controller
                      */
                     $image = $form->getData()["companylogo"];
                     $imageName =  $merchant->getcontactPersonName(). '.' . $image->guessExtension();
-                   // $image->move($this->getParameter('company_image_directory'),$imageName);
+                    $image->move($this->getParameter('company_image_directory'),$imageName);
                     $merchant->setCompanyLogo($imageName);
                     $errors =$validator->validate($merchant);
                   
@@ -74,7 +77,6 @@ class AccountController extends Controller
                     }
                    else {
                         $entityManager = $this->getDoctrine()->getManager();
-                     
                         $entityManager->persist($merchant);
                         $entityManager->flush();
                         return $this->redirectToRoute('merchant_login'); 
@@ -91,7 +93,7 @@ class AccountController extends Controller
                     return $this->render("@Merchant/Account/register.html.twig", array('form' => $form->createView(),'message'=> '','errors'=>'', 'error1'=>''));
           
         } catch (\Exception $exception) {
-            var_dump($exception);
+            return new  Response($exception);
             die;
     }
     

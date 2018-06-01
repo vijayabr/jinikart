@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Category
- *
  * @ORM\Table(name="category")
  * @ORM\Entity(repositoryClass="Common\Model\Repository\CategoryRepository")
  */
@@ -14,9 +13,8 @@ class Category
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
+     * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
@@ -30,7 +28,9 @@ class Category
 
     /**
      * @var int
-     * @ORM\Column(name="brandId", type="integer")
+     * @ORM\OneToOne(targetEntity="Common\Model\Brand")
+     * @ORM\JoinColumn(name="brandId", referencedColumnName="id")
+     * 
      */
     private $brandId;
 
@@ -47,7 +47,14 @@ class Category
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-
+    public function __construct() {
+        
+        $this->setCreatedAt(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
+    
 
     /**
      * Get id
