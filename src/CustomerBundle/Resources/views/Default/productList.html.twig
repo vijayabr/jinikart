@@ -1,0 +1,71 @@
+{% extends "@Customer/Default/index.html.twig" %}
+{% block body %}
+    <div class="header" style="color-interpolation: linearRGB;background-color: #7DA0B1;color:white">
+      <h1 align="center">Welcome to jinikart</h1>
+       <h5>Hello<a href="{{ path('customer_profile_page') }}">
+         {{ customer.fname }}</a>
+          !!!!</h5>    
+     </div>
+        <div  id="productlistContainer">
+     	<div class="row">
+        <div class="col-sm-2 col-md-5 col-lg-4" id="advancedform"style="background-color:#936c6c;padding:10px 2px 5px 50px; color:white">
+        <label style="font-size: 20px;">Brand&nbsp:&nbsp&nbsp</label>
+        <select id="brandlist" name="brand">
+	    {% for brand in brand %}
+        
+        <option value="{{ brand.brandName }}">{{ brand.brandName }}</option>
+        {% endfor %}
+	   </select><br>
+	   <label style="font-size: 20px;">Mobile phone operating system&nbsp:&nbsp&nbsp</label>
+        <select id="categorylist" name="category">
+	    {% for category in category %}
+        <option value="{{category.categoryName }}">{{category.categoryName }}</option>
+        {% endfor %}
+		</select><br>
+		<label style="font-size: 20px;">Price&nbsp:</label><br>
+
+		min&nbsp:&nbsp&nbsp<input type="text" id="min" name="min" value=0><br> max:
+	
+		<input type="text" id="max" name="max" value=100000><br>
+				
+		<label style="font-size: 20px;">Discount&nbsp&nbsp:&nbsp</label><br>
+		<input type="checkbox" name="discount" value=10>10% off or More<br>
+		<input type="checkbox" name="discount" value=25>25% off or More<br>
+		<input type="checkbox" name="discount" value=35>35% off or More<br>
+		<input type="checkbox" name="discount" value=50>50% off or More<br>
+  				
+		<label style="font-size: 20px;">Ram&nbsp:&nbsp&nbsp</label><br>
+		<input type="checkbox" name="ramsize" value=0>less than 1GB<br>
+		<input type="checkbox" name="ramsize" value=1>1GB<br>
+		<input type="checkbox" name="ramsize" value=2>2GB<br>
+		<input type="checkbox" name="ramsize" value=3>3GB<br>
+		<input type="checkbox" name="ramsize" value=4>4GB and more<br>
+		
+        <label style="font-size: 20px;">Camera&nbsp:&nbsp&nbsp</label><br>
+		<input type="radio" name="camera" value=1>front<br>
+		<input type="radio" name="camera" value=2>back<br>
+		<input type="radio" name="camera" value=3>dual<br>
+		<button type="submit" name="search" id="search">search</button>
+       </div>
+       <div class="col-sm-9 col-md-6 col-lg-8" style="padding:20px 20px 20px 20px;">
+        {%  if products %}   
+     	{%  for product in products %}
+           
+     	 <div class=" well" id="product" style="background-color: #ff9800;margin-Top:2em; margin-left:5em; padding:20px 20px 20px 20px;" >        
+		 <a href="{{ path('productdetails_page', { 'pName': product.productName }) }}"> {{  product.productName}}</a>
+		 &nbsp&nbsp&nbsp&nbsp price: {{  product.productPrice}}
+	     </div>
+	    {% endfor %}
+        {% endif %}
+    
+     </div>
+       </div>
+ 	 </div>
+
+{% endblock %}
+{% block javascripts %}
+
+<script src={{ asset('/js/CustomerProfile.js') }}></script>
+<script src={{ asset('/js/Product.js') }}></script>
+
+{% endblock %}

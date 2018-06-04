@@ -29,7 +29,7 @@ class Product_Detail_List
 
     /**
      * @var string
-     * @ORM\Column(name="product_IMEI", type="integer", unique=true)
+     * @ORM\Column(name="product_IMEI", type="string", unique=true)
      */
     private $productIMEI;
 
@@ -47,6 +47,14 @@ class Product_Detail_List
      */
     private $updatedAt;
 
+    public function __construct() {
+        
+        $this->setCreatedAt(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
+    
 
     /**
      * Get id

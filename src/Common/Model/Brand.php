@@ -41,6 +41,14 @@ class Brand
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
+    public function __construct() {
+        
+        $this->setCreatedAt(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
+    
 
 
     /**

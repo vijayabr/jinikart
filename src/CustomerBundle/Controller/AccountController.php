@@ -21,9 +21,10 @@ use CustomerBundle\Form\ChangePasswordType;
 use CustomerBundle\Form\ProfileType;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
+use CustomerBundle\Form\profileImageuploadType;
 
 
-class AccountController extends Controller 
+class AccountController extends Controller
 {
     
     /**
@@ -86,15 +87,14 @@ class AccountController extends Controller
                        
                         $qA1->setAnswer($form->getData()['question1']);
                         $entityManager = $this->getDoctrine()->getManager();
-                        $entityManager->persist($qA1);dump($qA1);
+                        $entityManager->persist($qA1);
                         $entityManager->flush();
                         
                         $qA2->setAnswer($form->getData()['question2']);
                         $entityManager = $this->getDoctrine()->getManager();
                         $entityManager->persist($qA2);
                         $entityManager->flush();
-                        
-                        
+                                                
                         
                         $customer->setAddressId($address);
                         $customer->setCustomerPlanId($customerPlan);
@@ -104,6 +104,8 @@ class AccountController extends Controller
                          * @var uplodedFile images
                          */
                         $image = $form->getData()["profile_photo"];
+
+                      
                         $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();
                         
                         $image->move($this->getParameter('image_directory'),$imageName);
@@ -151,18 +153,36 @@ class AccountController extends Controller
     
     public function customerProfileAction(Request $request){
         $customer= $this->getUser();
-        $image= $customer->getProfilePhoto();
-       // dump($image);die;
+        $image1= $customer->getProfilePhoto();
+       
         $form = $this->createForm(ProfileType::class);
         $form->handleRequest($request);
+        $imageform = $this->createForm(profileImageuploadType::class);
+        $imageform->handleRequest($request);
         $em = $this->getDoctrine()->getManager();
         try{
-        
+            if($imageform->isSubmitted()){
+                        
+                    
+            /**
+             * @var uplodedFile images
+             */
+                $image = $imageform->getData()["profile_photo"];
+                $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();
+              
+            
+                $image->move($this->getParameter('image_directory'),$imageName); 
+                $customer->setProfilePhoto($imageName);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($customer); 
+                $entityManager->flush();
+                return $this->redirectToRoute("customer_profile_page");
+            }
             if ($form->isSubmitted()) {
             $customerPlan =$form->getData()["plan"];
             $state=$form->getData()["state"];
             $country=$form->getData()["country"];
-                                  
+                    
             $q1=$em->getRepository('Model:SecretQuestion')->find(1);
             $q2=$em->getRepository('Model:SecretQuestion')->find(2);
             $qA1=$em->getRepository('Model:SecretAnswer')->findOneBy(['questionId'=>$q1]);
@@ -171,11 +191,13 @@ class AccountController extends Controller
             $customerMobileNoExist =$em->getRepository('Model:Customer')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
             $customerEmailExist =$em->getRepository('Model:Customer')->findOneBy(['email'=>$form->getData()["email"]]);
      
-             if($customerEmailExist || $customerMobileNoExist) {
+            if($customerEmailExist || $customerMobloginileNoExist) {
                         
                  if(($customer->getEmail()== $form->getData()["email"]) && ($customer->getMobileNo()== $form->getData()["mobile_no"]) ){
-                    
-                    $address=$em->getRepository('Model:Address')->findOneBy(['id' => $customer->getaddressId()]);
+
+                     $address =$em->getRepository('Model:Address')->findOneBy(['id' => $customer->getAddressId()]);
+                     
+                     
                     $address->setAddressLine1($form->getData()["address_line1"]);
                     $address->setAddressLine2($form->getData()["address_line2"]);
                     $address->setStateId($state);
@@ -183,7 +205,7 @@ class AccountController extends Controller
                     $address->setPincode($form->getData()["pincode"]);
                     $em->persist($address);
                     $em->flush();
-                    
+              
                     $customer->setFname($form->getData()["fname"]);
                     $customer->setLname($form->getData()["lname"]);
                     $customer->setEmail($form->getData()["email"]);
@@ -209,7 +231,9 @@ class AccountController extends Controller
                 }
                 else{
                 $infomessage="you already have an account!!!";
-                return $this->render("@Customer/Account/profile.html.twig", array('form' => $form->createView(),'message'=> $infomessage ,'image'=> $image));
+                return $this->render("@Customer/Account/profile.html.twig", 
+                    array('form' => $form->createView(),'imageform'=> $imageform->createView(),
+                        'message'=> $infomessage, 'image'=> $image1));
                 }
             }
             else
@@ -236,7 +260,7 @@ class AccountController extends Controller
             return $this->redirectToRoute("customer_profile_page");
             
            }
-       }else{
+       }
                  
         $form->get('fname')->setData($customer->getFname());
         $form->get('lname')->setData($customer->getLname());
@@ -260,20 +284,21 @@ class AccountController extends Controller
         $answers=$this->getDoctrine()->getRepository('Model:SecretAnswer')->getQuestionAnswer($customer->getId());
         $form->get('question1')->setData($answers[0]->getanswer());
         $form->get('question2')->setData($answers[1]->getanswer());
+             
         
-       
-        }
         }
         catch (\Exception $exception) {
             var_dump($exception);
             die;
         }
 //dump($image);die;
-        return $this->render("@Customer/Account/profile.html.twig",array('form' => $form->createView(),'message'=>"",'image'=>$image));   
+        return $this->render("@Customer/Account/profile.html.twig",array('form' => $form->createView(),'imageform'=> $imageform->createView(),'message'=>"",'image'=>$image1));   
         
     }
     
-   
+    
+    
+    
         
     /**
      * @Route("/customer/forgotpassword",name="customer_forgotpassword_page");
@@ -340,9 +365,8 @@ class AccountController extends Controller
        
        
        return $this->render("@Customer/Account/forgotpassword.html.twig",array('message'=> '','question'=>$question));
-   
-      
+         
     }
-      
+    
 
 }

@@ -124,9 +124,9 @@ class Merchant implements UserInterface
         $this->merchantRole="ROLE_MERCHANT";
       
             // we set up "created"+"modified"
-            $this->setCreated(new \DateTime());
-            if ($this->getModified() == null) {
-                $this->setModified(new \DateTime());
+            $this->setCreatedAt(new \DateTime());
+            if ($this->getUpdatedAt() == null) {
+                $this->setUpdatedAt(new \DateTime());
             }
         }
         

@@ -10,4 +10,19 @@ namespace Common\Model\Repository;
  */
 class CategoryRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function Categoryinfo($id) {
+        
+        $productinfo = $this->getEntityManager()
+        ->createQuery('SELECT c FROM Model:Category c WHERE c.id= :cid')
+        ->setParameter('cid', $id)
+        ->getResult();
+        return $productinfo;
+    }
+    public function categoryNameList() {
+        
+        $productinfo = $this->getEntityManager()
+        ->createQuery('SELECT c.categoryName FROM Model:Category c')
+        ->getResult();
+        return $productinfo;
+    }
 }

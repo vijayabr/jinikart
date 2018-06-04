@@ -10,4 +10,37 @@ namespace Common\Model\Repository;
  */
 class ProductRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function productsearchBasedonBrand($brand,$min,$max) {
+        
+          $products = $this->getEntityManager()
+          ->createQuery(
+            'SELECT p FROM Model:Product p WHERE p.brandId = :brand AND p.productPrice >= :min OR p.productPrice <= :max  ORDER BY p.productPrice ASC')
+            ->setParameter('brand', $brand)
+            ->setParameter('min', $min)            
+            ->setParameter('max', $max)
+            ->getResult();
+            return $products;
+       
+            
+    }
+    
+    public function productsearch($min,$max) {
+        $products = $this->getEntityManager()
+        ->createQuery(
+            'SELECT p FROM Model:Product p WHERE p.productPrice >= :min OR p.productPrice <= :max  ORDER BY p.productPrice ASC')
+            ->setParameter('min', $min)
+            ->setParameter('max', $max)
+            ->getResult();
+            return $products;
+    }
+    
+    public function completeproductinfo($pName) {
+
+        $productinfo = $this->getEntityManager()
+        ->createQuery('SELECT p FROM Model:Product p JOIN p.brandId brand b WHERE p.productName =:pName')
+         ->setParameter('pName', $pName)
+         ->getResult();
+          return $productinfo;
+    }
+    
 }

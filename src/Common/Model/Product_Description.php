@@ -34,6 +34,14 @@ class Product_Description
      * @ORM\Column(name="ram_size", type="string", length=50)
      */
     private $ramSize;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="camera", type="string", length=20)
+     */
+    private $camera;
+    
 
     /**
      * @var string
@@ -57,6 +65,14 @@ class Product_Description
     private $updatedAt;
 
 
+    public function __construct() {
+        
+        $this->setCreatedAt(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
+    
     /**
      * Get id
      *
@@ -115,6 +131,33 @@ class Product_Description
         return $this->ramSize;
     }
 
+    
+    
+    /**
+     * Set camera
+     *
+     * @param string $camera
+     *
+     * @return Product_Description
+     */
+    public function setCamera($camera)
+    {
+        $this->camera = $camera;
+        
+        return $this;
+    }
+    
+    /**
+     * Get camera
+     *
+     * @return string
+     */
+    public function getCamera()
+    {
+        return $this->camera;
+    }
+    
+    
     /**
      * Set productCompleteInfo
      *

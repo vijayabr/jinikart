@@ -40,21 +40,21 @@ class Product
     /**
      * @var float
      *
-     * @ORM\Column(name="product_price", type="float")
+     * @ORM\Column(name="productprice", type="float")
      */
     private $productPrice;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="product_discount", type="float", nullable=true)
+     * @ORM\Column(name="productDiscount", type="float", nullable=true)
      */
     private $productDiscount;
 
     /**
      * @var int
      * One Product can have one category.
-     * @ORM\OneToOne(targetEntity="Common\Model\Category")
+     * @ORM\ManyToOne(targetEntity="Common\Model\Category")
      * @ORM\JoinColumn(name="categoryId", referencedColumnName="id")
      */
     private $categoryId;
@@ -62,7 +62,7 @@ class Product
     /**
      * @var int
      * One Product can be of one brand.
-     * @ORM\OneToOne(targetEntity="Common\Model\Brand")
+     * @ORM\ManyToOne(targetEntity="Common\Model\Brand")
      * @ORM\JoinColumn(name="brandId", referencedColumnName="id")
      */
     private $brandId;
@@ -81,7 +81,14 @@ class Product
      */
     private $updatedAt;
 
-
+    public function __construct() {
+        
+        $this->setCreatedAt(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
+    
     /**
      * Get id
      *

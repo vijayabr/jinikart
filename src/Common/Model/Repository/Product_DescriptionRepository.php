@@ -10,4 +10,5 @@ namespace Common\Model\Repository;
  */
 class Product_DescriptionRepository extends \Doctrine\ORM\EntityRepository
 {
+   
 }

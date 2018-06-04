@@ -4,13 +4,10 @@ namespace MerchantBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-<<<<<<< HEAD
-use src\MerchantBundle\Form\MerchantType;
-use Symfony\Component\HttpFoundation\Request;
-=======
-use Symfony\Component\HttpFoundation\Request;
 use MerchantBundle\Form\MerchantType;
->>>>>>> merchant_registration
+use Symfony\Component\HttpFoundation\Request;
+
+
 use Common\Model\Address;
 use Common\Model\Merchant;
 
@@ -29,38 +26,38 @@ class AccountController extends Controller
         $form = $this->createForm(MerchantType::class);
         $form->handleRequest($request);
         $validator=$this->get('validator');
+        
         try {
             if ($form->isSubmitted() && $form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
                 $merchantPlan = $em->getRepository('Model:Merchant_plan')->findOneBy(['id' => 1]);
-<<<<<<< HEAD
+
                 //get address
-                $name = $form->getData()["companyName"];
-=======
-                dump($form->getData()); //get address
                 $name=$form->getData()["companyName"];                
->>>>>>> merchant_registration
                 $addr1 = $form->getData()["address_line1"];
                 $addr2 = $form->getData()["address_line2"];
                 $pin = $form->getData()["pincode"];
                 $state = $form->getData()["state"];
                 $country = $form->getData()["country"];
-                $address = new Address();
-                $address->setAddressLine1($addr1);
-                $address->setAddressLine2($addr2);
-                $address->setStateId($state);
-                $address->setCountryId($country);
-                $address->setPincode($pin);
-                $error1=$validator->validate($address);
-                $em->persist($address);
-               // $em->flush();
+                
                 $merchantMobileNoExist =$em->getRepository('Model:Merchant')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
                 $merchantEmailExist =$em->getRepository('Model:Merchant')->findOneBy(['email'=>$form->getData()["email"]]);
-               
+ 
                 if(!$merchantEmailExist && !$merchantMobileNoExist) {
                     
                     $merchant = new Merchant();
                
+                    $address = new Address();
+                    $address->setAddressLine1($addr1);
+                    $address->setAddressLine2($addr2);
+                    $address->setStateId($state);
+                    $address->setCountryId($country);
+                    $address->setPincode($pin);
+                    $error1=$validator->validate($address);
+                    $em->persist($address);
+                    //$em->flush();
+                    
+                    
                     $merchant->setCompanyName($form->getData()["companyName"]);
                     $merchant->setcontactPersonName($form->getData()["contactPersonName"]);
                     $merchant->setEmail($form->getData()["email"]);
@@ -68,7 +65,7 @@ class AccountController extends Controller
                     $merchant->setPassword($form->getData()["password"]);
                     $merchant->setAddressId($address);
                     $merchant->setmerchantPlanId($merchantPlan);
-                    $merchant->setPassword($this->get('security.encoder_factory')->getEncoder($merchant)->encodePassword($form->getData()['password'], ''));
+                    $merchant->setPassword($this->get('security.encoder_factory.generic')->getEncoder($merchant)->encodePassword($form->getData()['password'], ''));
                     
                     /**
                      * @var uplodedFile images
@@ -137,8 +134,4 @@ class AccountController extends Controller
     
 }
         
-    
-<<<<<<< HEAD
-=======
 
->>>>>>> merchant_registration
