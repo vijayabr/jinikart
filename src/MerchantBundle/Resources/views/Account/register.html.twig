@@ -2,31 +2,59 @@
 {% block body %}
     <div class=" main" align="center">
         <h2>Merchant Signup</h2>
-    </div>    
-          <div class="merchantform" style=" padding: 20px 15px 15px 20px; left: 100px " align="left">
+    </div> 
+         <div align="left">
+         {% if errors  %}
+               <ul>
+                   {%for er in errors  %}
+                    <li>
+                       {{ er.message }}
+                    </li>
+                   {% endfor %}
+               </ul>
+           {% endif %}
+           {% if error1 %}
+               <ul>
+                {% for er1 in error1 %}
+                    <li>
+                    {{ er1.message }}
 
-            {{ form_start(form) }}
-            {{ form_row(form.companyName,{ 'attr': {'class': 'form-group'} }) }}
-            {{ form_row(form.contactPersonName,  { 'attr': {'class': 'form-group'} }) }}
-            {{ form_row(form.email,  { 'attr': {'class': 'form-group'} }) }}
-            {{ form_row(form.mobile_no,  { 'attr': {'class': 'form-group'} }) }}
-            {{ form_row(form.password,  { 'attr': {'class': 'form-group'} }) }}
+                    </li>
+                {% endfor %}
+               </ul>
+           {% endif %}
 
-            {{ form_row(form.address_line1,  { 'attr': {'class': 'form-group'} }) }}
-            {{ form_row(form.address_line2,  { 'attr': {'class': 'form-group'} }) }}
-            {{ form_row(form.pincode,  { 'attr': {'class': 'form-group'} }) }}
-            {{ form_row(form.state,  { 'attr': {'class': 'drop-down'} }) }}
-            {{ form_row(form.country, { 'attr': {'class': 'drop-down'} }) }}
+           {% if message %}
+                {{ message }}
+               {{ "check your email-id or mobile number "}}
+            {% endif %}
 
+          </div>  
+    <div name="merchantform" style=" padding: 20px 15px 15px 20px; left: 100px ;align:left">
+
+            {{ form_start(form)}}
+            {{ form_row(form.companyName)}}
+            {{ form_row(form.contactPersonName)}}
+            {{ form_row(form.email, {'attr': {'id':'email'}} )}}
+            {{ form_row(form.mobileNo, {'attr': {'id':'mobile'}})}}
+            {{ form_row(form.password )}}
+            {{ form_row(form.address_line1) }}
+            {{ form_row(form.address_line2) }}
+            {{ form_row(form.pincode) }}
+            {{ form_row(form.state ,{ 'attr':{'class': 'drop-down'}}) }}
+            {{ form_row(form.country ,{'attr':{'class': 'drop-down'}}) }}
             <br/>
-            {{ form_row(form.companylogo,  { 'attr': {'class': 'form-group'} }) }}
+            {{ form_row(form.companylogo,{ 'attr':{'class': 'drop-down'}}) }}
+          
             <div id="buttons" class="btn">
-            <button type="submit">Register!</button>
-            <button type="reset">Clear</button>
+            <button type="submit">Register</button><br/>
+           <button type="reset">Clear</button><br/>
             </div>
-           
-            {{ form_end(form) }}
-            
-         </div>
-    
+           {{ form_end(form)}}
+            <a href="{{ path('merchant_login') }}">Already have an account? SignIn!!</a>
+    </div>
+   <!--   <script src="https://cdn.jsdelivr.net/jquery/1.12.4/jquery.min.js"></script>
+      <script src="vendor/jquery-validation/dist/jquery.validate.min.js"></script> -->
+        
+         
 {% endblock %}

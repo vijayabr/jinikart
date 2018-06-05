@@ -1,21 +1,20 @@
 <?php
 
-namespace Common\Model;
+namespace MerchantBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\DBAL\Types\BigIntType;
 
 /**
- * Product_Detail_List
+ * Transaction
  *
- * @ORM\Table(name="product__detail__list")
- * @ORM\Entity(repositoryClass="Common\Model\Repository\Product_Detail_ListRepository")
+ * @ORM\Table(name="transaction")
+ * @ORM\Entity(repositoryClass="MerchantBundle\Repository\TransactionRepository")
  */
-class Product_Detail_List
+class Transaction
 {
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,20 +23,24 @@ class Product_Detail_List
 
     /**
      * @var int
-     * @ORM\ManyToOne(targetEntity="Common\Model\Product")
-     * @ORM\JoinColumn(name="productId", referencedColumnName="id")
+     *
+     * @ORM\Column(name="order_id", type="integer", unique=true)
      */
-    private $productId;
+    private $orderId;
 
     /**
-     * @var string
-<<<<<<< HEAD
-     * @ORM\Column(name="product_IMEI", type="string", unique=true)
-=======
-     * @ORM\Column(name="productIMEI", type="string", unique=true)
->>>>>>> c885cc7c10d592c0057ea7ed9ce291682ff31b98
+     * @var int
+     *
+     * @ORM\Column(name="transaction_status", type="smallint")
      */
-    private $productIMEI;
+    private $transactionStatus;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="amount", type="float")
+     */
+    private $amount;
 
     /**
      * @var \DateTime
@@ -53,14 +56,6 @@ class Product_Detail_List
      */
     private $updatedAt;
 
-    public function __construct() {
-        
-        $this->setCreatedAt(new \DateTime());
-        if ($this->getUpdatedAt() == null) {
-            $this->setUpdatedAt(new \DateTime());
-        }
-    }
-    
 
     /**
      * Get id
@@ -73,51 +68,75 @@ class Product_Detail_List
     }
 
     /**
-     * Set productId
+     * Set orderId
      *
-     * @param integer $productId
+     * @param integer $orderId
      *
-     * @return Product_Detail_List
+     * @return Transaction
      */
-    public function setProductId($productId)
+    public function setOrderId($orderId)
     {
-        $this->productId = $productId;
+        $this->orderId = $orderId;
 
         return $this;
     }
 
     /**
-     * Get productId
+     * Get orderId
      *
      * @return int
      */
-    public function getProductId()
+    public function getOrderId()
     {
-        return $this->productId;
+        return $this->orderId;
     }
 
     /**
-     * Set productIMEI
+     * Set transactionStatus
      *
-     * @param string $productIMEI
+     * @param integer $transactionStatus
      *
-     * @return Product_Detail_List
+     * @return Transaction
      */
-    public function setProductIMEI($productIMEI)
+    public function setTransactionStatus($transactionStatus)
     {
-        $this->productIMEI = $productIMEI;
+        $this->transactionStatus = $transactionStatus;
 
         return $this;
     }
 
     /**
-     * Get productIMEI
+     * Get transactionStatus
      *
-     * @return string
+     * @return int
      */
-    public function getProductIMEI()
+    public function getTransactionStatus()
     {
-        return $this->productIMEI;
+        return $this->transactionStatus;
+    }
+
+    /**
+     * Set amount
+     *
+     * @param float $amount
+     *
+     * @return Transaction
+     */
+    public function setAmount($amount)
+    {
+        $this->amount = $amount;
+
+        return $this;
+    }
+
+    /**
+     * Get amount
+     *
+     * @return float
+     */
+    public function getAmount()
+    {
+        return $this->amount;
     }
 
     /**
@@ -125,7 +144,7 @@ class Product_Detail_List
      *
      * @param \DateTime $createdAt
      *
-     * @return Product_Detail_List
+     * @return Transaction
      */
     public function setCreatedAt($createdAt)
     {
@@ -149,7 +168,7 @@ class Product_Detail_List
      *
      * @param \DateTime $updatedAt
      *
-     * @return Product_Detail_List
+     * @return Transaction
      */
     public function setUpdatedAt($updatedAt)
     {

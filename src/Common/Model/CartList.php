@@ -1,31 +1,39 @@
 <?php
 
-namespace Common\Model;
+namespace MerchantBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Brand
+ * CartList
  *
- * @ORM\Table(name="brand")
- * @ORM\Entity(repositoryClass="Common\Model\Repository\BrandRepository")
+ * @ORM\Table(name="cart_list")
+ * @ORM\Entity(repositoryClass="MerchantBundle\Repository\CartListRepository")
  */
-class Brand
+class CartList
 {
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-    */
+     */
     private $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="product_id", type="integer")
+     */
+    private $productId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="brand_name", type="string", length=255)
+     * @ORM\Column(name="product_name", type="string", length=255)
      */
-    private $brandName;
+    private $productName;
 
     /**
      * @var \DateTime
@@ -40,23 +48,7 @@ class Brand
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-    public function __construct() {
-        
-        $this->setCreatedAt(new \DateTime());
-        if ($this->getUpdatedAt() == null) {
-            $this->setUpdatedAt(new \DateTime());
-        }
-    }
-    
 
-    public function __construct() {
-        
-        $this->setCreatedAt(new \DateTime());
-        if ($this->getUpdatedAt() == null) {
-            $this->setUpdatedAt(new \DateTime());
-        }
-    }
-    
 
     /**
      * Get id
@@ -69,27 +61,51 @@ class Brand
     }
 
     /**
-     * Set brandName
+     * Set productId
      *
-     * @param string $brandName
+     * @param integer $productId
      *
-     * @return Brand
+     * @return CartList
      */
-    public function setBrandName($brandName)
+    public function setProductId($productId)
     {
-        $this->brandName = $brandName;
+        $this->productId = $productId;
 
         return $this;
     }
 
     /**
-     * Get brandName
+     * Get productId
+     *
+     * @return int
+     */
+    public function getProductId()
+    {
+        return $this->productId;
+    }
+
+    /**
+     * Set productName
+     *
+     * @param string $productName
+     *
+     * @return CartList
+     */
+    public function setProductName($productName)
+    {
+        $this->productName = $productName;
+
+        return $this;
+    }
+
+    /**
+     * Get productName
      *
      * @return string
      */
-    public function getBrandName()
+    public function getProductName()
     {
-        return $this->brandName;
+        return $this->productName;
     }
 
     /**
@@ -97,7 +113,7 @@ class Brand
      *
      * @param \DateTime $createdAt
      *
-     * @return Brand
+     * @return CartList
      */
     public function setCreatedAt($createdAt)
     {
@@ -121,7 +137,7 @@ class Brand
      *
      * @param \DateTime $updatedAt
      *
-     * @return Brand
+     * @return CartList
      */
     public function setUpdatedAt($updatedAt)
     {

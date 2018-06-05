@@ -50,8 +50,7 @@ class Product_Photo
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-
-
+    
     public function __construct() {
         
         $this->setCreatedAt(new \DateTime());
@@ -59,8 +58,7 @@ class Product_Photo
             $this->setUpdatedAt(new \DateTime());
         }
     }
-    
-    /**
+   /**
      * Get id
      *
      * @return int

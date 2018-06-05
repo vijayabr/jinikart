@@ -2,6 +2,13 @@
 
 namespace Common\Model\Repository;
 
+use Proxies\__CG__\Common\Model\Product_Description;
+use Doctrine\ORM\QueryBuilder;
+use Common\Model\Product;
+use Common\Model\Product_Photo;
+use Common\Model\Product_Detail_List;
+use Common\Model\Merchant;
+
 /**
  * ProductRepository
  *
@@ -10,6 +17,7 @@ namespace Common\Model\Repository;
  */
 class ProductRepository extends \Doctrine\ORM\EntityRepository
 {
+
     public function productsearchBasedonBrand($brand,$min,$max) {
             $products = $this->getEntityManager()
           ->createQuery(
@@ -145,5 +153,24 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         $filterQuery = $filterQuery->getQuery()->useQueryCache(true);
         return $filterQuery->getResult();
     }  
-    
-}
+   
+    public function findAllProductDetails($merchantId)
+    {
+          $em = $this->getEntityManager();
+         
+            $qb = $em->createQueryBuilder();
+            $qb->select('p')
+            ->from('Common\Model\Product', 'p')
+            ->join('p.productDescriptionId','d','WITH','p.merchantId=?1','d.id')
+            ->where('p.merchantId = ?1')   
+            ->setParameter(1,(int)$merchantId);
+            $query=$qb->getQuery();
+            
+            $result=$query->getResult();
+            return $result;
+        
+    }
+ }
+
+
+

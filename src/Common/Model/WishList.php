@@ -1,21 +1,20 @@
 <?php
 
-namespace Common\Model;
+namespace MerchantBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\DBAL\Types\BigIntType;
 
 /**
- * Product_Detail_List
+ * WishList
  *
- * @ORM\Table(name="product__detail__list")
- * @ORM\Entity(repositoryClass="Common\Model\Repository\Product_Detail_ListRepository")
+ * @ORM\Table(name="wish_list")
+ * @ORM\Entity(repositoryClass="MerchantBundle\Repository\WishListRepository")
  */
-class Product_Detail_List
+class WishList
 {
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,20 +23,24 @@ class Product_Detail_List
 
     /**
      * @var int
-     * @ORM\ManyToOne(targetEntity="Common\Model\Product")
-     * @ORM\JoinColumn(name="productId", referencedColumnName="id")
+     *
+     * @ORM\Column(name="product_id", type="integer")
      */
     private $productId;
 
     /**
-     * @var string
-<<<<<<< HEAD
-     * @ORM\Column(name="product_IMEI", type="string", unique=true)
-=======
-     * @ORM\Column(name="productIMEI", type="string", unique=true)
->>>>>>> c885cc7c10d592c0057ea7ed9ce291682ff31b98
+     * @var int
+     *
+     * @ORM\Column(name="customer_id", type="integer")
      */
-    private $productIMEI;
+    private $customerId;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="wishlist_status", type="boolean")
+     */
+    private $wishlistStatus;
 
     /**
      * @var \DateTime
@@ -53,14 +56,6 @@ class Product_Detail_List
      */
     private $updatedAt;
 
-    public function __construct() {
-        
-        $this->setCreatedAt(new \DateTime());
-        if ($this->getUpdatedAt() == null) {
-            $this->setUpdatedAt(new \DateTime());
-        }
-    }
-    
 
     /**
      * Get id
@@ -77,7 +72,7 @@ class Product_Detail_List
      *
      * @param integer $productId
      *
-     * @return Product_Detail_List
+     * @return WishList
      */
     public function setProductId($productId)
     {
@@ -97,27 +92,51 @@ class Product_Detail_List
     }
 
     /**
-     * Set productIMEI
+     * Set customerId
      *
-     * @param string $productIMEI
+     * @param integer $customerId
      *
-     * @return Product_Detail_List
+     * @return WishList
      */
-    public function setProductIMEI($productIMEI)
+    public function setCustomerId($customerId)
     {
-        $this->productIMEI = $productIMEI;
+        $this->customerId = $customerId;
 
         return $this;
     }
 
     /**
-     * Get productIMEI
+     * Get customerId
      *
-     * @return string
+     * @return int
      */
-    public function getProductIMEI()
+    public function getCustomerId()
     {
-        return $this->productIMEI;
+        return $this->customerId;
+    }
+
+    /**
+     * Set wishlistStatus
+     *
+     * @param boolean $wishlistStatus
+     *
+     * @return WishList
+     */
+    public function setWishlistStatus($wishlistStatus)
+    {
+        $this->wishlistStatus = $wishlistStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get wishlistStatus
+     *
+     * @return bool
+     */
+    public function getWishlistStatus()
+    {
+        return $this->wishlistStatus;
     }
 
     /**
@@ -125,7 +144,7 @@ class Product_Detail_List
      *
      * @param \DateTime $createdAt
      *
-     * @return Product_Detail_List
+     * @return WishList
      */
     public function setCreatedAt($createdAt)
     {
@@ -149,7 +168,7 @@ class Product_Detail_List
      *
      * @param \DateTime $updatedAt
      *
-     * @return Product_Detail_List
+     * @return WishList
      */
     public function setUpdatedAt($updatedAt)
     {

@@ -3,7 +3,7 @@
     <div class="header" style="color-interpolation: linearRGB;background-color: #7DA0B1;color:white">
       <h1 align="center">Welcome to jinikart</h1><br/>
     
-       <h5 style="font-size: 50px;text-align: center;">{{ merchant.CompanyName }}</h5>
+       <h5 style="font-size: 50px;text-align: center;">{{ merchant.companyName }}</h5>
      <header id="header">
       <div class="container">
         <nav id="nav">
@@ -15,12 +15,11 @@
               <a href="{{ path('add_products') }}">Add Products</a>
             </li>
             <li>
-              <a href="{{ path('list_products') }}">List Products</a>
+              <a href="{{ path('list_products',{'id' :merchant.id})}}">List Products</a>
             </li>
           </ul>
         </nav>
       </div>
     </header>
-       
     </div>
 {% endblock %}

@@ -49,6 +49,7 @@ class Merchant implements UserInterface
     private $contactPersonName;
     
     /**
+     * @Assert\Type("numeric")
      * @Assert\Regex("/^\d{10}$/", message="mobile number should be 10 digits")
      * @var string
      * @ORM\Column(name="mobile_no", type="string", length=15,unique=true)

@@ -45,7 +45,16 @@ class AccountController extends Controller
                 $pin = $form->getData()["pincode"];
                 $state = $form->getData()["state"];
                 $addr2 = $form->getData()["address_line2"];
-                $country = $form->getData()["country"];                
+                $country = $form->getData()["country"];
+                $address = new Address();
+                $address->setAddressLine1($addr1);
+                $address->setAddressLine2($addr2);
+                $address->setStateId($state);
+                $address->setCountryId($country);
+                $address->setPincode($pin);
+               $error1=$validator->validate($address);
+                $em->persist($address);
+                $em->flush();
                 $customerMobileNoExist =$em->getRepository('Model:Customer')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
                 $customerEmailExist =$em->getRepository('Model:Customer')->findOneBy(['email'=>$form->getData()["email"]]);
                 if(!$customerEmailExist && !$customerMobileNoExist) {

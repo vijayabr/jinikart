@@ -1,0 +1,27 @@
+{% extends "@Merchant/Default/index.html.twig" %}
+{% block body %}
+<h2>Updated List</h2>
+<div class="container" align="center" padding="50px 30px 50px 80px">
+      <table style="border: 2px solid black;text-align:center;">
+      <tr>   
+        <th>Product Name</th> 
+         <th>Product Price</th> 
+    {#    <th>Category</th>
+        <th>Brand</th> #}
+        <th>Color</th>
+        <th>RAM</th>
+        <th >Description</th>     
+      </tr>
+       <tr>
+        <td> {{ product.productName }}</td>
+        <td> {{ product.productPrice }}</td>
+        <td>{{ descp.color }}</td>
+        <td>{{ descp.ramSize }}</td>
+        <td> {{ descp.productCompleteInfo }}</td>
+    {#    <td>{{ cat.categoryName }}</td>
+        <td>{{ brand.brandName }}</td>
+       #}
+      </tr>    
+ </table>
+</div>
+{% endblock %}

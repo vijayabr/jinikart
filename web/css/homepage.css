@@ -11,8 +11,10 @@
 	font-size:35px;
 }
 
-.lbl{
-	text-align:center;
-	font-size:40px;
-	color: blue;	
+
+
+table,th,td{
+    border: 1px solid black;
 }
+
+

@@ -1,8 +1,15 @@
 {% extends "@Merchant/Default/index.html.twig" %}
 {% block body %}
 <h2>Add Here!</h2>
+ 
+ <div>
+
 {{ form_start(form) }}
 {{ form_widget(form) }}
-{{ form_end(form) }}
+<button type="submit"  >Add</button>
+<button type="Reset">Clear</button>
 
+<br/>
+{{ form_end(form) }}
+</div>
 {% endblock %}

@@ -9,11 +9,23 @@ security:
     providers:
         chain_provider:
             chain:
-                providers: [customer_db, merchant_db]
+                providers: [customer_db, merchant_db,product_db,product_photo_db,product_description_db,product_detail_list_db,category_db,brand_db]
         customer_db:
             entity: { class: Common\Model\Customer, property: email }
         merchant_db:
             entity: { class: Common\Model\Merchant, property: email }
+        product_db:
+             entity: { class: Common\Model\Product}
+        product_photo_db:
+             entity: { class: Common\Model\Product_Photo}
+        product_description_db:
+             entity: { class: Common\Model\Product_Description}
+        product_detail_list_db:
+             entity: { class: Common\Model\Product_Detail_List}
+        category_db:
+             entity: { class: Common\Model\Category}
+        brand_db:
+             entity: { class: Common\Model\Brand}     
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:

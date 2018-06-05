@@ -3,9 +3,7 @@
 namespace Common\Model;
 
 use Doctrine\ORM\Mapping as ORM;
-
-
-
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Product
@@ -13,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="product")
  * @ORM\Entity(repositoryClass="Common\Model\Repository\ProductRepository")
  */
-class Product
+class Product 
 {
     /**
      * @var int
@@ -45,12 +43,24 @@ class Product
     private $productPrice;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="coupon", type="string", nullable=true)
+     */
+    private $coupon;
+    /**
      * @var float
      *
      * @ORM\Column(name="productDiscount", type="float", nullable=true)
      */
     private $productDiscount;
 
+    /**
+     * @var int
+     * @ORM\ManyToOne(targetEntity="Common\Model\Merchant")
+     * @ORM\JoinColumn(name="merchantId", referencedColumnName="id")
+     */
+    private $merchantId;
     /**
      * @var int
      * One Product can have one category.
@@ -76,11 +86,10 @@ class Product
 
     /**
      * @var \DateTime
-     *
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-
+    
     public function __construct() {
         
         $this->setCreatedAt(new \DateTime());
@@ -91,7 +100,6 @@ class Product
     
     /**
      * Get id
-     *
      * @return int
      */
     public function getId()
@@ -101,9 +109,7 @@ class Product
 
     /**
      * Set productName
-     *
      * @param string $productName
-     *
      * @return Product
      */
     public function setProductName($productName)
@@ -115,7 +121,6 @@ class Product
 
     /**
      * Get productName
-     *
      * @return string
      */
     public function getProductName()
@@ -139,7 +144,6 @@ class Product
 
     /**
      * Get productDescriptionId
-     *
      * @return int
      */
     public function getProductDescriptionId()
@@ -149,9 +153,7 @@ class Product
 
     /**
      * Set productPrice
-     *
      * @param float $productPrice
-     *
      * @return Product
      */
     public function setProductPrice($productPrice)
@@ -163,7 +165,6 @@ class Product
 
     /**
      * Get productPrice
-     *
      * @return float
      */
     public function getProductPrice()
@@ -173,9 +174,7 @@ class Product
 
     /**
      * Set productDiscount
-     *
      * @param float $productDiscount
-     *
      * @return Product
      */
     public function setProductDiscount($productDiscount)
@@ -195,6 +194,53 @@ class Product
         return $this->productDiscount;
     }
 
+    /**
+     * Set coupon
+     *
+     * @param string $coupon
+     *
+     * @return Product
+     */
+    public function setCoupon($coupon)
+    {
+        $this->coupon = $coupon;
+        
+        return $this;
+    }
+    
+    /**
+     * Get coupon
+     *
+     * @return string
+     */
+    public function getCoupon()
+    {
+        return $this->coupon;
+    }
+    /**
+     * Set merchantId
+     *
+     * @param integer $merchantId
+     *
+     * @return Product
+     */
+    public function setMerchantId($merchantId)
+    {
+        $this-> merchantId = $merchantId;
+        
+        return $this;
+    }
+    
+    /**
+     * Get merchantId
+     *
+     * @return int
+     */
+    public function getMerchantId()
+    {
+        return $this-> merchantId;
+    }
+    
     /**
      * Set categoryId
      *
@@ -290,5 +336,7 @@ class Product
     {
         return $this->updatedAt;
     }
+    
+
 }
 

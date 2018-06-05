@@ -1,31 +1,39 @@
 <?php
 
-namespace Common\Model;
+namespace MerchantBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Brand
+ * ProductOrderDetail
  *
- * @ORM\Table(name="brand")
- * @ORM\Entity(repositoryClass="Common\Model\Repository\BrandRepository")
+ * @ORM\Table(name="product_order_detail")
+ * @ORM\Entity(repositoryClass="MerchantBundle\Repository\ProductOrderDetailRepository")
  */
-class Brand
+class ProductOrderDetail
 {
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-    */
+     */
     private $id;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="brand_name", type="string", length=255)
+     * @ORM\Column(name="product_order_id", type="integer", unique=true)
      */
-    private $brandName;
+    private $productOrderId;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="delivery_date", type="datetime")
+     */
+    private $deliveryDate;
 
     /**
      * @var \DateTime
@@ -40,23 +48,7 @@ class Brand
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-    public function __construct() {
-        
-        $this->setCreatedAt(new \DateTime());
-        if ($this->getUpdatedAt() == null) {
-            $this->setUpdatedAt(new \DateTime());
-        }
-    }
-    
 
-    public function __construct() {
-        
-        $this->setCreatedAt(new \DateTime());
-        if ($this->getUpdatedAt() == null) {
-            $this->setUpdatedAt(new \DateTime());
-        }
-    }
-    
 
     /**
      * Get id
@@ -69,27 +61,51 @@ class Brand
     }
 
     /**
-     * Set brandName
+     * Set productOrderId
      *
-     * @param string $brandName
+     * @param integer $productOrderId
      *
-     * @return Brand
+     * @return ProductOrderDetail
      */
-    public function setBrandName($brandName)
+    public function setProductOrderId($productOrderId)
     {
-        $this->brandName = $brandName;
+        $this->productOrderId = $productOrderId;
 
         return $this;
     }
 
     /**
-     * Get brandName
+     * Get productOrderId
      *
-     * @return string
+     * @return int
      */
-    public function getBrandName()
+    public function getProductOrderId()
     {
-        return $this->brandName;
+        return $this->productOrderId;
+    }
+
+    /**
+     * Set deliveryDate
+     *
+     * @param \DateTime $deliveryDate
+     *
+     * @return ProductOrderDetail
+     */
+    public function setDeliveryDate($deliveryDate)
+    {
+        $this->deliveryDate = $deliveryDate;
+
+        return $this;
+    }
+
+    /**
+     * Get deliveryDate
+     *
+     * @return \DateTime
+     */
+    public function getDeliveryDate()
+    {
+        return $this->deliveryDate;
     }
 
     /**
@@ -97,7 +113,7 @@ class Brand
      *
      * @param \DateTime $createdAt
      *
-     * @return Brand
+     * @return ProductOrderDetail
      */
     public function setCreatedAt($createdAt)
     {
@@ -121,7 +137,7 @@ class Brand
      *
      * @param \DateTime $updatedAt
      *
-     * @return Brand
+     * @return ProductOrderDetail
      */
     public function setUpdatedAt($updatedAt)
     {

@@ -1,0 +1,41 @@
+{% extends "@Merchant/Default/index.html.twig" %}
+{% block body %}
+<h2>Added Products</h2>
+<div class="container" align="center" padding="50px 30px 50px 80px">
+      <table style="border: 2px solid black;text-align:center;">
+      <tr>
+        <th>Product Name</th>
+         <th>Price</th> 
+        <th>Coupon</th>      
+        <th>Color</th>
+        <th>RAM</th>
+        <th >Description</th>
+        <th></th>
+        <th></th>
+      </tr>
+      {% for pro in product %}  
+        <td>{{ pro.productName }}</td>
+        <td>{{ pro.productPrice }}</td>
+        <td>{{pro.coupon}}</td>   
+        <td>{{ pro.productDescriptionId.color }}</td>
+        <td>{{ pro.productDescriptionId.ramSize }}</td>
+        <td>{{ pro.productDescriptionId.productCompleteInfo }}</td>
+         <th><a href="{{ path('update') }}">Update</a></th>     
+         <td><button type="submit"  onclick="window.location.href='{{ path('coupon',{'id' :pro.id}) }}'">Generate Coupon</button></td> 
+      </tr>   
+ {% endfor %} 
+ </table> <br/><br/>
+ <div align="center">
+
+</div>
+</div>
+{#  <td>{{ imei.productIMEI }}</td> 
+
+    <td>{{ pro.categoryId }}</td>
+        <td>{{ pro.brandId }}</td>
+#}
+ <!-- <th>Category</th>
+        <th>Brand</th>
+          <th>IMEI NO</th> -->
+{% endblock %}
+
