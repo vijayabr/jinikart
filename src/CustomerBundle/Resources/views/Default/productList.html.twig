@@ -9,8 +9,9 @@
         <div  id="productlistContainer">
      	<div class="row">
         <div class="col-sm-2 col-md-5 col-lg-4" id="advancedform"style="background-color:#936c6c;padding:10px 2px 5px 50px; color:white">
-        <label style="font-size: 20px;">Brand&nbsp:&nbsp&nbsp</label>
+        <br><br><label style="font-size: 20px;">Brand&nbsp:&nbsp&nbsp</label>
         <select id="brandlist" name="brand">
+        <option value="">brand name</option>
 	    {% for brand in brand %}
         
         <option value="{{ brand.brandName }}">{{ brand.brandName }}</option>
@@ -18,10 +19,11 @@
 	   </select><br>
 	   <label style="font-size: 20px;">Mobile phone operating system&nbsp:&nbsp&nbsp</label>
         <select id="categorylist" name="category">
+        <option value="">category name</option>
 	    {% for category in category %}
         <option value="{{category.categoryName }}">{{category.categoryName }}</option>
         {% endfor %}
-		</select><br>
+		</select><br><br>
 		<label style="font-size: 20px;">Price&nbsp:</label><br>
 
 		min&nbsp:&nbsp&nbsp<input type="text" id="min" name="min" value=0><br> max:
@@ -29,25 +31,40 @@
 		<input type="text" id="max" name="max" value=100000><br>
 				
 		<label style="font-size: 20px;">Discount&nbsp&nbsp:&nbsp</label><br>
-		<input type="checkbox" name="discount" value=10>10% off or More<br>
-		<input type="checkbox" name="discount" value=25>25% off or More<br>
-		<input type="checkbox" name="discount" value=35>35% off or More<br>
-		<input type="checkbox" name="discount" value=50>50% off or More<br>
+		<select id="discount" name="discount">
+		<option value="">discount%</option>
+        <option value=1>less then 10%</option>
+        <option value=10>10% off or More</option>
+        <option value=25>25% off or More</option>
+        <option value=35>35% off or More</option>
+        <option value=50>50% off or More</option>
+		</select><br>
   				
-		<label style="font-size: 20px;">Ram&nbsp:&nbsp&nbsp</label><br>
-		<input type="checkbox" name="ramsize" value=0>less than 1GB<br>
-		<input type="checkbox" name="ramsize" value=1>1GB<br>
-		<input type="checkbox" name="ramsize" value=2>2GB<br>
-		<input type="checkbox" name="ramsize" value=3>3GB<br>
-		<input type="checkbox" name="ramsize" value=4>4GB and more<br>
+		<label style="font-size: 20px;">RamSize&nbsp:&nbsp&nbsp</label><br>
+		<select id="ramsize" name="ramsize">
+        <option value="">ramsize</option>
+        <option value="KB">less than 1gb</option>
+        <option value="1GB">1GB</option>
+        <option value="2GB">2GB</option>
+        <option value="3GB">3GB</option>
+        <option value="4GB">4GB and more</option>
+        </select>
+		<br>
 		
+				
         <label style="font-size: 20px;">Camera&nbsp:&nbsp&nbsp</label><br>
-		<input type="radio" name="camera" value=1>front<br>
-		<input type="radio" name="camera" value=2>back<br>
-		<input type="radio" name="camera" value=3>dual<br>
+        <select id="camera" name="camera">
+        <option value="">Camera</option>
+        <option value="front">front</option>
+        <option value="back">back</option>
+        <option value="dual">dual</option>
+		</select>
+		<br><br>
+        
+		<input type="hidden" id="url" name="url" value="{{ path('advancedproductList_page') }}"/> 
 		<button type="submit" name="search" id="search">search</button>
        </div>
-       <div class="col-sm-9 col-md-6 col-lg-8" style="padding:20px 20px 20px 20px;">
+       <div class="col-sm-9 col-md-6 col-lg-8"  id="productsList" style="padding:20px 20px 20px 20px;">
         {%  if products %}   
      	{%  for product in products %}
            
