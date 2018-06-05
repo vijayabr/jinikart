@@ -1,6 +1,6 @@
 <?php
 
-namespace  Common\Model;
+namespace  Common\Model\Repository;
 /**
  * AddressRepository
  *

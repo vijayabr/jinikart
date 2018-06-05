@@ -14,6 +14,9 @@ var/*
 !var/sessions/.gitkeep
 !var/SymfonyRequirements.php
 /vendor/
+/web/images/*.*
+/web/company_image/*.*
+web/images/*.*
 /web/bundles/
 .idea/jinikart.iml
 .idea/workspace.xml

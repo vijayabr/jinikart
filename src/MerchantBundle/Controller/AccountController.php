@@ -2,10 +2,11 @@
 
 namespace MerchantBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Request;
 use MerchantBundle\Form\MerchantType;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
 use Common\Model\Address;
 use Common\Model\Merchant;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,11 +26,11 @@ class AccountController extends Controller
         $form = $this->createForm(MerchantType::class);
         $form->handleRequest($request);
         $validator=$this->get('validator');
+        
         try {
             if ($form->isSubmitted() && $form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
                 $merchantPlan = $em->getRepository('Model:Merchant_plan')->findOneBy(['id' => 1]);
-                
                 //get address
                 $name=$form->getData()["companyName"];                
                 $addr1 = $form->getData()["address_line1"];
@@ -37,7 +38,8 @@ class AccountController extends Controller
                 $pin = $form->getData()["pincode"];
                 $state = $form->getData()["state"];
                 $country = $form->getData()["country"];
-                
+                $merchantMobileNoExist =$em->getRepository('Model:Merchant')->findOneBy(['mobileNo'=>$form->getData()["mobileNo"]]);
+                $merchantEmailExist =$em->getRepository('Model:Merchant')->findOneBy(['email'=>$form->getData()["email"]]);
                 $address = new Address();
                 $address->setAddressLine1($addr1);
                 $address->setAddressLine2($addr2);
@@ -54,6 +56,17 @@ class AccountController extends Controller
                     
                     $merchant = new Merchant();
                
+                    $address = new Address();
+                    $address->setAddressLine1($addr1);
+                    $address->setAddressLine2($addr2);
+                    $address->setStateId($state);
+                    $address->setCountryId($country);
+                    $address->setPincode($pin);
+                    $error1=$validator->validate($address);
+                    $em->persist($address);
+                    //$em->flush();
+                    
+                    
                     $merchant->setCompanyName($form->getData()["companyName"]);
                     $merchant->setcontactPersonName($form->getData()["contactPersonName"]);
                     $merchant->setEmail($form->getData()["email"]);
@@ -61,7 +74,7 @@ class AccountController extends Controller
                     $merchant->setPassword($form->getData()["password"]);
                     $merchant->setAddressId($address);
                     $merchant->setmerchantPlanId($merchantPlan);
-                    $merchant->setPassword($this->get('security.encoder_factory')->getEncoder($merchant)->encodePassword($form->getData()['password'], ''));
+                    $merchant->setPassword($this->get('security.encoder_factory.generic')->getEncoder($merchant)->encodePassword($form->getData()['password'], ''));
                     
                     /**
                      * @var uplodedFile images
@@ -127,5 +140,4 @@ class AccountController extends Controller
     
 }
         
-    
 

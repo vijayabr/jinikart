@@ -38,7 +38,7 @@ class Product
     /**
      * @var float
      *
-     * @ORM\Column(name="product_price", type="float")
+     * @ORM\Column(name="productprice", type="float")
      */
     private $productPrice;
 
@@ -51,7 +51,7 @@ class Product
     /**
      * @var float
      *
-     * @ORM\Column(name="product_discount", type="float", nullable=true)
+     * @ORM\Column(name="productDiscount", type="float", nullable=true)
      */
     private $productDiscount;
 
@@ -86,12 +86,10 @@ class Product
 
     /**
      * @var \DateTime
-     *
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-
-
+    
     public function __construct() {
         
         $this->setCreatedAt(new \DateTime());
@@ -102,7 +100,6 @@ class Product
     
     /**
      * Get id
-     *
      * @return int
      */
     public function getId()
@@ -112,9 +109,7 @@ class Product
 
     /**
      * Set productName
-     *
      * @param string $productName
-     *
      * @return Product
      */
     public function setProductName($productName)
@@ -126,7 +121,6 @@ class Product
 
     /**
      * Get productName
-     *
      * @return string
      */
     public function getProductName()
@@ -150,7 +144,6 @@ class Product
 
     /**
      * Get productDescriptionId
-     *
      * @return int
      */
     public function getProductDescriptionId()
@@ -160,9 +153,7 @@ class Product
 
     /**
      * Set productPrice
-     *
      * @param float $productPrice
-     *
      * @return Product
      */
     public function setProductPrice($productPrice)
@@ -174,7 +165,6 @@ class Product
 
     /**
      * Get productPrice
-     *
      * @return float
      */
     public function getProductPrice()
@@ -184,9 +174,7 @@ class Product
 
     /**
      * Set productDiscount
-     *
      * @param float $productDiscount
-     *
      * @return Product
      */
     public function setProductDiscount($productDiscount)
@@ -348,20 +336,7 @@ class Product
     {
         return $this->updatedAt;
     }
-    public function getPassword()
-    {}
-
-    public function eraseCredentials()
-    {}
-
-    public function getSalt()
-    {}
-
-    public function getRoles()
-    {}
-
-    public function getUsername()
-    {}
+    
 
 }
 

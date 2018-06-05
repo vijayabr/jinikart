@@ -40,7 +40,7 @@ class Brand
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-
+    
     public function __construct() {
         
         $this->setCreatedAt(new \DateTime());
@@ -48,7 +48,7 @@ class Brand
             $this->setUpdatedAt(new \DateTime());
         }
     }
-    
+        
 
     /**
      * Get id

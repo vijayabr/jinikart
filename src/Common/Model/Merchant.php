@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class Merchant implements UserInterface
 {
+    const ACTIVE=1;
     /**
      * @var int
      *
@@ -34,7 +35,7 @@ class Merchant implements UserInterface
     /**
      * @var int
      *one customer has one default address
-     * @ORM\OneToOne(targetEntity="Common\Model\Address")
+     * @ORM\ManyToOne(targetEntity="Common\Model\Address")
      * @ORM\JoinColumn(name="addressId", referencedColumnName="id")
      */
     private $addressId;
@@ -96,7 +97,7 @@ class Merchant implements UserInterface
     /**
      * @var int
      *one customer has one plan
-     * @ORM\OneToOne(targetEntity="Common\Model\Merchant_plan")
+     * @ORM\ManyToOne(targetEntity="Common\Model\Merchant_plan")
      * @ORM\JoinColumn(name="merchantPlanId", referencedColumnName="id")
      */
     private $merchantPlanId;
@@ -119,13 +120,17 @@ class Merchant implements UserInterface
 
     public function __construct()
     {
-        $this->merchantStatus=1;
-        $this->merchantPlanId=1;
+        $this->merchantStatus=Merchant::ACTIVE;
+        $this->merchantPlanId=Merchant_plan::DEFAULTMERCHANTPLAN;
         $this->merchantRole="ROLE_MERCHANT";
-        $this->setUpdatedAt(new \DateTime());
-        $this->setCreatedAt(new \DateTime());
-    }
-
+      
+            // we set up "created"+"modified"
+            $this->setCreatedAt(new \DateTime());
+            if ($this->getUpdatedAt() == null) {
+                $this->setUpdatedAt(new \DateTime());
+            }
+        }
+        
 
     /**
      * Get id
@@ -393,7 +398,7 @@ class Merchant implements UserInterface
     /**
      * Get createdAt
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getCreatedAt()
     {

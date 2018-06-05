@@ -31,7 +31,11 @@ class Product_Detail_List
 
     /**
      * @var string
+<<<<<<< HEAD
+     * @ORM\Column(name="product_IMEI", type="string", unique=true)
+=======
      * @ORM\Column(name="productIMEI", type="string", unique=true)
+>>>>>>> c885cc7c10d592c0057ea7ed9ce291682ff31b98
      */
     private $productIMEI;
 

@@ -58,9 +58,7 @@ class Product_Photo
             $this->setUpdatedAt(new \DateTime());
         }
     }
-    
-
-    /**
+   /**
      * Get id
      *
      * @return int

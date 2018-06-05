@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Address
  *
  * @ORM\Table(name="address")
- * @ORM\Entity(repositoryClass="Common\Model\AddressRepository")
+ * @ORM\Entity(repositoryClass="Common\Model\Repository\AddressRepository")
  */
 class Address
 {
@@ -78,12 +78,13 @@ class Address
 
 
     public function __construct() {
-        // we set up "created"+"modified"
+       
         $this->setCreatedAt(new \DateTime());
         if ($this->getUpdatedAt() == null) {
             $this->setUpdatedAt(new \DateTime());
         }
     }
+    
 
     /**
      * Get id
@@ -217,7 +218,7 @@ class Address
     /**
      * Set createdAt
      *
-     * @param DateTime $createdAt
+     * @param \DateTime $createdAt
      *
      * @return Address
      */
@@ -231,7 +232,7 @@ class Address
     /**
      * Get createdAt
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -241,7 +242,7 @@ class Address
     /**
      * Set updatedAt
      *
-     * @param DateTime $updatedAt
+     * @param \DateTime $updatedAt
      *
      * @return Address
      */
@@ -255,7 +256,7 @@ class Address
     /**
      * Get updatedAt
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {

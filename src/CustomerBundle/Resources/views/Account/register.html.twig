@@ -30,7 +30,7 @@
                {{ "check your emailid or mobile number "}}
             {% endif %}
 
-          </div>
+         </div>
 
           <div class="customerform" style=" padding: 20px 15px 15px 20px; left: 100px " align="left">
 
@@ -46,6 +46,9 @@
             {{ form_row(form.pincode,  { 'attr': {'class': 'form-group'} }) }}
             {{ form_row(form.state,  { 'attr': {'class': 'drop-down'} }) }}
             {{ form_row(form.country, { 'attr': {'class': 'drop-down'} }) }}
+            {{ form_row(form.question1, { 'attr': {'class': 'drop-down'} }) }}
+            {{ form_row(form.question2, { 'attr': {'class': 'drop-down'} }) }}
+            
 
             <br/>
             {{ form_row(form.profile_photo,  { 'attr': {'class': 'form-group'} }) }}
@@ -54,7 +57,10 @@
             <button type="reset">Clear</button>
             </div>
             {{ form_end(form) }}
-        
+        </div>
+    <div>    
+               
        <a href="{{ path('login') }}">Already have an account? SignIn!!</a>
    </div>
+
 {% endblock %}

@@ -13,8 +13,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="customer")
  * @ORM\Entity(repositoryClass="Common\Model\Repository\CustomerRepository")
  */
-class Customer implements  UserInterface
+class Customer implements UserInterface
 {
+    
+    const ACTIVE=1;
     /**
      * @var int
      *
@@ -68,7 +70,7 @@ class Customer implements  UserInterface
 
     /**
      * @var string
-     * @Assert\NotBlank(message="please,upload the image")
+     * 
      * @ORM\Column(name="profile_photo", type="string", length=50)
      */
     private $profilePhoto;
@@ -120,14 +122,18 @@ class Customer implements  UserInterface
     {
 
 //        $this->customerPlanId=1;
-        $this->customerStatus=1;
+        $this->customerStatus= Customer::ACTIVE;
 //        $this->addressId=1;
         $this->customerRole="ROLE_CUSTOMER";
-       $this->setCreatedAt(new \DateTime());
+
+        
+        $this->setCreatedAt(new \DateTime());
+       
             if ($this->getUpdatedAt() == null) {
                 $this->setUpdatedAt(new \DateTime());
             }
      }
+        
 
     /**
      * Get id

@@ -21,7 +21,7 @@ use Common\Model\Merchant;
 class ProductManagementController extends Controller
 {
     /**
-     * @Route("/add",name="add_products");
+     * @Route("/merchant/add",name="add_products");
      * @param Request $Request
      */
     public function addProductAction(Request $request){
@@ -99,7 +99,7 @@ class ProductManagementController extends Controller
   }
     
     /**
-     * @Route("/list/{id}",name="list_products");
+     * @Route("/merchant/list/{id}",name="list_products");
      * @param Request $Request
      */
     
@@ -114,7 +114,7 @@ class ProductManagementController extends Controller
     }
     
     /**
-     * @Route("/coupon/{id}",name="coupon");
+     * @Route("/merchant/coupon/{id}",name="coupon");
      * @param Request $request
      */
     public function couponGenerateAction(Request $Request,$length = 6, $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',$id){
@@ -137,7 +137,7 @@ class ProductManagementController extends Controller
              
     }
 /**
-     * @Route("/update",name="update");
+     * @Route("/merchant/update",name="update");
      * @param Request $request
      */
 public function updateAction(Request $request)
@@ -188,14 +188,7 @@ public function updateAction(Request $request)
                   $em->persist($product);
                   $em->flush();
                   }
-//                 $photo= new Product_Photo();
-//                 $imageName =$product->getProductName(). '.' . $image->guessExtension();
-//                 $image->move($this->getParameter('product_image_directory'),$imageName);
-//                 $photo->setPhotoName($imageName);
-//                 $photo->setProductId($product);
-//                 $em->persist($photo);
-//                 $em->flush();
-                  return $this->render("@Merchant/Default/updated.html.twig",array('product'=>$product,'descp'=>$descp)
+               return $this->render("@Merchant/Default/updated.html.twig",array('product'=>$product,'descp'=>$descp)
                    );
                }
 
@@ -208,12 +201,10 @@ public function updateAction(Request $request)
           die;
          }
       
-}
-   
-    
+    }
   
     /**
-     * @Route("/details",name="company_details");
+     * @Route("/merchant/details",name="company_details");
      * @param Request $request
      */
     public function detailAction(Request $request)

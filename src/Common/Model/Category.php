@@ -28,7 +28,7 @@ class Category
 
     /**
      * @var int
-     * @ORM\OneToOne(targetEntity="Common\Model\Brand")
+     * @ORM\ManyToOne(targetEntity="Common\Model\Brand")
      * @ORM\JoinColumn(name="brandId", referencedColumnName="id")
      * 
      */
@@ -47,6 +47,7 @@ class Category
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
+
     public function __construct() {
         
         $this->setCreatedAt(new \DateTime());

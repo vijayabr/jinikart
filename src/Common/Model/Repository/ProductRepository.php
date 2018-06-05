@@ -2,7 +2,6 @@
 
 namespace Common\Model\Repository;
 
-use Proxies\__CG__\Common\Model\Product_Description;
 use Doctrine\ORM\QueryBuilder;
 use Common\Model\Product;
 use Common\Model\Product_Photo;
@@ -17,8 +16,143 @@ use Common\Model\Merchant;
  */
 class ProductRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function productsearchBasedonBrand($brand,$min,$max) {
+            $products = $this->getEntityManager()
+          ->createQuery(
+            'SELECT p FROM Model:Product p WHERE p.brandId =:brand AND p.productPrice >=:min AND p.productPrice <= :max ORDER BY p.productName ASC')
+            ->setParameter('brand', $brand)
+            ->setParameter('min', $min)
+            ->setParameter('max', $max)
+           ->getResult();
+            return $products;
+       
+            
+    }
     
+    public function productsearch() {
+        $products = $this->getEntityManager()
+        ->createQuery(
+            'SELECT p FROM Model:Product p ORDER BY p.productName ASC')
+            ->getResult();
+            return $products;
+    }
     
+   
+    public function completeproductinfo($pName) {
+
+        $productinfo = $this->getEntityManager()
+        ->createQuery('SELECT p FROM Model:Product p JOIN p.brandId brand b WHERE p.productName =:pName')
+         ->setParameter('pName', $pName)
+         ->getResult();
+          return $productinfo;
+    }
+    
+    public function productAdvancedSearch($filterData)
+    {   
+        $filterQuery = $this->createQueryBuilder('p')
+        ->select('p', 'pd', 'c', 'b')
+        ->leftJoin('p.categoryId', 'c')
+        ->leftJoin('p.brandId', 'b')
+        ->leftJoin('p.productDescriptionId', 'pd')
+        ->orderBy('p.createdAt', 'desc');        
+        
+        foreach ($filterData as $filter => $data) {
+            if (isset($data) && !empty($data) ) {
+                switch ($filter) {
+                    case 'minprice':
+                        $filterQuery = $filterQuery->andWhere('p.productPrice  >=:minprice')
+                        ->setParameter('minprice', $data);
+                        break;
+                        
+                    case 'maxprice':
+                        $filterQuery = $filterQuery->andWhere('p.productPrice  <=:maxprice')
+                        ->setParameter('maxprice', $data);
+                        break;
+                        
+                    case 'category':
+                        $filterQuery = $filterQuery->andWhere('c.categoryName LIKE :category' )
+                        ->setParameter('category', "%".$data."%");
+                        break;                        
+                    case 'brand':
+                        $filterQuery = $filterQuery->andWhere('b.brandName LIKE :brand' )
+                        ->setParameter('brand', "%".$data."%");
+                        break;                   
+                        
+                    case 'ramsize':
+                        switch($data){
+                            case 'KB':
+                                $filterQuery = $filterQuery->andWhere('pd.ramSize LIKE :ramsize')
+                                ->setParameter('ramsize',"%".$data."%" );
+                                break;
+                            case '1GB':
+                                $filterQuery = $filterQuery->andWhere('pd.ramSize =:ramsize')
+                                ->setParameter('ramsize',$data);
+                                break;
+                            case '2GB':
+                                $filterQuery = $filterQuery->andWhere('pd.ramSize =:ramsize')
+                                ->setParameter('ramsize',$data);
+                                break;
+                            case '3GB':
+                                $filterQuery = $filterQuery->andWhere('pd.ramSize =:ramsize')
+                                ->setParameter('ramsize',$data);
+                                break;
+                            case '4GB':
+                                $filterQuery = $filterQuery->andWhere('pd.ramSize >=:ramsize')
+                                ->setParameter('ramsize',$data);
+                                break;                        
+                        }
+                        break;    
+                    case 'discount':
+                        switch($data){
+                            case '1':
+                                $filterQuery = $filterQuery->andWhere('p.productDiscount < :maxdiscount')
+                                ->setParameter('maxdiscount',"10" );
+                                break;
+                            case '10':
+                                $filterQuery = $filterQuery->andWhere('p.productDiscount >= :mindiscount and p.productDiscount < :maxdiscount')
+                                ->setParameter('mindiscount',$data)
+                                ->setParameter('maxdiscount',"25");
+                                break;
+                            case '25':
+                                $filterQuery = $filterQuery->andWhere('p.productDiscount >= :mindiscount and p.productDiscount< :maxdiscount')
+                                ->setParameter('mindiscount',$data)
+                                ->setParameter('maxdiscount',"35");
+                                break;
+                            case '35':
+                                $filterQuery = $filterQuery->andWhere('p.productDiscount >= :mindiscount and p.productDiscount< :maxdiscount')
+                                ->setParameter('mindiscount',$data)
+                                ->setParameter('maxdiscount',"50");
+                                break;
+                            case '50':
+                                $filterQuery = $filterQuery->andWhere('p.productDiscount >= :mindiscount')
+                                ->setParameter('mindiscount',$data);
+                                break;                                
+                        }
+                       break;
+                    case 'camera':
+                        switch($data){
+                            case 'front':
+                                $filterQuery = $filterQuery->andWhere('pd.camera LIKE :camera')
+                                ->setParameter('camera',"%".$data."%" );
+                                break;
+                            case 'back':
+                                $filterQuery = $filterQuery->andWhere('pd.camera LIKE :camera')
+                                ->setParameter('camera',"%".$data."%" );
+                                break;
+                            case 'dual':
+                                $filterQuery = $filterQuery->andWhere('pd.camera LIKE :camera')
+                                ->setParameter('camera',"%".$data."%" );
+                                break;                     
+                        }
+                        break;    
+                }
+            }
+        }
+        $filterQuery = $filterQuery->getQuery()->useQueryCache(true);
+        return $filterQuery->getResult();
+    }  
+   
     public function findAllProductDetails($merchantId)
     {
           $em = $this->getEntityManager();
@@ -35,70 +169,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             return $result;
         
     }
-    
-    public function getDataForm($form)
-    {
-        $em = $this->getEntityManager();
-       
-        $id=$form->getData()["merchantId"];
-        $name=$form->getData()["product_name"];
-        $price = $form->getData()["product_price"];
-        $imei = $form->getData()["productIMEI"];
-        
-        $discount = $form->getData()["product_discount"];
-        $category = $form->getData()["categoryName"];
-        $brand = $form->getData()["brandName"];
-        $color = $form->getData()["color"];
-        $ram = $form->getData()["ram_size"];
-        $cam = $form->getData()["camera"];
-        $info = $form->getData()["product_complete_info"];
-        $image = $form->getData()["product_photo"];
-        $merch= new Merchant();
-        $merch=$em->getRepository('Model:Merchant')->findOneBy(['id'=>$id]);
-        
-        $descp = new Product_Description();
-        $descp->setColor($color);
-        $descp->setRamSize($ram);
-        $descp->setCamera($cam);
-        $descp->setProductCompleteInfo($info);
-        $descp->setCreatedAt(new \DateTime());
-        if ($descp->getUpdatedAt() == null)
-        {
-            $descp->setUpdatedAt(new \DateTime());
-        }
-        $em->persist($descp);
-        $em->flush();
-        
-        $product= new Product();
-        $product->setProductName($name);
-        $product->setProductDiscount($discount);
-        $product->setProductPrice($price);
-        $product->setBrandId($brand);
-        $product->setCategoryId($category);
-        $product->setProductDescriptionId($descp);
-        $product->setMerchantId($merch);
-        $product->setCreatedAt(new \DateTime());
-        if ($product->getUpdatedAt() == null)
-        {
-            $product->setUpdatedAt(new \DateTime());
-        }
-        $em->persist($product);
-        $em->flush();
-
-        $imei1= new Product_Detail_List();
-        $imei1->setProductIMEI($imei);
-        $imei1->setProductId($product);
-        $imei1->setCreatedAt(new \DateTime());
-        if ($imei1->getUpdatedAt() == null)
-        {
-            $imei1->setUpdatedAt(new \DateTime());
-        }
-        $em->persist($imei1);
-        $em->flush();
-        
-        return "Done";
-    }
-}
+ }
 
 
 
