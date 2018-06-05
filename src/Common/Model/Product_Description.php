@@ -129,7 +129,7 @@ class Product_Description
         return $this->ramSize;
     }
     /**
-     * Set color
+     * Set camera
      *
      * @param string $color
      *
@@ -143,7 +143,7 @@ class Product_Description
     }
     
     /**
-     * Get color
+     * Get camera
      *
      * @return string
      */
