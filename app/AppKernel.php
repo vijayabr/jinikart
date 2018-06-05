@@ -19,8 +19,7 @@ class AppKernel extends Kernel
       
             new CustomerBundle\CustomerBundle(),
             new AdminBundle\AdminBundle(),
-            new MerchantBundle\MerchantBundle(),
-            new Liuggio\ExcelBundle\LiuggioExcelBundle()
+            new MerchantBundle\MerchantBundle()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
