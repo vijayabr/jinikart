@@ -38,7 +38,7 @@ class AccountController extends Controller
                 $pin = $form->getData()["pincode"];
                 $state = $form->getData()["state"];
                 $country = $form->getData()["country"];
-                $merchantMobileNoExist =$em->getRepository('Model:Merchant')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
+                $merchantMobileNoExist =$em->getRepository('Model:Merchant')->findOneBy(['mobileNo'=>$form->getData()["mobileNo"]]);
                 $merchantEmailExist =$em->getRepository('Model:Merchant')->findOneBy(['email'=>$form->getData()["email"]]);
                 $address = new Address();
                 $address->setAddressLine1($addr1);

@@ -2,7 +2,6 @@
 
 namespace Common\Model\Repository;
 
-use Proxies\__CG__\Common\Model\Product_Description;
 use Doctrine\ORM\QueryBuilder;
 use Common\Model\Product;
 use Common\Model\Product_Photo;
