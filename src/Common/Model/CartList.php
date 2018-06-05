@@ -1,21 +1,20 @@
 <?php
 
-namespace Common\Model;
+namespace MerchantBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\DBAL\Types\BigIntType;
 
 /**
- * Product_Detail_List
+ * CartList
  *
- * @ORM\Table(name="product__detail__list")
- * @ORM\Entity(repositoryClass="Common\Model\Repository\Product_Detail_ListRepository")
+ * @ORM\Table(name="cart_list")
+ * @ORM\Entity(repositoryClass="MerchantBundle\Repository\CartListRepository")
  */
-class Product_Detail_List
+class CartList
 {
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,16 +23,17 @@ class Product_Detail_List
 
     /**
      * @var int
-     * @ORM\ManyToOne(targetEntity="Common\Model\Product")
-     * @ORM\JoinColumn(name="productId", referencedColumnName="id")
+     *
+     * @ORM\Column(name="product_id", type="integer")
      */
     private $productId;
 
     /**
      * @var string
-     * @ORM\Column(name="productIMEI", type="string", unique=true)
+     *
+     * @ORM\Column(name="product_name", type="string", length=255)
      */
-    private $productIMEI;
+    private $productName;
 
     /**
      * @var \DateTime
@@ -49,14 +49,6 @@ class Product_Detail_List
      */
     private $updatedAt;
 
-    public function __construct() {
-        
-        $this->setCreatedAt(new \DateTime());
-        if ($this->getUpdatedAt() == null) {
-            $this->setUpdatedAt(new \DateTime());
-        }
-    }
-    
 
     /**
      * Get id
@@ -73,7 +65,7 @@ class Product_Detail_List
      *
      * @param integer $productId
      *
-     * @return Product_Detail_List
+     * @return CartList
      */
     public function setProductId($productId)
     {
@@ -93,27 +85,27 @@ class Product_Detail_List
     }
 
     /**
-     * Set productIMEI
+     * Set productName
      *
-     * @param string $productIMEI
+     * @param string $productName
      *
-     * @return Product_Detail_List
+     * @return CartList
      */
-    public function setProductIMEI($productIMEI)
+    public function setProductName($productName)
     {
-        $this->productIMEI = $productIMEI;
+        $this->productName = $productName;
 
         return $this;
     }
 
     /**
-     * Get productIMEI
+     * Get productName
      *
      * @return string
      */
-    public function getProductIMEI()
+    public function getProductName()
     {
-        return $this->productIMEI;
+        return $this->productName;
     }
 
     /**
@@ -121,7 +113,7 @@ class Product_Detail_List
      *
      * @param \DateTime $createdAt
      *
-     * @return Product_Detail_List
+     * @return CartList
      */
     public function setCreatedAt($createdAt)
     {
@@ -145,7 +137,7 @@ class Product_Detail_List
      *
      * @param \DateTime $updatedAt
      *
-     * @return Product_Detail_List
+     * @return CartList
      */
     public function setUpdatedAt($updatedAt)
     {

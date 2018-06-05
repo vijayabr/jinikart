@@ -3,14 +3,13 @@
 <h2>Add Here!</h2>
  
  <div>
+
 {{ form_start(form) }}
 {{ form_widget(form) }}
-<button type="submit">Add</button>
+<button type="submit"  >Add</button>
 <button type="Reset">Clear</button>
-{{ form_end(form) }}
-<br/>
-<button type="submit" onclick="window.location.href='{{ path('coupon') }}'">Generate Coupon</button>
-<input type="button"  onclick="window.location.href='{{ path('list_products') }}'" value="List"/>
 
+<br/>
+{{ form_end(form) }}
 </div>
 {% endblock %}

@@ -15,9 +15,10 @@ class AddProductType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('product_name',TextType::class,array('label' => 'Product Name: '))
+        $builder->add('merchantId',NUmberType::class,array('label' => 'Merchant Id: '))
+        ->add('product_name',TextType::class,array('label' => 'Product Name: '))
         ->add('product_price',TextType::class,array('label' => 'Product Price: '))
-        ->add('productIMEI',NumberType::class,array('attr'=> array('class' => 'Model:Product_Detail_List',
+        ->add('productIMEI',TextType::class,array('attr'=> array('class' => 'Model:Product_Detail_List',
             'label'=> 'IMEI:'),'constraints'=>array(new Length(array('min'=>15))),'required'=>''
          ))
         ->add('product_discount',PercentType::class,array('label' => 'Discount:'))

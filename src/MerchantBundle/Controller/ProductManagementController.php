@@ -15,6 +15,7 @@ use Common\Model\Product_Photo;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use MerchantBundle\Form\UpdateProductType;
+use Common\Model\Merchant;
 
 
 class ProductManagementController extends Controller
@@ -27,96 +28,97 @@ class ProductManagementController extends Controller
         
         $form = $this->createForm(AddProductType::class);
         $form->handleRequest($request);     
-        try{
-            
-            if ($form->isSubmitted() && $form->isValid()) {
-            
-                $em = $this->getDoctrine()->getManager();
-                $name=$form->getData()["product_name"];
-                $price = $form->getData()["product_price"];
-                $imei = $form->getData()["productIMEI"]; 
-                $discount = $form->getData()["product_discount"];
-                $category = $form->getData()["categoryName"]; 
-                $brand = $form->getData()["brandName"];
-                $color = $form->getData()["color"];
-                $ram = $form->getData()["ram_size"];
-                $cam = $form->getData()["camera"];
-                $info = $form->getData()["product_complete_info"];
-                $image = $form->getData()["product_photo"];
         
-                $descp = new Product_Description();
-                $descp->setColor($color);
-                $descp->setRamSize($ram);
-                $descp->setCamera($cam);
-                $descp->setProductCompleteInfo($info);
-            
+          try{     
+            //  $id="";
+            if ($form->isSubmitted() && $form->isValid()) {
+   
+                 $em = $this->getDoctrine()->getManager(); 
+              //   $product=$em->getRepository('Model:Product')->getDataForm($form);
+                 $id=$form->getData()["merchantId"];
+                 $name=$form->getData()["product_name"];
+                 $price = $form->getData()["product_price"];
+                 $imei = $form->getData()["productIMEI"];  
+                 $discount = $form->getData()["product_discount"];
+                 $category = $form->getData()["categoryName"]; 
+                 $brand = $form->getData()["brandName"];
+                 $color = $form->getData()["color"];
+                 $ram = $form->getData()["ram_size"];
+                 $cam = $form->getData()["camera"];
+                 $info = $form->getData()["product_complete_info"];
+                 $image = $form->getData()["product_photo"];
+                 
+                 $merchant= new Merchant();
+                 $merchant=$em->getRepository('Model:Merchant')->findOneBy(['id'=>$id]);
+               
+                 $descp = new Product_Description();
+                 $descp->setColor($color);
+                 $descp->setRamSize($ram);
+                 $descp->setCamera($cam);
+                 $descp->setProductCompleteInfo($info);            
                  $em->persist($descp);
-                 $em->flush();  
+                 $em->flush();           
+                 
+                 $product= new Product();
+                 $product->setProductName($name);
+                 $product->setProductDiscount($discount);
+                 $product->setProductPrice($price);
+                 $product->setBrandId($brand);
+                 $product->setCategoryId($category);
+                 $product->setProductDescriptionId($descp);
+                 $product->setMerchantId($merchant);
+               
+                 $em->persist($product);
+                 $em->flush();
                 
-                $pro= new Product();
-                $pro->setProductName($name);
-                $pro->setProductDiscount($discount);
-                $pro->setProductPrice($price);
-                $pro->setBrandId($brand);
-                $pro->setCategoryId($category);
-                $pro->setProductDescriptionId($descp);
-              
-                $em->persist($pro);
-                $em->flush();
-                
-                $photo= new Product_Photo();
-                $imageName =  $pro->getProductName(). '.' . $image->guessExtension();
-                $image->move($this->getParameter('product_image_directory'),$imageName);
-                $photo->setPhotoName($imageName);
-                $photo->setProductId($pro);
-                $em->persist($photo);
-                $em->flush();
+                 $photo= new Product_Photo();
+                 $imageName =  $product->getProductName(). '.' . $image->guessExtension();
+                 $image->move($this->getParameter('product_image_directory'),$imageName);
+                 $photo->setPhotoName($imageName);
+                 $photo->setProductId($product);
+                 $em->persist($photo);
+                 $em->flush();
+                  
+                 $imei1= new Product_Detail_List();          
+                 $imei1->setProductIMEI($imei);              
+                 $imei1->setProductId($product);  
+                 $em->persist($imei1);
+                 $em->flush();
                 
                
-                $imei1= new Product_Detail_List();
-                $imei1->setProductIMEI( $imei); 
-                $imei1->setProductId($pro);
+              return new Response("Added to Database");
+              return $this->render("@Merchant/Default/homepage.html.twig");
               
-                $em->persist($imei1);
-                $em->flush();
-           
             }
-            return $this->render("@Merchant/Default/add.html.twig",array('form'=> $form->createView()));      
-       }catch(\Exception $exception){
+            return $this->render("@Merchant/Default/add.html.twig",array('form'=> $form->createView()));
+                 }catch(\Exception $exception){
  
-           return new Response($exception);
-           die;
-       }
+                    return new Response($exception);
+                    die;
+        }
   }
     
     /**
-     * @Route("/list",name="list_products");
+     * @Route("/list/{id}",name="list_products");
      * @param Request $Request
      */
     
-    public function listProductAction(Request $Request){
+  public function listProductAction(Request $Request,$id){
         
-        $em=$this->getDoctrine()->getManager();
-        $pro=$em->getRepository('Model:Product')->findOneBy(['id'=>'1']);
+          $merchantId = $Request->request->get('id');
+         
+          $product = $this->getDoctrine()->getRepository('Model:Product')->findAllProductDetails(['id'=>$merchantId]);
         
-        $imei=$em->getRepository('Model:Product_Detail_List')->findOneBy(['id'=>'1']);
-        
-        $cat=$em->getRepository('Model:Category')->findOneBy(['id'=>'1']);
-        
-        $brand=$em->getRepository('Model:Brand')->findOneBy(['id'=>'1']);
-        
-        $descp=$em->getRepository('Model:Product_Description')->findOneBy(['id'=>'1']);
-
-        return $this->render("@Merchant/Default/list.html.twig",array('product'=>$pro,'imei'=>$imei,
-            'cat'=>$cat,'brand'=>$brand,'descp'=>$descp));
+          return $this->render("@Merchant/Default/list.html.twig",array('product'=>$product,'merchant'=>$id));
+        //'imei'=>$imei,'cat'=>$cat,'brand'=>$brand,'descp'=>$descp));
     }
     
     /**
-     * @Route("/coupon",name="coupon");
-     * 
+     * @Route("/coupon/{id}",name="coupon");
+     * @param Request $request
      */
     public function couponGenerateAction(Request $Request,$length = 6, $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',$id){
-        
+//              $id = $Request->request->get('id');
              $charactersLength = strlen($characters);
              $randomString = '';
              for ($i = 0; $i < $length; $i++) {
@@ -131,7 +133,8 @@ class ProductManagementController extends Controller
              $em->persist($product);
              $em->flush();
              
-             return $this->redirectToRoute("add_products",array('message'=>"Coupon Generated"));         
+             return  $this->redirectToRoute("list_products",array('id'=>$id)); 
+             
     }
 /**
      * @Route("/update",name="update");
@@ -140,13 +143,9 @@ class ProductManagementController extends Controller
 public function updateAction(Request $request)
 {
         $form = $this->createForm(UpdateProductType::class);      
-        $form->handleRequest($request);             
-       // dump($form);die;
-   //     $descp = new Product_Description();
-   //     $descp=$em->getRepository('Model:Product_Description')->findOneBy(['id'=>'1']);               
+        $form->handleRequest($request);                       
            try{
                
-           //    dump($product);die;
                 if ($form->isSubmitted() && $form->isValid()) 
                 {     
                   $em = $this->getDoctrine()->getManager();
@@ -212,16 +211,14 @@ public function updateAction(Request $request)
 }
    
     
-   
-    
-    
+  
     /**
      * @Route("/details",name="company_details");
      * @param Request $request
      */
     public function detailAction(Request $request)
     {
-        $em = $thisss->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $merchant=$em->getRepository('Model:Merchant')->findOneBy(['id'=>1]);
        
         return $this->render("@Merchant/Account/detail.html.twig",array('merchant'=> $merchant));

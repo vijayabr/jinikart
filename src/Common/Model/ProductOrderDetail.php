@@ -1,21 +1,20 @@
 <?php
 
-namespace Common\Model;
+namespace MerchantBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\DBAL\Types\BigIntType;
 
 /**
- * Product_Detail_List
+ * ProductOrderDetail
  *
- * @ORM\Table(name="product__detail__list")
- * @ORM\Entity(repositoryClass="Common\Model\Repository\Product_Detail_ListRepository")
+ * @ORM\Table(name="product_order_detail")
+ * @ORM\Entity(repositoryClass="MerchantBundle\Repository\ProductOrderDetailRepository")
  */
-class Product_Detail_List
+class ProductOrderDetail
 {
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,16 +23,17 @@ class Product_Detail_List
 
     /**
      * @var int
-     * @ORM\ManyToOne(targetEntity="Common\Model\Product")
-     * @ORM\JoinColumn(name="productId", referencedColumnName="id")
+     *
+     * @ORM\Column(name="product_order_id", type="integer", unique=true)
      */
-    private $productId;
+    private $productOrderId;
 
     /**
-     * @var string
-     * @ORM\Column(name="productIMEI", type="string", unique=true)
+     * @var \DateTime
+     *
+     * @ORM\Column(name="delivery_date", type="datetime")
      */
-    private $productIMEI;
+    private $deliveryDate;
 
     /**
      * @var \DateTime
@@ -49,14 +49,6 @@ class Product_Detail_List
      */
     private $updatedAt;
 
-    public function __construct() {
-        
-        $this->setCreatedAt(new \DateTime());
-        if ($this->getUpdatedAt() == null) {
-            $this->setUpdatedAt(new \DateTime());
-        }
-    }
-    
 
     /**
      * Get id
@@ -69,51 +61,51 @@ class Product_Detail_List
     }
 
     /**
-     * Set productId
+     * Set productOrderId
      *
-     * @param integer $productId
+     * @param integer $productOrderId
      *
-     * @return Product_Detail_List
+     * @return ProductOrderDetail
      */
-    public function setProductId($productId)
+    public function setProductOrderId($productOrderId)
     {
-        $this->productId = $productId;
+        $this->productOrderId = $productOrderId;
 
         return $this;
     }
 
     /**
-     * Get productId
+     * Get productOrderId
      *
      * @return int
      */
-    public function getProductId()
+    public function getProductOrderId()
     {
-        return $this->productId;
+        return $this->productOrderId;
     }
 
     /**
-     * Set productIMEI
+     * Set deliveryDate
      *
-     * @param string $productIMEI
+     * @param \DateTime $deliveryDate
      *
-     * @return Product_Detail_List
+     * @return ProductOrderDetail
      */
-    public function setProductIMEI($productIMEI)
+    public function setDeliveryDate($deliveryDate)
     {
-        $this->productIMEI = $productIMEI;
+        $this->deliveryDate = $deliveryDate;
 
         return $this;
     }
 
     /**
-     * Get productIMEI
+     * Get deliveryDate
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getProductIMEI()
+    public function getDeliveryDate()
     {
-        return $this->productIMEI;
+        return $this->deliveryDate;
     }
 
     /**
@@ -121,7 +113,7 @@ class Product_Detail_List
      *
      * @param \DateTime $createdAt
      *
-     * @return Product_Detail_List
+     * @return ProductOrderDetail
      */
     public function setCreatedAt($createdAt)
     {
@@ -145,7 +137,7 @@ class Product_Detail_List
      *
      * @param \DateTime $updatedAt
      *
-     * @return Product_Detail_List
+     * @return ProductOrderDetail
      */
     public function setUpdatedAt($updatedAt)
     {

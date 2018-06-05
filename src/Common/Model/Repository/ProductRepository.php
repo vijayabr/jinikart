@@ -2,6 +2,13 @@
 
 namespace Common\Model\Repository;
 
+use Proxies\__CG__\Common\Model\Product_Description;
+use Doctrine\ORM\QueryBuilder;
+use Common\Model\Product;
+use Common\Model\Product_Photo;
+use Common\Model\Product_Detail_List;
+use Common\Model\Merchant;
+
 /**
  * ProductRepository
  *
@@ -10,4 +17,88 @@ namespace Common\Model\Repository;
  */
 class ProductRepository extends \Doctrine\ORM\EntityRepository
 {
+    
+    
+    public function findAllProductDetails($merchantId)
+    {
+          $em = $this->getEntityManager();
+         
+            $qb = $em->createQueryBuilder();
+            $qb->select('p')
+            ->from('Common\Model\Product', 'p')
+            ->join('p.productDescriptionId','d','WITH','p.merchantId=?1','d.id')
+            ->where('p.merchantId = ?1')   
+            ->setParameter(1,(int)$merchantId);
+            $query=$qb->getQuery();
+            
+            $result=$query->getResult();
+            return $result;
+        
+    }
+    
+    public function getDataForm($form)
+    {
+        $em = $this->getEntityManager();
+       
+        $id=$form->getData()["merchantId"];
+        $name=$form->getData()["product_name"];
+        $price = $form->getData()["product_price"];
+        $imei = $form->getData()["productIMEI"];
+        
+        $discount = $form->getData()["product_discount"];
+        $category = $form->getData()["categoryName"];
+        $brand = $form->getData()["brandName"];
+        $color = $form->getData()["color"];
+        $ram = $form->getData()["ram_size"];
+        $cam = $form->getData()["camera"];
+        $info = $form->getData()["product_complete_info"];
+        $image = $form->getData()["product_photo"];
+        $merch= new Merchant();
+        $merch=$em->getRepository('Model:Merchant')->findOneBy(['id'=>$id]);
+        
+        $descp = new Product_Description();
+        $descp->setColor($color);
+        $descp->setRamSize($ram);
+        $descp->setCamera($cam);
+        $descp->setProductCompleteInfo($info);
+        $descp->setCreatedAt(new \DateTime());
+        if ($descp->getUpdatedAt() == null)
+        {
+            $descp->setUpdatedAt(new \DateTime());
+        }
+        $em->persist($descp);
+        $em->flush();
+        
+        $product= new Product();
+        $product->setProductName($name);
+        $product->setProductDiscount($discount);
+        $product->setProductPrice($price);
+        $product->setBrandId($brand);
+        $product->setCategoryId($category);
+        $product->setProductDescriptionId($descp);
+        $product->setMerchantId($merch);
+        $product->setCreatedAt(new \DateTime());
+        if ($product->getUpdatedAt() == null)
+        {
+            $product->setUpdatedAt(new \DateTime());
+        }
+        $em->persist($product);
+        $em->flush();
+
+        $imei1= new Product_Detail_List();
+        $imei1->setProductIMEI($imei);
+        $imei1->setProductId($product);
+        $imei1->setCreatedAt(new \DateTime());
+        if ($imei1->getUpdatedAt() == null)
+        {
+            $imei1->setUpdatedAt(new \DateTime());
+        }
+        $em->persist($imei1);
+        $em->flush();
+        
+        return "Done";
+    }
 }
+
+
+

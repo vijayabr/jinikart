@@ -5,9 +5,6 @@ namespace Common\Model;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-
-
-
 /**
  * Product
  *
@@ -58,6 +55,12 @@ class Product
      */
     private $productDiscount;
 
+    /**
+     * @var int
+     * @ORM\ManyToOne(targetEntity="Common\Model\Merchant")
+     * @ORM\JoinColumn(name="merchantId", referencedColumnName="id")
+     */
+    private $merchantId;
     /**
      * @var int
      * One Product can have one category.
@@ -226,6 +229,30 @@ class Product
     {
         return $this->coupon;
     }
+    /**
+     * Set merchantId
+     *
+     * @param integer $merchantId
+     *
+     * @return Product
+     */
+    public function setMerchantId($merchantId)
+    {
+        $this-> merchantId = $merchantId;
+        
+        return $this;
+    }
+    
+    /**
+     * Get merchantId
+     *
+     * @return int
+     */
+    public function getMerchantId()
+    {
+        return $this-> merchantId;
+    }
+    
     /**
      * Set categoryId
      *
