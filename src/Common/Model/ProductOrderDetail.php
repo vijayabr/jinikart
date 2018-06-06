@@ -1,6 +1,6 @@
 <?php
 
-namespace MerchantBundle\Entity;
+namespace Common\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * ProductOrderDetail
  *
  * @ORM\Table(name="product_order_detail")
- * @ORM\Entity(repositoryClass="MerchantBundle\Repository\ProductOrderDetailRepository")
+ * @ORM\Entity(repositoryClass="Common\Model\Repository\ProductOrderDetailRepository")
  */
 class ProductOrderDetail
 {
@@ -23,10 +23,17 @@ class ProductOrderDetail
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="product_order_id", type="integer", unique=true)
+     * @ORM\ManyToOne(targetEntity="Common\Model\ProductOrder")
+     * @ORM\JoinColumn(name="ProductOrderId", referencedColumnName="id")
      */
     private $productOrderId;
+    /**
+     * @var int
+     * @ORM\ManyToOne(targetEntity="Common\Model\Product_Detail_List")
+     * @ORM\JoinColumn(name="productIMEI", referencedColumnName="id")
+     */
+    private $productIMEI;
+    
 
     /**
      * @var \DateTime
@@ -59,6 +66,30 @@ class ProductOrderDetail
     {
         return $this->id;
     }
+    /**
+     * Set productIMEI
+     *
+     * @param integer $productIMEI
+     *
+     * @return CartList
+     */
+    public function setProductId($productIMEI)
+    {
+        $this->productId = $productIMEI;
+        
+        return $this;
+    }
+    
+    /**
+     * Get productIMEI
+     *
+     * @return int
+     */
+    public function getProductId()
+    {
+        return $this->$productIMEI;
+    }
+    
 
     /**
      * Set productOrderId
