@@ -21,13 +21,6 @@ class Cart
      */
     private $id;
 
-    /**
-     * @var int
-     * @ORM\ManyToOne(targetEntity="Common\Model\Product")
-     * @ORM\JoinColumn(name="productId", referencedColumnName="id")
-     * 
-     */
-    private $productId;
 
     /**
      * @var int
@@ -35,15 +28,7 @@ class Cart
      * @ORM\JoinColumn(name="customerId", referencedColumnName="id")
      */
     private $customerId;
-
-    /**
-     * @var int
-     * @ORM\Column(name="product_count", type="integer")
-     */
-    private $productCount;
-
    
-
     /**
      * @var bool
      *
@@ -76,30 +61,7 @@ class Cart
         return $this->id;
     }
 
-    /**
-     * Set productId
-     *
-     * @param integer $productId
-     *
-     * @return Cart
-     */
-    public function setProductId($productId)
-    {
-        $this->productId = $productId;
-
-        return $this;
-    }
-
-    /**
-     * Get productId
-     *
-     * @return int
-     */
-    public function getProductId()
-    {
-        return $this->productId;
-    }
-
+    
     /**
      * Set customerId
      *
@@ -123,33 +85,6 @@ class Cart
     {
         return $this->customerId;
     }
-
-    /**
-     * Set productCount
-     *
-     * @param integer $productCount
-     *
-     * @return Cart
-     */
-    public function setProductCount($productCount)
-    {
-        $this->productCount = $productCount;
-
-        return $this;
-    }
-
-    /**
-     * Get productCount
-     *
-     * @return int
-     */
-    public function getProductCount()
-    {
-        return $this->productCount;
-    }
-
-    
-
     /**
      * Set cartStatus
      *

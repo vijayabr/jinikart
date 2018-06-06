@@ -55,7 +55,6 @@ class Product
      */
     private $productDiscount;
 
-    
     /**
      * @var int
      * One Product can have one category.
@@ -71,7 +70,12 @@ class Product
      * @ORM\JoinColumn(name="brandId", referencedColumnName="id")
      */
     private $brandId;
-
+    /**
+     * @var int
+     * @ORM\Column(name="product_count", type="integer")
+     */
+    private $productCount;
+    
     /**
      * @var \DateTime
      *
@@ -101,6 +105,31 @@ class Product
     {
         return $this->id;
     }
+    
+    /**
+     * Set productCount
+     *
+     * @param integer $productCount
+     *
+     * @return Product
+     */
+    public function setProductCount($productCount)
+    {
+        $this->productCount = $productCount;
+        
+        return $this;
+    }
+    
+    /**
+     * Get productCount
+     *
+     * @return int
+     */
+    public function getProductCount()
+    {
+        return $this->productCount;
+    }
+    
 
     /**
      * Set productName
@@ -212,7 +241,7 @@ class Product
     {
         return $this->coupon;
     }
-  
+
     /**
      * Set categoryId
      *
