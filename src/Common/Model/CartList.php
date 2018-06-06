@@ -70,15 +70,15 @@ class CartList
     }
     
     /**
-     * Set cartListId
+     * Set cartId
      *
-     * @param integer $cartListId
+     * @param integer $cartId
      *
      * @return CartList
      */
-    public function setCartListId($cartListId)
+    public function setCartListId($cartId)
     {
-        $this->cartListId = $cartListId;
+        $this->cartId = $cartId;
         
         return $this;
     }
