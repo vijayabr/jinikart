@@ -66,7 +66,7 @@ class ProductManagementController extends Controller
                  $product->setBrandId($brand);
                  $product->setCategoryId($category);
                  $product->setProductDescriptionId($descp);
-                 $product->setMerchantId($merchant);
+                
                
                  $em->persist($product);
                  $em->flush();
@@ -81,7 +81,8 @@ class ProductManagementController extends Controller
                   
                  $imei1= new Product_Detail_List();          
                  $imei1->setProductIMEI($imei);              
-                 $imei1->setProductId($product);  
+                 $imei1->setProductId($product); 
+                 $imei1->setMerchantId($merchant);
                  $em->persist($imei1);
                  $em->flush();
                 

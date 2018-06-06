@@ -158,13 +158,14 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
           $em = $this->getEntityManager();
          
             $qb = $em->createQueryBuilder();
-            $qb->select('p')
-            ->from('Common\Model\Product', 'p')
-            ->join('p.productDescriptionId','d','WITH','p.merchantId=?1','d.id')
-            ->where('p.merchantId = ?1')   
+            $qb->select('l')
+            ->from('Common\Model\Product_Detail_List','l')
+            ->join('l.productId','p')
+            ->join('p.productDescriptionId','d')
+            ->where('l.merchantId = ?1')   
             ->setParameter(1,(int)$merchantId);
             $query=$qb->getQuery();
-            
+         
             $result=$query->getResult();
             return $result;
         

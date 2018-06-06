@@ -14,14 +14,14 @@
         <th></th>
       </tr>
       {% for pro in product %}  
-        <td>{{ pro.productName }}</td>
-        <td>{{ pro.productPrice }}</td>
-        <td>{{pro.coupon}}</td>   
-        <td>{{ pro.productDescriptionId.color }}</td>
-        <td>{{ pro.productDescriptionId.ramSize }}</td>
-        <td>{{ pro.productDescriptionId.productCompleteInfo }}</td>
+        <td>{{ pro.productId.productName }}</td>
+        <td>{{ pro.productId.productPrice }}</td>
+        <td>{{pro.productId.coupon}}</td>   
+        <td>{{ pro.productId.productDescriptionId.color }}</td>
+        <td>{{ pro.productId.productDescriptionId.ramSize }}</td>
+        <td>{{ pro.productId.productDescriptionId.productCompleteInfo }}</td>
          <th><a href="{{ path('update') }}">Update</a></th>     
-         <td><button type="submit"  onclick="window.location.href='{{ path('coupon',{'id' :pro.id}) }}'">Generate Coupon</button></td> 
+         <td><button type="submit"  onclick="window.location.href='{{ path('coupon',{'id' :pro.merchantId.id}) }}'">Generate Coupon</button></td> 
       </tr>   
  {% endfor %} 
  </table> <br/><br/>

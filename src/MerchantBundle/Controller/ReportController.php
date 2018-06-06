@@ -36,42 +36,53 @@ class ReportController extends Controller
         // ask the service for a Excel5
         $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
         $phpExcelObject->getDefaultStyle()->getFont()->setName('Arial Black');
-        $phpExcelObject->getDefaultStyle()->getFont()->setSize(14);
+        $phpExcelObject->getDefaultStyle()->getFont()->setSize(12);
         $phpExcelObject->getProperties()->setCreator("liuggio")
-      //  ->setLastModifiedBy("Giulio De Donato")
-        ->setTitle("Stock Document")
+       
         ->setSubject("Product Document")
         ->setDescription("Stock Document, generated using PHP classes.");
-     //   ->setKeywords("office 2005 openxml php")
-     //   ->setCategory("Test result file");
       
-        $em = $this->getDoctrine()->getManager(); 
-      
-        $product = $em->getRepository('Model:Merchant')->findAllDetails(['id'=> $id]);
-
-      
-        $rowCount = 2;
-        foreach ($product as $value){
-             $phpExcelObject->getActiveSheet()->SetCellValue('A'.$rowCount, $value['productName']);
-     //       $phpExcelObject->getActiveSheet()->SetCellValue('B'.$rowCount, $row['age']);
-       //     $phpExcelObject->getActiveSheet()->SetCellValue('C'.$rowCount, $row['name']);
-         //   $phpExcelObject->getActiveSheet()->SetCellValue('D'.$rowCount, $row['name']);
-            $rowCount++;
-        }
-         $phpExcelObject->setActiveSheetIndex(0)
+        $em = $this->getDoctrine()->getManager();     
+        $product = $em->getRepository('Model:Merchant')->findAllDetails(['id'=> $id]);  
+//      For Count of products
+//         $proln=count($product);    
+//         $count= array();
+        
+//             for($i=0;$i<$proln;$i++)
+//             {
+//                 if()
+//                     $count[$i]++;
+//             }
+             
+        $phpExcelObject->setActiveSheetIndex(0);
+        $sheet = $phpExcelObject->getActiveSheet(0);
+        $sheet
         ->setCellValue('A1', 'Product Name')
         ->setCellValue('B1', 'ProductIMEI')
         ->setCellValue('C1', 'ProductCount')
-        ->setCellValue('D1', 'Remaining');
+        ->setCellValue('D1', 'Remaining');    
+        $sheet->setTitle("Stock");
+        $rowCount = 2;
+        foreach ($product as $value){
+             $phpExcelObject->getActiveSheet(0)->SetCellValue('A'.$rowCount, $value['productName']);
+             $phpExcelObject->getActiveSheet(0)->SetCellValue('B'.$rowCount, $value['productIMEI']); 
+        //     $phpExcelObject->getActiveSheet(0)->SetCellValue('C'.$rowCount, $count);     
+             $rowCount++;
+        }
+           $objWorkSheet = $phpExcelObject->createSheet(1)->setTitle("Invoice");
+           $objWorkSheet  = $phpExcelObject->getSheet(1);
+           $objWorkSheet->setCellValue('A1', 'Customer Name')
+          ->setCellValue('B1', 'Product Name')
+          ->setCellValue('C1', 'Price')
+          ->setCellValue('C1', 'Ordered Date')
+          ->setCellValue('D1', 'Shipping Address');  
+          
+       
         
-        
-        $phpExcelObject->getActiveSheet()->setTitle('Simple');
-        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
-        $phpExcelObject->setActiveSheetIndex(0);
         
         // create the writer
         $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
-        $writer->save('web/Excel/stock-file.xlsx');
+       // $writer->save('web/Excel/stock-file.xlsx');
         // create the response
         $response = $this->get('phpexcel')->createStreamedResponse($writer);
         // adding headers
