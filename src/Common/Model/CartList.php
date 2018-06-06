@@ -64,21 +64,21 @@ class CartList
      *
      * @return int
      */
-    public function getCartListId()
+    public function getCartId()
     {
-        return $this->cartListId;
+        return $this->cartId;
     }
     
     /**
-     * Set cartListId
+     * Set cartId
      *
-     * @param integer $cartListId
+     * @param integer $cartId
      *
      * @return Cart
      */
-    public function setCartListId($cartListId)
+    public function setCartId($cartListId)
     {
-        $this->cartListId = $cartListId;
+        $this->cartId = $cartId;
         
         return $this;
     }
