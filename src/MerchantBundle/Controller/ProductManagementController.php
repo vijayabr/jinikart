@@ -210,10 +210,12 @@ public function updateAction(Request $request)
     public function detailAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $merchant=$em->getRepository('Model:Merchant')->findOneBy(['id'=>1]);
+        $merchant=$this->getUser();
+       
        
         return $this->render("@Merchant/Account/detail.html.twig",array('merchant'=> $merchant));
-        
-    }
+     
+  }
+  
   
 }

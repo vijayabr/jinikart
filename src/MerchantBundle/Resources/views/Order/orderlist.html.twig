@@ -1,0 +1,20 @@
+{% extends "@Customer/Default/index.html.twig" %}
+{% block body %}
+    <div class="header" style="color-interpolation: linearRGB;background-color: #7DA0B1;color:white">
+      <h1 align="center">Welcome to jinikart</h1>
+    </div>
+        
+     	<div class="col-sm-9 col-md-6 col-lg-8"  id="orderlistContainer" style="padding:20px 20px 20px 20px;">
+    
+    
+     </div>
+       
+ 	 
+
+{% endblock %}
+{% block javascripts %}
+
+<script src={{ asset('/js/CustomerProfile.js') }}></script>
+<script src={{ asset('/js/Product.js') }}></script>
+
+{% endblock %}

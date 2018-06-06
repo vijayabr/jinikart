@@ -1,6 +1,6 @@
 <?php
 
-namespace MerchantBundle\Entity;
+namespace Common\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * WishList
  *
  * @ORM\Table(name="wish_list")
- * @ORM\Entity(repositoryClass="MerchantBundle\Repository\WishListRepository")
+ * @ORM\Entity(repositoryClass="Common\Model\Repository\WishListRepository")
  */
 class WishList
 {
@@ -23,15 +23,15 @@ class WishList
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="product_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Common\Model\Product")
+     * @ORM\JoinColumn(name="productId", referencedColumnName="id")
      */
     private $productId;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="customer_id", type="integer")
+     * @ORM\OneToOne(targetEntity="Common\Model\Customer")
+     * @ORM\JoinColumn(name="customerId", referencedColumnName="id")
      */
     private $customerId;
 

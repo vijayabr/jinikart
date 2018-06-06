@@ -1,6 +1,6 @@
 <?php
 
-namespace MerchantBundle\Entity;
+namespace Common\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,13 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
  * ProductOrder
  *
  * @ORM\Table(name="product_order")
- * @ORM\Entity(repositoryClass="MerchantBundle\Repository\ProductOrderRepository")
+ * @ORM\Entity(repositoryClass="Common\Model\Repository\ProductOrderRepository")
  */
 class ProductOrder
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -23,42 +22,39 @@ class ProductOrder
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="customer_id", type="integer")
+     * @ORM\OneToOne(targetEntity="Common\Model\Customer")
+     * @ORM\JoinColumn(name="customerId", referencedColumnName="id")
      */
     private $customerId;
 
     /**
      * @var \DateTime
-     *
      * @ORM\Column(name="ordered_date", type="datetime")
      */
     private $orderedDate;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="delivery_address", type="string", length=255)
+     * @var int
+     *one customer has one default address
+     * @ORM\ManyToOne(targetEntity="Common\Model\Address")
+     * @ORM\JoinColumn(name="addressId", referencedColumnName="id")
      */
     private $deliveryAddress;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="order_status", type="integer")
      */
     private $orderStatus;
 
     /**
      * @var \DateTime
-     *
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
 
     /**
      * @var \DateTime
-     *
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
@@ -66,7 +62,6 @@ class ProductOrder
 
     /**
      * Get id
-     *
      * @return int
      */
     public function getId()
@@ -76,21 +71,17 @@ class ProductOrder
 
     /**
      * Set customerId
-     *
-     * @param integer $customerId
-     *
+     * @param integer $customerId     
      * @return ProductOrder
      */
     public function setCustomerId($customerId)
     {
         $this->customerId = $customerId;
-
         return $this;
     }
 
     /**
      * Get customerId
-     *
      * @return int
      */
     public function getCustomerId()
@@ -100,21 +91,17 @@ class ProductOrder
 
     /**
      * Set orderedDate
-     *
      * @param \DateTime $orderedDate
-     *
      * @return ProductOrder
      */
     public function setOrderedDate($orderedDate)
     {
         $this->orderedDate = $orderedDate;
-
         return $this;
     }
 
     /**
      * Get orderedDate
-     *
      * @return \DateTime
      */
     public function getOrderedDate()
@@ -124,22 +111,18 @@ class ProductOrder
 
     /**
      * Set deliveryAddress
-     *
-     * @param string $deliveryAddress
-     *
+     * @param integer $deliveryAddress
      * @return ProductOrder
      */
     public function setDeliveryAddress($deliveryAddress)
     {
         $this->deliveryAddress = $deliveryAddress;
-
         return $this;
     }
 
     /**
      * Get deliveryAddress
-     *
-     * @return string
+     * @return integer
      */
     public function getDeliveryAddress()
     {
@@ -148,9 +131,7 @@ class ProductOrder
 
     /**
      * Set orderStatus
-     *
      * @param integer $orderStatus
-     *
      * @return ProductOrder
      */
     public function setOrderStatus($orderStatus)
@@ -162,7 +143,6 @@ class ProductOrder
 
     /**
      * Get orderStatus
-     *
      * @return int
      */
     public function getOrderStatus()
@@ -172,9 +152,7 @@ class ProductOrder
 
     /**
      * Set createdAt
-     *
      * @param \DateTime $createdAt
-     *
      * @return ProductOrder
      */
     public function setCreatedAt($createdAt)
@@ -186,7 +164,6 @@ class ProductOrder
 
     /**
      * Get createdAt
-     *
      * @return \DateTime
      */
     public function getCreatedAt()
@@ -196,21 +173,17 @@ class ProductOrder
 
     /**
      * Set updatedAt
-     *
      * @param \DateTime $updatedAt
-     *
      * @return ProductOrder
      */
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
-
         return $this;
     }
 
     /**
      * Get updatedAt
-     *
      * @return \DateTime
      */
     public function getUpdatedAt()
