@@ -13,7 +13,8 @@ class ReportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $pr =$em->getRepository('Model:Product')->findAll();
         $products=$em->getRepository('Model:Product_Detail_List')->findBy(["merchantId"=>$merchant]);
-        
+        $orders=$em->getRepository('Model:ProductOrderDetail')->findAll();
+        dump($orders);
         dump($products);    
         die;
     }

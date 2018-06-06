@@ -76,7 +76,7 @@ class CartList
      *
      * @return CartList
      */
-    public function setCartListId($cartId)
+    public function setCartId($cartId)
     {
         $this->cartId = $cartId;
         
