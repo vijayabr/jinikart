@@ -8,10 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
-  /**
-   * @Route("/test");
-   * @param Request $request
-   */
+  
     public function indexAction(Request $request)
     {
         // ask the service for a Excel5

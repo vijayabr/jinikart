@@ -10,4 +10,25 @@ namespace Common\Model\Repository;
  */
 class MerchantRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findAllDetails(){
+       
+        $em = $this->getEntityManager();      
+        $qb = $em->createQueryBuilder();
+        $qb->select('p')
+        ->from('Common\Model\Product', 'p')
+        ->where('p.merchantId = ?1')
+        ->setParameter(1,1);
+        $query=$qb->getQuery();
+        
+        $result=$query->getResult();
+        return $result;
+               
+//     $query = "SELECT * FROM bestelling";
+    
+//     $result = mysql_query($query) or die(mysql_error());
+    
+//     while($row = mysql_fetch_array($result)){
+//         $name = $row['name'];
+//         $age = $row['age'];
+    }
 }
