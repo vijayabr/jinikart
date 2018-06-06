@@ -60,13 +60,13 @@ class CartList
     }
 
     /**
-     * Get cartListId
+     * Get cartId
      *
      * @return int
      */
-    public function getCartListId()
+    public function getCartId()
     {
-        return $this->cartListId;
+        return $this->cartId;
     }
     
     /**

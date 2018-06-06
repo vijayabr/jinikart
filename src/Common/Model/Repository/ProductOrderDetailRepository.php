@@ -10,4 +10,13 @@ namespace Common\Model\Repository;
  */
 class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
 {
+    
+    public function productOrder(){
+        $query = $this->createQueryBuilder('pod')
+        ->select('pod', 'po', 'cl')
+        ->leftJoin('pod.cartListId', 'cl')
+        ->leftJoin('pod.productOrderId', 'po');
+        $query = $query->getQuery()->useQueryCache(true);
+        return $query->getResult();
+    }
 }

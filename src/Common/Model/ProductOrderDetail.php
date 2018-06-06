@@ -24,14 +24,14 @@ class ProductOrderDetail
     
     /**
      * @var int
-     * @ORM\ManyToOne(targetEntity="Common\Model\CartList")
+     * @ORM\ManyToOne(targetEntity="Common\Model\CartList",cascade={"all"},fetch="EAGER")
      * @ORM\JoinColumn(name="cartListId", referencedColumnName="id")
      */
     private $cartListId;
     
     /**
      * @var int
-     * @ORM\ManyToOne(targetEntity="Common\Model\ProductOrder")
+     * @ORM\ManyToOne(targetEntity="Common\Model\ProductOrder",cascade={"all"},fetch="EAGER")
      * @ORM\JoinColumn(name="productOrderId", referencedColumnName="id")
      */
     private $productOrderId;

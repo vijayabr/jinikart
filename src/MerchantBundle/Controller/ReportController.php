@@ -5,19 +5,29 @@ namespace MerchantBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Common\Model\ProductOrderDetail;
 
 class ReportController extends Controller
 {
+    public function invoiceInformation($merchant){
+        $em = $this->getDoctrine()->getManager();
+        $pr =$em->getRepository('Model:Product')->findAll();
+        $products=$em->getRepository('Model:Product_Detail_List')->findBy(["merchantId"=>$merchant]);
+        
+        dump($products);    
+        die;
+    }
+    
+    
     /**
      * @Route("/merchant/order",name="_order_page");
      * @param Request $request
      */
     public function OrderListAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $merchant=$this->getUser();
         
-       
+        $merchant=$this->getUser();
+        $details= $this->invoiceInformation($merchant);      
         return $this->render("@Merchant/Order/orderlist.html.twig",array('merchant'=> $merchant));
         
     }
