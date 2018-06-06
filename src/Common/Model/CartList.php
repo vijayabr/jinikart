@@ -74,7 +74,7 @@ class CartList
      *
      * @param integer $cartListId
      *
-     * @return Cart
+     * @return CartList
      */
     public function setCartListId($cartListId)
     {

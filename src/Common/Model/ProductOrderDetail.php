@@ -21,20 +21,22 @@ class ProductOrderDetail
      */
     private $id;
 
+    
+    /**
+     * @var int
+     * @ORM\ManyToOne(targetEntity="Common\Model\CartList")
+     * @ORM\JoinColumn(name="cartListId", referencedColumnName="id")
+     */
+    private $cartListId;
+    
     /**
      * @var int
      * @ORM\ManyToOne(targetEntity="Common\Model\ProductOrder")
-     * @ORM\JoinColumn(name="ProductOrderId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="productOrderId", referencedColumnName="id")
      */
     private $productOrderId;
-    /**
-     * @var int
-     * @ORM\ManyToOne(targetEntity="Common\Model\Product_Detail_List")
-     * @ORM\JoinColumn(name="productIMEI", referencedColumnName="id")
-     */
-    private $productIMEI;
     
-
+    
     /**
      * @var \DateTime
      *
@@ -67,27 +69,27 @@ class ProductOrderDetail
         return $this->id;
     }
     /**
-     * Set productIMEI
+     * Set cartListId
      *
-     * @param integer $productIMEI
+     * @param integer $cartListId
      *
-     * @return CartList
+     * @return ProductOrderDetail
      */
-    public function setProductId($productIMEI)
+    public function setCartListId($cartListId)
     {
-        $this->productId = $productIMEI;
+        $this->cartListId = $cartListId;
         
         return $this;
     }
     
     /**
-     * Get productIMEI
+     * Get cartListId
      *
      * @return int
      */
-    public function getProductId()
+    public function getCartListId()
     {
-        return $this->$productIMEI;
+        return $this->cartListId;
     }
     
 
@@ -98,13 +100,13 @@ class ProductOrderDetail
      *
      * @return ProductOrderDetail
      */
-    public function setProductOrderId($productOrderId)
+    public function setProductOrderIdId($productOrderId)
     {
         $this->productOrderId = $productOrderId;
-
+        
         return $this;
     }
-
+    
     /**
      * Get productOrderId
      *
@@ -112,9 +114,11 @@ class ProductOrderDetail
      */
     public function getProductOrderId()
     {
-        return $this->productOrderId;
+        return $this->$productOrderId;
     }
-
+    
+    
+  
     /**
      * Set deliveryDate
      *

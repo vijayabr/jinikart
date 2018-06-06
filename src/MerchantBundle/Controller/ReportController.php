@@ -17,9 +17,22 @@ class ReportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $merchant=$this->getUser();
         
-        require_once __DIR__ . '/vendor/autoload.php';
+       
+        return $this->render("@Merchant/Order/orderlist.html.twig",array('merchant'=> $merchant));
         
-        $mpdf = new \Mpdf\Mpdf();
+    }
+    
+    
+    /**
+     * @Route("/merchant/pdf",name="_pdfGenerator_page");
+     * @param Request $request
+     */
+    public function PdfGeneratorAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $merchant=$this->getUser();
+        
+        $mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp']);
         $mpdf->WriteHTML('<h1>Hello world!</h1>');
         $mpdf->Output();
         return $this->render("@Merchant/Order/orderlist.html.twig",array('merchant'=> $merchant));
