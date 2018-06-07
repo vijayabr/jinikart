@@ -32,7 +32,7 @@ class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
         return $query->getResult();
         
     }
-<<<<<<< HEAD
+
         public function findInvoiceDetails($id){
             
             $em = $this->getEntityManager();
@@ -57,7 +57,7 @@ class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
             return $result;
         }
     }
-=======
+
     
     
     public function productOrder($merchant,$orderId){
@@ -84,5 +84,5 @@ class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
     }
     
 }
->>>>>>> 3934fd5139dd5efd5f3b36f3029976caccc65998
+
 
