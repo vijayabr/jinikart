@@ -60,20 +60,20 @@ class ProductController extends Controller
                 $min=$productsearch->getData()["min"];
                 $brand=$productsearch->getData()["brand"];
                 $em = $this->getDoctrine()->getManager();
+                $merchant = $this->getDoctrine()->getRepository('Model:Merchant')->findAll();
                 $brands = $this->getDoctrine()->getRepository('Model:Brand')->brandNameList();
                 $categorys = $this->getDoctrine()->getRepository('Model:Category')->categoryNameList();
                 $productdescription1=$this->getDoctrine()->getRepository('Model:Product_Description')->findAll();
                
                 
                 if($brand){
-                    
                     $products = $em->getRepository('Model:Product')->productsearchBasedonBrand($brand->getId(),$min,$max);
-                    return $this->render("@Customer/Default/productList.html.twig",array('customer'=> $customer,'products'=> $products,'brand'=>$brands,'category'=>$categorys));
+                    return $this->render("@Customer/Default/productList.html.twig",array('customer'=> $customer,'products'=> $products,'brand'=>$brands,'category'=>$categorys,'merchants'=>$merchant));
                }
                 else{
                     $products = $em->getRepository('Model:Product')->productsearch();
                     return $this->render("@Customer/Default/productList.html.twig",
-                        array('customer'=> $customer,'products'=> $products,'brand'=>$brands,'category'=>$categorys));               
+                        array('customer'=> $customer,'products'=> $products,'brand'=>$brands,'category'=>$categorys,'merchants'=>$merchant));               
                 }                     
             }            
         }
@@ -98,6 +98,7 @@ class ProductController extends Controller
         $em = $this->getDoctrine();
         $product = $em->getRepository('Model:Product')->findOneBy(['productName'=>$pName]);
         $brand = $this->getDoctrine()->getRepository('Model:Brand')->findAll();
+
         $category = $this->getDoctrine()->getRepository('Model:Category')->findAll();
         $productdescription=$this->getDoctrine()->getRepository('Model:Product_Description')->findAll();
      /*    dump($product,$brand);
@@ -119,13 +120,13 @@ class ProductController extends Controller
         try{
         $customer = $this->getUser();
         $em = $this->getDoctrine();
-        $sortedList=$request->request->get("sortlist");               
-        $products = $em->getRepository('Model:Product')->productAdvancedSearch($sortedList);                
+        $sortedList=$request->request->get("sortlist");            
+        $products = $em->getRepository('Model:Product_Detail_List')->productAdvancedSearch($sortedList); 
         $msg="<div class='col-sm-9 col-md-6 col-lg-8'id='productsList' style='padding:20px 20px 20px 20px;'>";
         if($products){
-        foreach ($products as $product){
-            $name=$product->getproductName();
-            $price=$product->getproductName();
+            foreach ($products as $product){             
+            $name=$product->getProductId()->getproductName();
+            $price=$product->getProductId()->getproductName();
             $submsg="<div class=' well' id='product' style='background-color: #ff9800;margin-Top:2em; margin-left:5em; padding:20px 20px 20px 20px' > ";
             $submsg=$submsg."<a href=".$this->generateUrl ( 'productdetails_page', ['pName'=> $name] ).">".$name."</a>";
             $submsg=$submsg.$price;
