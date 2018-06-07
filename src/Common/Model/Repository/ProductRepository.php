@@ -170,6 +170,19 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             return $result;
         
     }
+    public function findUniqueProductCount($id)
+    {
+        
+        $em = $this->getEntityManager();
+        
+        $qb = $em->createQueryBuilder();
+        $qb->select('distinct l.productCount')
+        ->from('Common\Model\Product','l')
+        ->where('l.id=?1')
+        ->setParameter('1', $id);
+        $query=$qb->getQuery();
+        dump($query);die;
+    }
  }
 
 

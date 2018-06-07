@@ -14,7 +14,7 @@ class MerchantRepository extends \Doctrine\ORM\EntityRepository
        
         $em = $this->getEntityManager();      
         $qb = $em->createQueryBuilder();
-        $qb->select('count(p.productId) as productCount','p.productIMEI,d.productName')
+        $qb->select('p.productIMEI,d.productName,d.productCount')
         ->from('Common\Model\Product_Detail_List', 'p')
         ->join('p.productId','d')
         ->where('p.merchantId = ?1')
@@ -22,15 +22,10 @@ class MerchantRepository extends \Doctrine\ORM\EntityRepository
         $query=$qb->getQuery();
       //  dump($query);die;
         $result=$query->getResult();
-       // dump($result);die;
+     //  dump($result);die;
         return $result;
-               
-//     $query = "SELECT * FROM bestelling";
-    
-//     $result = mysql_query($query) or die(mysql_error());
-    
-//     while($row = mysql_fetch_array($result)){
-//         $name = $row['name'];
-//         $age = $row['age'];
+          
     }
+    
+  
 }

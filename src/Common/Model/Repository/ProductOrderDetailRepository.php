@@ -18,5 +18,30 @@ class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
         ->leftJoin('pod.productOrderId', 'po');
         $query = $query->getQuery()->useQueryCache(true);
         return $query->getResult();
+        
     }
-}
+        public function findInvoiceDetails($id){
+            
+            $em = $this->getEntityManager();
+            $qb = $em->createQueryBuilder();
+            $qb->select('pod','po.orderedDate','cl','pd,p.productName','p.productPrice','ct','c.fname','a.addressLine1','s.stateName','cy.countryName')
+            ->from('Common\Model\ProductOrderDetail','pod')
+            ->join('pod.productOrderId','po')
+            ->join('pod.cartListId','cl')
+            ->innerjoin('cl.cartId','ct')
+            ->innerjoin('ct.customerId','c')
+            ->join('c.addressId','a')
+            ->innerJoin('a.stateId','s')
+            ->innerJoin('a.countryId','cy')
+            ->join('cl.productIMEI','pd')
+            ->join('pd.productId','p')
+            ->where('p.id= ?1')
+            ->setParameter('1',(int)$id);
+            
+            $query=$qb->getQuery();
+            $result=$query->getResult();
+         //  dump($result);die;
+            return $result;
+        }
+    }
+

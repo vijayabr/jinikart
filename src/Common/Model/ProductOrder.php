@@ -39,7 +39,7 @@ class ProductOrder
      * @ORM\ManyToOne(targetEntity="Common\Model\Address")
      * @ORM\JoinColumn(name="addressId", referencedColumnName="id")
      */
-    private $deliveryAddress;
+    private $addressId;
 
     /**
      * @var int

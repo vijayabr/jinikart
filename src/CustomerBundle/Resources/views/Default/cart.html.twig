@@ -1,5 +1,14 @@
 {% extends "@Customer/Default/index.html.twig" %}
 {% block body %}
-<p>hii</p>
-
+<div>
+<h2>Cart</h2>
+</div><br/><br/>
+{{ dump(product) }}
+<div align="center">
+{{ form_start(form) }}
+{{ form_row(form.product.productName) }}
+{{ form_row(form.productPrice) }}
+{{ form_widget(form) }}
+{{ form_end(form) }}
+</div>
 {% endblock %}
