@@ -40,7 +40,8 @@ class Product
      *
      * @ORM\Column(name="productprice", type="float")
      */
-    private $productPrice;
+    private $productPrice;    
+    
 
     /**
      * @var string

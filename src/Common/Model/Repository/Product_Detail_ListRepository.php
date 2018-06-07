@@ -10,4 +10,115 @@ namespace Common\Model\Repository;
  */
 class Product_Detail_ListRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function productAdvancedSearch($filterData)
+    {
+        $filterQuery = $this->createQueryBuilder('pdl')
+        ->select('pdl','p')
+        ->leftJoin('pdl.productId', 'p')
+        ->leftJoin('pdl.merchantId', 'm')
+        ->leftJoin('p.categoryId', 'c')
+        ->leftJoin('p.brandId', 'b')
+        ->leftJoin('p.productDescriptionId', 'pd')
+        ->orderBy('p.createdAt', 'desc');
+        
+        foreach ($filterData as $filter => $data) {
+            if (isset($data) && !empty($data) ) {
+                switch ($filter) {
+                    case 'minprice':
+                        $filterQuery = $filterQuery->andWhere('p.productPrice  >=:minprice')
+                        ->setParameter('minprice', $data);
+                        break;
+                        
+                    case 'maxprice':
+                        $filterQuery = $filterQuery->andWhere('p.productPrice  <=:maxprice')
+                        ->setParameter('maxprice', $data);
+                        break;
+                        
+                    case 'category':
+                        $filterQuery = $filterQuery->andWhere('c.categoryName LIKE :category' )
+                        ->setParameter('category', "%".$data."%");
+                        break;
+                    case 'brand':
+                        $filterQuery = $filterQuery->andWhere('b.brandName LIKE :brand' )
+                        ->setParameter('brand', "%".$data."%");
+                        break;
+                        
+                    case 'ramsize':
+                        switch($data){
+                            case 'KB':
+                                $filterQuery = $filterQuery->andWhere('pd.ramSize LIKE :ramsize')
+                                ->setParameter('ramsize',"%".$data."%" );
+                                break;
+                            case '1GB':
+                                $filterQuery = $filterQuery->andWhere('pd.ramSize =:ramsize')
+                                ->setParameter('ramsize',$data);
+                                break;
+                            case '2GB':
+                                $filterQuery = $filterQuery->andWhere('pd.ramSize =:ramsize')
+                                ->setParameter('ramsize',$data);
+                                break;
+                            case '3GB':
+                                $filterQuery = $filterQuery->andWhere('pd.ramSize =:ramsize')
+                                ->setParameter('ramsize',$data);
+                                break;
+                            case '4GB':
+                                $filterQuery = $filterQuery->andWhere('pd.ramSize >=:ramsize')
+                                ->setParameter('ramsize',$data);
+                                break;
+                        }
+                        break;
+                    case 'discount':
+                        switch($data){
+                            case '1':
+                                $filterQuery = $filterQuery->andWhere('p.productDiscount < :maxdiscount')
+                                ->setParameter('maxdiscount',"10" );
+                                break;
+                            case '10':
+                                $filterQuery = $filterQuery->andWhere('p.productDiscount >= :mindiscount and p.productDiscount < :maxdiscount')
+                                ->setParameter('mindiscount',$data)
+                                ->setParameter('maxdiscount',"25");
+                                break;
+                            case '25':
+                                $filterQuery = $filterQuery->andWhere('p.productDiscount >= :mindiscount and p.productDiscount< :maxdiscount')
+                                ->setParameter('mindiscount',$data)
+                                ->setParameter('maxdiscount',"35");
+                                break;
+                            case '35':
+                                $filterQuery = $filterQuery->andWhere('p.productDiscount >= :mindiscount and p.productDiscount< :maxdiscount')
+                                ->setParameter('mindiscount',$data)
+                                ->setParameter('maxdiscount',"50");
+                                break;
+                            case '50':
+                                $filterQuery = $filterQuery->andWhere('p.productDiscount >= :mindiscount')
+                                ->setParameter('mindiscount',$data);
+                                break;
+                        }
+                        break;
+                    case 'camera':
+                        switch($data){
+                            case 'front':
+                                $filterQuery = $filterQuery->andWhere('pd.camera LIKE :camera')
+                                ->setParameter('camera',"%".$data."%" );
+                                break;
+                            case 'back':
+                                $filterQuery = $filterQuery->andWhere('pd.camera LIKE :camera')
+                                ->setParameter('camera',"%".$data."%" );
+                                break;
+                            case 'dual':
+                                $filterQuery = $filterQuery->andWhere('pd.camera LIKE :camera')
+                                ->setParameter('camera',"%".$data."%" );
+                                break;
+                        }
+                        break;
+                    case 'merchant':
+                        $filterQuery = $filterQuery->andWhere('m.companyName LIKE :merchant' )
+                        ->setParameter('merchant', "%".$data."%");
+                        break;
+                }
+            }
+        }
+        $filterQuery = $filterQuery->getQuery()->useQueryCache(true);
+        return $filterQuery->getResult();
+    }
+    
 }

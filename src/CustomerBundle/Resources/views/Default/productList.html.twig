@@ -8,7 +8,7 @@
      </div>
         <div  id="productlistContainer">
      	<div class="row">
-        <div class="col-sm-2 col-md-5 col-lg-4" id="advancedform"style="background-color:#936c6c;padding:10px 2px 5px 50px; color:white">
+        <div class="col-sm-2 col-md-5 col-lg-3" id="advancedform"style="background-color:#936c6c;padding:10px 2px 5px 50px; color:white">
         <br><br><label style="font-size: 20px;">Brand&nbsp:&nbsp&nbsp</label>
         <select id="brandlist" name="brand">
         <option value="">brand name</option>
@@ -23,7 +23,8 @@
 	    {% for category in category %}
         <option value="{{category.categoryName }}">{{category.categoryName }}</option>
         {% endfor %}
-		</select><br><br>
+		</select><br><br>	
+		
 		<label style="font-size: 20px;">Price&nbsp:</label><br>
 
 		min&nbsp:&nbsp&nbsp<input type="text" id="min" name="min" value=0><br> max:
@@ -59,7 +60,17 @@
         <option value="back">back</option>
         <option value="dual">dual</option>
 		</select>
-		<br><br>
+		<br>
+		<label style="font-size: 20px;">Merchant&nbsp:&nbsp&nbsp</label>
+        <br>             
+        <select id="merchantlist" name="merchant">
+        <option value="">merchant name</option>
+	    {% for merchant in merchants %}
+         <option value="{{merchant.companyName }}">{{merchant.companyName }}</option>
+        {% endfor %}
+     
+		</select><br>
+		<br>
         
 		<input type="hidden" id="url" name="url" value="{{ path('advancedproductList_page') }}"/> 
 		<button type="submit" name="search" id="search">search</button>

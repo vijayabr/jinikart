@@ -42,8 +42,8 @@ class ProductOrder
     private $addressId;
 
     /**
-     * @var int
-     * @ORM\Column(name="order_status", type="integer")
+     * @var string
+     * @ORM\Column(name="order_status", type="string")
      */
     private $orderStatus;
 
@@ -131,7 +131,7 @@ class ProductOrder
 
     /**
      * Set orderStatus
-     * @param integer $orderStatus
+     * @param string $orderStatus
      * @return ProductOrder
      */
     public function setOrderStatus($orderStatus)
@@ -143,7 +143,7 @@ class ProductOrder
 
     /**
      * Get orderStatus
-     * @return int
+     * @return string
      */
     public function getOrderStatus()
     {
