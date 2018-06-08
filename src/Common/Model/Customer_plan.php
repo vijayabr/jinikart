@@ -13,7 +13,9 @@ use Symfony\Component\Validator\Constraints\DateTime;
  */
 class Customer_plan
 {
-    const DEFAULTPLAN=1;
+//     const DEFAULTPLAN=1;
+    const NONPRIME = 1;
+    const PRIME = 1;
     
     /**
      * @var int
