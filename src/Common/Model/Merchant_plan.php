@@ -14,7 +14,9 @@ use Symfony\Component\Validator\Constraints\DateTime;
 class Merchant_plan
 {
     
-    const DEFAULTMERCHANTPLAN=1;
+    const DEFAULT_MERCHANT_PLAN =1; //1 = Silver Plan
+    const GOLD_PLAN =2;
+    const SILVER_PLAN=3;
     /**
      * @var int
      *

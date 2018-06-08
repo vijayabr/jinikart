@@ -5,6 +5,7 @@ namespace Common\Model;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\DBAL\Types\BigIntType;
 
 
 /**
@@ -16,7 +17,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Customer implements UserInterface
 {
     
+    
+    const INACTIVE= 0;
     const ACTIVE=1;
+    const SUSPENDED=2;
+    const ROLE="ROLE_CUSTOMER";
     /**
      * @var int
      *
@@ -36,7 +41,6 @@ class Customer implements UserInterface
 
     /**
      * @var string
-     * @Assert\NotBlank()
      * @Assert\Regex("/^[A-Z a-z]+$/", message="Last name should only contain  alphabets")
      * @ORM\Column(name="lname", type="string", length=50)
      */
@@ -55,22 +59,20 @@ class Customer implements UserInterface
      * @var string
      * @Assert\NotBlank()
      * @Assert\Email(
-     *     message="the email is not valid email"
-     * )
+     *     message="The email is not valid!")
      * @ORM\Column(name="email", type="string", length=50)
      */
     private $email;
 
     /**
-     * @Assert\Regex("/^\d{10}$/", message="mobile number should be 10 digits")
-     * @var string
-     * @ORM\Column(name="mobile_no", type="string", length=15,unique=true)
+     * @Assert\Regex("/^\d{10}$/", message="Mobile number should have 10 digits")
+     * @var BigIntType
+     * @ORM\Column(name="mobile_no", type="bigint", length=13,unique=true)
      */
     private $mobileNo;
 
     /**
      * @var string
-     * 
      * @ORM\Column(name="profile_photo", type="string", length=50)
      */
     private $profilePhoto;
@@ -122,9 +124,9 @@ class Customer implements UserInterface
     {
 
 //        $this->customerPlanId=1;
-        $this->customerStatus= Customer::ACTIVE;
+ //       $this->customerStatus= Customer::ACTIVE;
 //        $this->addressId=1;
-        $this->customerRole="ROLE_CUSTOMER";
+  //      $this->customerRole="ROLE_CUSTOMER";
 
         
         $this->setCreatedAt(new \DateTime());
@@ -244,7 +246,7 @@ class Customer implements UserInterface
     /**
      * Set mobileNo
      *
-     * @param string $mobileNo
+     * @param integer $mobileNo
      *
      * @return Customer
      */
@@ -258,7 +260,7 @@ class Customer implements UserInterface
     /**
      * Get mobileNo
      *
-     * @return string
+     * @return int
      */
     public function getMobileNo()
     {

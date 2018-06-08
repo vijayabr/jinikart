@@ -146,7 +146,7 @@ class ReportController extends Controller
         
         // create the writer
         $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
-       // $writer->save('web/Excel/stock-file.xlsx');
+        // $writer->save('web/Excel/stock-invoice-file.xls');
         // create the response
         $response = $this->get('phpexcel')->createStreamedResponse($writer);
         // adding headers

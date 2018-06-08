@@ -44,18 +44,22 @@ class TransactionController extends Controller
             //  $em->persist($cartlist);
             //  $em->flush();
               $productOrder= new ProductOrder();
+              $productOrder->setOrderedDate(new \DateTime());
               $productOrder->setOrderStatus(1);
               $productOrder->setCustomerId($cid);
+            
               //   dump(productOrder);die;
               //  $em->persist($productOrder);
               //  $em->flush();
               
               $productOrderDetail= new ProductOrderDetail();
-              $productOrderDetail->setId(1);
-              $productOrder->setCustomerId($cid);
-              //   dump(productOrder);die;
+              $productOrderDetail->setDeliveryDate(new \DateTime());
+              $productOrderDetail->setProductOrderIdId($productOrder);
+              $productOrderDetail->setCartListId($cartlist);
+              //dump($productOrderDetail);die;
               //  $em->persist($productOrder);
               //  $em->flush();
+              
               }
               
          

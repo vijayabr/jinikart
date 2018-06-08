@@ -47,7 +47,6 @@ class ProductController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     
-    
     public function customerIndexAction(Request $request)
     {
         

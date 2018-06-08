@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class WishList
 {
+    const IN_STOCK=1;
+    const OUT_OF_STOCK=0;
     /**
      * @var int
      *

@@ -6,15 +6,14 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Cart
- *
  * @ORM\Table(name="cart")
  * @ORM\Entity(repositoryClass="Common\Model\Repository\CartRepository")
  */
 class Cart
 {
+    const DEFAULT_CART_STATUS=0; // 0: EMPTY CART
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
