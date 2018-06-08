@@ -147,6 +147,7 @@ class AccountController extends Controller
         $imageform = $this->createForm(profileImageuploadType::class);
         $imageform->handleRequest($request);
         $em = $this->getDoctrine()->getManager();
+      
         try{
             if($imageform->isSubmitted()){
                         

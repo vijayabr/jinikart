@@ -56,7 +56,7 @@ class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
          //  dump($result);die;
             return $result;
         }
-    }
+    
 
     
     
@@ -71,7 +71,7 @@ class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('po.customerId', 'c')
             ->leftJoin('cl.productIMEI', 'pi')
             ->leftJoin('pi.productId', 'p')
-            ->leftJoin('po.deliveryAddress','a' )
+            ->leftJoin('po.addressId','a' )
             ->leftJoin('a.stateId', 's')
             ->leftJoin('a.countryId', 'co')
             ->leftJoin('p.productDescriptionId', 'pd')
