@@ -1,6 +1,6 @@
 <?php
 
-namespace MerchantBundle\Entity;
+namespace Common\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Cart
  *
  * @ORM\Table(name="cart")
- * @ORM\Entity(repositoryClass="MerchantBundle\Repository\CartRepository")
+ * @ORM\Entity(repositoryClass="Common\Model\Repository\CartRepository")
  */
 class Cart
 {
@@ -21,35 +21,14 @@ class Cart
      */
     private $id;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="product_id", type="integer", unique=true)
-     * 
-     */
-    private $productId;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="customer_id", type="integer", unique=true)
+     * @ORM\OneToOne(targetEntity="Common\Model\Customer")
+     * @ORM\JoinColumn(name="customerId", referencedColumnName="id")
      */
     private $customerId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="product_count", type="integer")
-     */
-    private $productCount;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="cart_list_id", type="integer", unique=true)
-     */
-    private $cartListId;
-
+   
     /**
      * @var bool
      *
@@ -82,30 +61,7 @@ class Cart
         return $this->id;
     }
 
-    /**
-     * Set productId
-     *
-     * @param integer $productId
-     *
-     * @return Cart
-     */
-    public function setProductId($productId)
-    {
-        $this->productId = $productId;
-
-        return $this;
-    }
-
-    /**
-     * Get productId
-     *
-     * @return int
-     */
-    public function getProductId()
-    {
-        return $this->productId;
-    }
-
+    
     /**
      * Set customerId
      *
@@ -129,55 +85,6 @@ class Cart
     {
         return $this->customerId;
     }
-
-    /**
-     * Set productCount
-     *
-     * @param integer $productCount
-     *
-     * @return Cart
-     */
-    public function setProductCount($productCount)
-    {
-        $this->productCount = $productCount;
-
-        return $this;
-    }
-
-    /**
-     * Get productCount
-     *
-     * @return int
-     */
-    public function getProductCount()
-    {
-        return $this->productCount;
-    }
-
-    /**
-     * Set cartListId
-     *
-     * @param integer $cartListId
-     *
-     * @return Cart
-     */
-    public function setCartListId($cartListId)
-    {
-        $this->cartListId = $cartListId;
-
-        return $this;
-    }
-
-    /**
-     * Get cartListId
-     *
-     * @return int
-     */
-    public function getCartListId()
-    {
-        return $this->cartListId;
-    }
-
     /**
      * Set cartStatus
      *
@@ -188,10 +95,9 @@ class Cart
     public function setCartStatus($cartStatus)
     {
         $this->cartStatus = $cartStatus;
-
+        
         return $this;
     }
-
     /**
      * Get cartStatus
      *

@@ -40,7 +40,8 @@ class Product
      *
      * @ORM\Column(name="productprice", type="float")
      */
-    private $productPrice;
+    private $productPrice;    
+    
 
     /**
      * @var string
@@ -54,13 +55,7 @@ class Product
      * @ORM\Column(name="productDiscount", type="float", nullable=true)
      */
     private $productDiscount;
-
-    /**
-     * @var int
-     * @ORM\ManyToOne(targetEntity="Common\Model\Merchant")
-     * @ORM\JoinColumn(name="merchantId", referencedColumnName="id")
-     */
-    private $merchantId;
+  
     /**
      * @var int
      * One Product can have one category.
@@ -76,7 +71,12 @@ class Product
      * @ORM\JoinColumn(name="brandId", referencedColumnName="id")
      */
     private $brandId;
-
+    /**
+     * @var int
+     * @ORM\Column(name="product_count", type="integer")
+     */
+    private $productCount;
+    
     /**
      * @var \DateTime
      *
@@ -106,6 +106,31 @@ class Product
     {
         return $this->id;
     }
+    
+    /**
+     * Set productCount
+     *
+     * @param integer $productCount
+     *
+     * @return Product
+     */
+    public function setProductCount($productCount)
+    {
+        $this->productCount = $productCount;
+        
+        return $this;
+    }
+    
+    /**
+     * Get productCount
+     *
+     * @return int
+     */
+    public function getProductCount()
+    {
+        return $this->productCount;
+    }
+    
 
     /**
      * Set productName
@@ -217,29 +242,7 @@ class Product
     {
         return $this->coupon;
     }
-    /**
-     * Set merchantId
-     *
-     * @param integer $merchantId
-     *
-     * @return Product
-     */
-    public function setMerchantId($merchantId)
-    {
-        $this-> merchantId = $merchantId;
-        
-        return $this;
-    }
     
-    /**
-     * Get merchantId
-     *
-     * @return int
-     */
-    public function getMerchantId()
-    {
-        return $this-> merchantId;
-    }
     
     /**
      * Set categoryId

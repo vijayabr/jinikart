@@ -31,13 +31,16 @@ class Product_Detail_List
 
     /**
      * @var string
-<<<<<<< HEAD
-     * @ORM\Column(name="product_IMEI", type="string", unique=true)
-=======
      * @ORM\Column(name="productIMEI", type="string", unique=true)
->>>>>>> c885cc7c10d592c0057ea7ed9ce291682ff31b98
      */
     private $productIMEI;
+    
+    /**
+     * @var int
+     * @ORM\ManyToOne(targetEntity="Common\Model\Merchant")
+     * @ORM\JoinColumn(name="merchantId", referencedColumnName="id")
+     */
+    private $merchantId;
 
     /**
      * @var \DateTime
@@ -71,7 +74,29 @@ class Product_Detail_List
     {
         return $this->id;
     }
-
+    /**
+     * Set merchantId
+     *
+     * @param integer $merchantId
+     *
+     * @return Product_Detail_List
+     */
+    public function setMerchantId($merchantId)
+    {
+        $this-> merchantId = $merchantId;
+        
+        return $this;
+    }
+    
+    /**
+     * Get merchantId
+     *
+     * @return int
+     */
+    public function getMerchantId()
+    {
+        return $this-> merchantId;
+    }
     /**
      * Set productId
      *

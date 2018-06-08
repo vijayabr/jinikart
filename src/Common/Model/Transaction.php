@@ -1,6 +1,6 @@
 <?php
 
-namespace MerchantBundle\Entity;
+namespace Common\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Transaction
  *
  * @ORM\Table(name="transaction")
- * @ORM\Entity(repositoryClass="MerchantBundle\Repository\TransactionRepository")
+ * @ORM\Entity(repositoryClass="Common\Model\Repository\TransactionRepository")
  */
 class Transaction
 {
@@ -23,8 +23,8 @@ class Transaction
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="order_id", type="integer", unique=true)
+     *@ORM\OneToOne(targetEntity="Common\Model\ProductOrder")
+     * @ORM\JoinColumn(name="orderId", referencedColumnName="id")
      */
     private $orderId;
 

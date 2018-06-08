@@ -1,0 +1,38 @@
+{% extends "@Customer/Default/index.html.twig" %}
+{% block body %}
+    <div class="header" style="color-interpolation: linearRGB;background-color: #7DA0B1;color:white">
+      <h1 align="center">Welcome to jinikart</h1>
+    </div>
+        
+     <div class="col-sm-10 col-md-8 col-lg-11"  id="orderlistContainer" style="padding:20px 20px 20px 20px;">
+    {% if orders %}
+    	{%  for order in orders %}
+           
+     	 <div class=" well" id="product" style="background-color: #ff9800;margin-Top:2em; margin-left:5em; padding:20px 20px 20px 20px;" >        
+		 <p><h4>Customer Name &nbsp&nbsp:&nbsp&nbsp&nbsp&nbsp{{ order.fname }}{{ order.lname }}<br></h4>
+             <h5>Mobile Number&nbsp&nbsp:&nbsp&nbsp&nsp&nbsp{{ order.mobileNo }}<br>
+                 Email&nbsp&nbsp:&nbsp&nbsp&nbsp&nbsp{{ order.email }}<br>
+                 Delivery address&nbsp&nbsp:&nbsp&nbsp&nbsp&nbsp{{ order.addressLine1 }}<br>       
+                {{ order.addressLine2 }}<br>
+                {{ order.stateName }}&nbsp&nbsp&nbsp&nbsp{{ order.countryName }}&nbsp&nbsp&nbsp&nbsp{{ order.pincode }}
+                <br>Product price &nbsp&nbsp:&nbsp&nbsp&nbsp&nbsp{{ order.productPrice }}
+               	<br>Discount&nbsp&nbsp:&nbsp&nbsp&nbsp&nbsp{{ order.productDiscount }}
+                <br>Selling price&nbsp&nbsp:&nbsp&nbsp&nbsp&nbsp{{order.price  }}
+                <br>Ordered date&nbsp&nbsp:&nbsp&nbsp&nbsp&nbsp{{ order.orderedDate|date("m/d/Y") }}
+                <br>Order Status&nbsp&nbsp:&nbsp&nbsp&nbsp&nbsp{{ order.orderStatus }}
+                <br></h5><h4>Product Information&nbsp&nbsp:&nbsp&nbsp&nbsp&nbsp{{order.productName}}
+                </h4><h5>IMEI number&nbsp&nbsp:&nbsp&nbsp&nbsp&nbsp{{ order.productIMEI }}&nbsp&nbsp&nbsp&nbsp          
+                       Color&nsp&nbsp:&nbsp&nbsp&nbsp&nbsp{{  order.color}}&nbsp&nbsp&nbsp&nbspramsize&nbsp&nbsp:&nbsp&nbsp&nbsp&nbsp{{order.ramSize}}
+                   <br>About Product&nbsp&nbsp:&nbsp&nbsp&nbsp&nbsp <br>Order Status:{{ order.productCompleteInfo}}</h6></p>
+		 		<button type="submit"  onclick="window.location.href='{{ path('orderinvoicePdf_page', {'order':order.id }) }}'">download product Order pdf</button>	 
+		 </div>
+	    {% endfor %}
+    {% else %}
+    <h4>product order not found</h4>
+    {% endif %}<br><br>
+    <button type="submit"  onclick="window.location.href='{{ path('invoicePdf_page') }}'">download invoice file</button>	 
+   </div>
+       
+ 	 
+
+{% endblock %}

@@ -1,6 +1,6 @@
 <?php
 
-namespace MerchantBundle\Entity;
+namespace Common\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * ProductOrderDetail
  *
  * @ORM\Table(name="product_order_detail")
- * @ORM\Entity(repositoryClass="MerchantBundle\Repository\ProductOrderDetailRepository")
+ * @ORM\Entity(repositoryClass="Common\Model\Repository\ProductOrderDetailRepository")
  */
 class ProductOrderDetail
 {
@@ -21,13 +21,22 @@ class ProductOrderDetail
      */
     private $id;
 
+    
     /**
      * @var int
-     *
-     * @ORM\Column(name="product_order_id", type="integer", unique=true)
+     * @ORM\ManyToOne(targetEntity="Common\Model\CartList",cascade={"all"},fetch="EAGER")
+     * @ORM\JoinColumn(name="cartListId", referencedColumnName="id")
+     */
+    private $cartListId;
+    
+    /**
+     * @var int
+     * @ORM\ManyToOne(targetEntity="Common\Model\ProductOrder",cascade={"all"},fetch="EAGER")
+     * @ORM\JoinColumn(name="productOrderId", referencedColumnName="id")
      */
     private $productOrderId;
-
+    
+    
     /**
      * @var \DateTime
      *
@@ -59,6 +68,30 @@ class ProductOrderDetail
     {
         return $this->id;
     }
+    /**
+     * Set cartListId
+     *
+     * @param integer $cartListId
+     *
+     * @return ProductOrderDetail
+     */
+    public function setCartListId($cartListId)
+    {
+        $this->cartListId = $cartListId;
+        
+        return $this;
+    }
+    
+    /**
+     * Get cartListId
+     *
+     * @return int
+     */
+    public function getCartListId()
+    {
+        return $this->cartListId;
+    }
+    
 
     /**
      * Set productOrderId
@@ -67,13 +100,13 @@ class ProductOrderDetail
      *
      * @return ProductOrderDetail
      */
-    public function setProductOrderId($productOrderId)
+    public function setProductOrderIdId($productOrderId)
     {
         $this->productOrderId = $productOrderId;
-
+        
         return $this;
     }
-
+    
     /**
      * Get productOrderId
      *
@@ -81,9 +114,11 @@ class ProductOrderDetail
      */
     public function getProductOrderId()
     {
-        return $this->productOrderId;
+        return $this->$productOrderId;
     }
-
+    
+    
+  
     /**
      * Set deliveryDate
      *

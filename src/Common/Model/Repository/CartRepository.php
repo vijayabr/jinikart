@@ -1,6 +1,6 @@
 <?php
 
-namespace MerchantBundle\Repository;
+namespace Common\Model\Repository;
 
 /**
  * CartRepository
@@ -9,5 +9,12 @@ namespace MerchantBundle\Repository;
  * repository methods below.
  */
 class CartRepository extends \Doctrine\ORM\EntityRepository
-{
+{ 
+    public function findAllData(){
+    $query = $this->createQueryBuilder('c')
+    ->select('c');
+    $query = $query->getQuery()->useQueryCache(true);
+    return $query->getResult();
+}
+
 }

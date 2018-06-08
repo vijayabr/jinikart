@@ -1,6 +1,6 @@
 <?php
 
-namespace MerchantBundle\Entity;
+namespace Common\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CartList
  *
  * @ORM\Table(name="cart_list")
- * @ORM\Entity(repositoryClass="MerchantBundle\Repository\CartListRepository")
+ * @ORM\Entity(repositoryClass="Common\Model\Repository\CartListRepository")
  */
 class CartList
 {
@@ -20,22 +20,22 @@ class CartList
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
+    
     /**
      * @var int
-     *
-     * @ORM\Column(name="product_id", type="integer")
+     *  @ORM\ManyToOne(targetEntity="Common\Model\Cart")
+     * @ORM\JoinColumn(name="cartId", referencedColumnName="id")
+     * 
      */
-    private $productId;
-
+    private $cartId;
     /**
-     * @var string
-     *
-     * @ORM\Column(name="product_name", type="string", length=255)
+     * @var int
+     * @ORM\ManyToOne(targetEntity="Common\Model\Product_Detail_List")
+     * @ORM\JoinColumn(name="productIMEI", referencedColumnName="id")
      */
-    private $productName;
+    private $productIMEI;
 
-    /**
+     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -52,7 +52,6 @@ class CartList
 
     /**
      * Get id
-     *
      * @return int
      */
     public function getId()
@@ -61,52 +60,54 @@ class CartList
     }
 
     /**
-     * Set productId
+     * Get cartId
      *
-     * @param integer $productId
+     * @return int
+     */
+    public function getCartId()
+    {
+        return $this->cartId;
+    }
+    
+    /**
+     * Set cartId
+     *
+     * @param integer $cartId
      *
      * @return CartList
      */
-    public function setProductId($productId)
+    public function setCartId($cartId)
     {
-        $this->productId = $productId;
+        $this->cartId = $cartId;
+        
+        return $this;
+    }
+    
+    
+    /**
+     * Set productIMEI
+     *
+     * @param integer $productIMEI
+     *
+     * @return CartList
+     */
+    public function setProductId($productIMEI)
+    {
+        $this->productId = $productIMEI;
 
         return $this;
     }
 
     /**
-     * Get productId
+     * Get productIMEI
      *
      * @return int
      */
     public function getProductId()
     {
-        return $this->productId;
+        return $this->$productIMEI;
     }
 
-    /**
-     * Set productName
-     *
-     * @param string $productName
-     *
-     * @return CartList
-     */
-    public function setProductName($productName)
-    {
-        $this->productName = $productName;
-
-        return $this;
-    }
-
-    /**
-     * Get productName
-     *
-     * @return string
-     */
-    public function getProductName()
-    {
-        return $this->productName;
-    }
 
     /**
      * Set createdAt

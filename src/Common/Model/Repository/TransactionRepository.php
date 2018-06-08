@@ -1,6 +1,6 @@
 <?php
 
-namespace MerchantBundle\Repository;
+namespace Common\Model\Repository;
 
 /**
  * TransactionRepository
