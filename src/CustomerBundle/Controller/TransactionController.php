@@ -7,39 +7,72 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use CustomerBundle\Form\AddCartType;
+use Common\Model\Cart;
+use Common\Model\CartList;
+use Common\Model\ProductOrder;
+use Common\Model\ProductOrderDetail;
 
 class TransactionController extends Controller
 {
     /**
-     * @Route("/customer/cart/{id}", name="add_cart");
+     * @Route("/customer/cart/{cid}/{id}", name="add_cart");
      * @param Request $request
      */
-    public function addCartAction(Request $request,$id)
+    public function addCartAction(Request $request,$cid,$id)
     {
         $form = $this->createForm(AddCartType::class);
         $form->handleRequest($request);     
-        
+       
         try{
-         $em=$this->getDoctrine()->getManager();
-         $product=$em->getRepository('Model:Product')->findOneBy(['id'=>$id]);
+          $em=$this->getDoctrine()->getManager();
+          $product=$em->getRepository('Model:Product')->findOneBy(['id'=>$id]);
+          
+          if($form->isSubmitted()){     
+              $cart= new Cart();       
+              $cart->setCartStatus(1);
+              $cart->setCustomerId($id);
+            //  dump($cart);die;
+            //  $em->persist($cart);
+            //  $em->flush();
+              
+              $cartlist= new CartList();
+              $em=$this->getDoctrine()->getManager();
+              $productimei=$em->getRepository('Model:Product')->findIMEI(['id'=>$id]);            
+              $cartlist->setProductIMEI($productimei);
+              $cartlist->setCartId($cart);
+            //   dump($cartlist);die;
+            //  $em->persist($cartlist);
+            //  $em->flush();
+              $productOrder= new ProductOrder();
+              $productOrder->setOrderStatus(1);
+              $productOrder->setCustomerId($cid);
+              //   dump(productOrder);die;
+              //  $em->persist($productOrder);
+              //  $em->flush();
+              
+              $productOrderDetail= new ProductOrderDetail();
+              $productOrderDetail->setId(1);
+              $productOrder->setCustomerId($cid);
+              //   dump(productOrder);die;
+              //  $em->persist($productOrder);
+              //  $em->flush();
+              }
+              
          
-      /*    if($form->isSubmitted()){     
-             $quantity=$form->getData()["product_count"];            
-         }
          
-       */   
+         
        return $this->render("@Customer/Default/cart.html.twig",array('form'=>$form->createView(),'product'=>$product)); 
          
-        }catch(\Exception $exception){
+        } catch(\Exception $exception){
             
             return new Response($exception);
             die;
         }
-        
+         
     }
     
     /**
-     * @Route("/customer/wish/{id}", name="wish_cart");
+     * @Route("/customer/wish/{cid}/{id}", name="wish_cart");
      * @param Request $request
      */
     public function addWishListAction(Request $request,$id)

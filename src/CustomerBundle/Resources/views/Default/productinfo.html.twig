@@ -26,7 +26,7 @@
      </div>
      <div align="center">
      <br/><br/>
-     <button type="submit" onclick="window.location.href='{{ path('add_cart') }}'">Add To Cart</button>
+     <button type="submit" onclick="window.location.href='{{ path('add_cart',{'cid':customer.id,'id':product.id}) }}'">Add To Cart</button>
      </div>	 
 {% endblock %}
 {% block javascripts %}

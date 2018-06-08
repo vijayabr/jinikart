@@ -94,7 +94,7 @@ class CartList
      *
      * @return CartList
      */
-    public function setProductId($productIMEI)
+    public function setProductIMEI($productIMEI)
     {
         $this->productId = $productIMEI;
 
@@ -106,7 +106,7 @@ class CartList
      *
      * @return int
      */
-    public function getProductId()
+    public function getProductIMEI()
     {
         return $this->$productIMEI;
     }
