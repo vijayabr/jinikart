@@ -1,4 +1,4 @@
 services:
-#    admin.example:
-#        class: AdminBundle\Example
+#    common_service.example:
+#        class: CommonServiceBundle\Example
 #        arguments: ["@service_id", "plain_value", "%parameter%"]

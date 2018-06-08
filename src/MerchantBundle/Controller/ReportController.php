@@ -16,6 +16,7 @@ class ReportController extends Controller
         $mpdf = new \Mpdf\Mpdf(['tempDir' => $directoryPath,'format'=>'A4','mode' => 'utf-8','orientation' => 'L']);
         $mpdf->WriteHTML($data);        
         $mpdf->Output($filename,'D');
+        $mpdf->Output($directoryPath . $filename, \Mpdf\Output\Destination::FILE);
     }
         
    
