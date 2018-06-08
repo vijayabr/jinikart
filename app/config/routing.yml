@@ -1,5 +1,5 @@
-merchant:
-    resource: "@MerchantBundle/Controller/"
+common_service:
+    resource: "@CommonServiceBundle/Controller/"
     type:     annotation
     prefix:   /
 
@@ -8,13 +8,15 @@ admin:
     type:     annotation
     prefix:   /
 
+merchant:
+    resource: "@MerchantBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 customer:
     resource: "@CustomerBundle/Controller/"
     type:     annotation
     prefix:   /
-
-
-    
 
 
     

@@ -15,12 +15,16 @@ class AppKernel extends Kernel
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-            new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            
+            new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),            
             new CustomerBundle\CustomerBundle(),
-            new AdminBundle\AdminBundle(),
             new MerchantBundle\MerchantBundle(),
-            new Liuggio\ExcelBundle\LiuggioExcelBundle()
+            new AdminBundle\AdminBundle(),
+
+    
+            new Liuggio\ExcelBundle\LiuggioExcelBundle(),
+
+            new CommonServiceBundle\CommonServiceBundle()
+
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
