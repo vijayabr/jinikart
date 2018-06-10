@@ -46,15 +46,14 @@
             <br/>
             {{ form_row(form.companylogo,{ 'attr':{'class': 'drop-down'}}) }}
           
-            <div id="buttons" class="btn">
-            <button type="submit">Register</button><br/>
-           <button type="reset">Clear</button><br/>
+            <div id="buttons" padding="10em">
+           <p><button type="submit" style="width:80px" class="btn btn-log btn-primary">Register</button>
+           <button type="reset" style="width:80px" class="btn btn-log btn-primary">Clear</button><br/></p>
             </div>
            {{ form_end(form)}}
             <a href="{{ path('merchant_login') }}">Already have an account? SignIn!!</a>
     </div>
-     <script src="https://cdn.jsdelivr.net/jquery/1.12.4/jquery.min.js"></script>
-      <script src="vendor/jquery-validation/dist/jquery.validate.min.js"></script>
+     
         
   <script>
   $(document).ready(function(){
@@ -65,9 +64,11 @@
 		});
 		$("button").onclick(function(){
 			$("#mobile").click(){
-				alert("Mobile should contain 10digits")
+				alert("Mobile should contain 10 digits")
 	        }
 		});
 	});
   </script>
+  <script src="https://cdn.jsdelivr.net/jquery/1.12.4/jquery.min.js"></script>
+      <script src="vendor/jquery-validation/dist/jquery.validate.min.js"></script>
 {% endblock %}

@@ -23,13 +23,13 @@ class MerchantType extends AbstractType
         public function buildForm(FormBuilderInterface $builder, array $options)
         {
             $builder->add('companyName', TextType::class, array('label' => 'Comapany Name:'))
-            ->add('contactPersonName', TextType::class, array('label' => 'Contact Person Name:'))
+            ->add('contactPersonName', TextType::class, array('label' => 'Contact Person Name:', 'required'=>''))
             ->add('address_line1', TextType::class, array('label' => 'Address_line1:'))
-            ->add('address_line2', TextType::class, array('label' => 'Address_line2:'))
+            ->add('address_line2', TextType::class, array('label' => 'Address_line2:','required'=>false))
             ->add('email', EmailType::class, array('label' => 'Email Id:','required'=>''))
             ->add('mobileNo', TelType::class, array('label' => 'Mobile Number:',
-                'required'=>true,'constraints'=>array(new Length(array('min'=>10, 'max'=>12)))
-            ))
+                'required'=>''))
+            
             ->add('password', RepeatedType::class, array(
                 'type' => PasswordType::class,
                 'first_options' => array('label' => 'Password:'),
@@ -44,7 +44,7 @@ class MerchantType extends AbstractType
                     return $country->getCountryName();
                     },'placeholder' => 'Choose a country'))
             ->add('pincode',TextType::class, array('label' => 'Pincode:'))
-            ->add('companylogo', FileType::class, array('label' => 'Company Logo'));
+            ->add('companylogo', FileType::class, array('label' => 'Company Logo', 'required'=>false));
             
          }
 }

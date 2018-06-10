@@ -53,6 +53,10 @@ class AccountController extends Controller
                 $address->setCountryId($country);
                 $address->setPincode($pin); 
                 $error1=$validator->validate($address);
+                if(!$error1){
+                    $em->persist($address);
+                    $em->flush();
+                }
              //   $em->persist($address);
              //   $em->flush();
                 $customerMobileNoExist =$em->getRepository('Model:Customer')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
@@ -66,6 +70,9 @@ class AccountController extends Controller
                     $customer->setEmail($form->getData()["email"]);
                     $customer->setMobileNo($form->getData()["mobile_no"]);
                     $customer->setPassword($form->getData()["password"]);
+                    $customer->setCustomerPlanId($customerPlan);
+                    $customer->setCustomerStatus(Customer::ACTIVE);
+                    $customer->setCustomerRole(Customer::ROLE);
                     $errors =$validator->validate($customer); 
                     $error1=$validator->validate($address);
                     if(count($errors) > 0 || count($error1)>0){
@@ -82,7 +89,8 @@ class AccountController extends Controller
                         $q1=$em->getRepository('Model:SecretQuestion')->find(1);
                         $q2=$em->getRepository('Model:SecretQuestion')->find(2);
                         $qA1=$em->getRepository('Model:SecretAnswer')->findOneBy(['questionId'=>$q1]);
-                        $qA2=$em->getepository('Model:SecretAnswer')->findOneBy(['questionId'=>$q2]);                       
+                        $qA2=$em->getRepository('Model:SecretAnswer')->findOneBy(['questionId'=>$q2]);        
+                     
                         $qA1->setAnswer($form->getData()['question1']);
                         $entityManager = $this->getDoctrine()->getManager();
                         $entityManager->persist($qA1);
@@ -99,12 +107,12 @@ class AccountController extends Controller
                          * @var uplodedFile images
                          */
                         $image = $form->getData()["profile_photo"];
-
-                      
-                        $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();
-                        
+                        if($image)
+                        {
+                        $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();     
                         $image->move($this->getParameter('image_directory'),$imageName);
                         $customer->setProfilePhoto($imageName);
+                        }
                         $entityManager = $this->getDoctrine()->getManager();
                         $entityManager->persist($customer);
                         $entityManager->flush();

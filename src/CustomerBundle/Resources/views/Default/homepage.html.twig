@@ -18,9 +18,9 @@
             {{ form_widget(form.max) }}
             <button type="submit" name="search">Search</button>
             {{ form_end(form) }}
-                    
-               
-          </div>  
+             
+          <button type="button"  onclick="window.location.href='{{ path('logout') }}'">Logout</button>   
+          </div>    
  
       <script>
 		var slider1 = document.getElementById("form_min");

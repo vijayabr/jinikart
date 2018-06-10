@@ -34,7 +34,7 @@ class Customer implements UserInterface
     /**
      * @var string
      * @Assert\NotBlank()
-     * @Assert\Regex("/^[a-z A-Z]$/", message="First name should only contain  alphabets")
+     * @Assert\Regex("/^[a-z A-Z]+$/", message="First name should only contain  alphabets")
      * @ORM\Column(name="fname", type="string", length=10)
      */
     private $fname;
@@ -42,7 +42,7 @@ class Customer implements UserInterface
     /**
      * @var string
      * @Assert\Regex("/^[A-Z a-z]+$/", message="Last name should only contain  alphabets")
-     * @ORM\Column(name="lname", type="string", length=50)
+     * @ORM\Column(name="lname", type="string", length=10)
      */
     private $lname;
 
@@ -122,12 +122,6 @@ class Customer implements UserInterface
 
     public function __construct()
     {
-
-//        $this->customerPlanId=1;
- //       $this->customerStatus= Customer::ACTIVE;
-//        $this->addressId=1;
-  //      $this->customerRole="ROLE_CUSTOMER";
-
         
         $this->setCreatedAt(new \DateTime());
        

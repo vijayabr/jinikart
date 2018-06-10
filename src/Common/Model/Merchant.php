@@ -39,7 +39,7 @@ class Merchant implements UserInterface
     /**
      * @var int
      *one customer has one default address
-     * @ORM\ManyToOne(targetEntity="Common\Model\Address")
+     * @ORM\ManyToOne(targetEntity="Common\Model\Address",cascade={"persist"})
      * @ORM\JoinColumn(name="addressId", referencedColumnName="id")
      */
     private $addressId;
@@ -78,7 +78,6 @@ class Merchant implements UserInterface
    
     /**
      * @var string
-     *@Assert\NotBlank(message="Please,upload the image")
      * @ORM\Column(name="company_logo", type="string", length=50)
      */
     private $companyLogo;
