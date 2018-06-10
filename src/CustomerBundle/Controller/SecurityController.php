@@ -8,6 +8,7 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Bundle\TwigBundle\Controller\ExceptionController;
+use Symfony\Bridge\Doctrine\Security\RememberMe;
 
 class SecurityController extends Controller
 {

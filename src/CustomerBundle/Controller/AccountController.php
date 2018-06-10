@@ -37,10 +37,10 @@ class AccountController extends Controller
         $form->handleRequest($request);
         $validator=$this->get('validator');
         try {
-            if ($form->isSubmitted() && $form->isValid()) { 
+            if ($form->isSubmitted()) { 
                 $em = $this->getDoctrine()->getManager();           
-                $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' => Customer_plan::DEFAULTPLAN]);
-                //get address
+                $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' => Customer_plan::DEFAULT_CUSTOMER_PLAN]);
+         
                 $addr1 = $form->getData()["address_line1"];
                 $pin = $form->getData()["pincode"];
                 $state = $form->getData()["state"];
@@ -51,13 +51,14 @@ class AccountController extends Controller
                 $address->setAddressLine2($addr2);
                 $address->setStateId($state);
                 $address->setCountryId($country);
-                $address->setPincode($pin);
-               $error1=$validator->validate($address);
-                $em->persist($address);
-                $em->flush();
+                $address->setPincode($pin); 
+                $error1=$validator->validate($address);
+             //   $em->persist($address);
+             //   $em->flush();
                 $customerMobileNoExist =$em->getRepository('Model:Customer')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
                 $customerEmailExist =$em->getRepository('Model:Customer')->findOneBy(['email'=>$form->getData()["email"]]);
                 if(!$customerEmailExist && !$customerMobileNoExist) {
+                   
                     $address = new Address();
                     $customer = new Customer();  
                     $customer->setFname($form->getData()["fname"]);

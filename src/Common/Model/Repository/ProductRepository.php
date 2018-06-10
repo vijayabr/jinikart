@@ -66,20 +66,23 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             return $result;
         
     }
-   /*  public function findUniqueProductCount($id)
+    public function findProductDetails($Id)
     {
-        
         $em = $this->getEntityManager();
         
         $qb = $em->createQueryBuilder();
-        $qb->select('distinct l.productCount')
-        ->from('Common\Model\Product','l')
-        ->where('l.id=?1')
-        ->setParameter('1', $id);
+        $qb->select('l.productIMEI,p.productName,p.productPrice,d.color,d.ramSize,d.productCompleteInfo')
+        ->from('Common\Model\Product_Detail_List','l')
+        ->join('l.productId','p')
+        ->join('p.productDescriptionId','d')
+        ->where('l.productId = ?1')
+        ->setParameter(1,(int)$Id);
         $query=$qb->getQuery();
-        dump($query);die;
+        
+        $result=$query->getResult();
+        return $result;
     }
-    */
+ 
     public function findIMEI() {
         
         $em = $this->getEntityManager();

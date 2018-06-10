@@ -116,11 +116,10 @@ class TransactionController extends Controller
         
         try{
             
-            //             $em=$this->getDoctrine()->getManager();
-            //             $product=$em->getRepository('Model:Product')->findOneBy(['id'=>$id]);
-            //             dump($product);die;
-            
-            return $this->render("@Customer/Default/placeOrder.html.twig");
+            $em=$this->getDoctrine()->getManager();
+            $product=$em->getRepository('Model:Product')->findProductDetails(['id'=>$id]);
+        
+            return $this->render("@Customer/Default/placeOrder.html.twig",array('product'=>$product));
             //             dump($product);die;
             
             //         if($form->isSubmitted()){

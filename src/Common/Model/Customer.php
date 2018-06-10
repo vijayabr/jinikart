@@ -34,8 +34,8 @@ class Customer implements UserInterface
     /**
      * @var string
      * @Assert\NotBlank()
-     * @Assert\Regex("/^[a-z A-Z]+$/", message="First name should only contain  alphabets")
-     * @ORM\Column(name="fname", type="string", length=50)
+     * @Assert\Regex("/^[a-z A-Z]$/", message="First name should only contain  alphabets")
+     * @ORM\Column(name="fname", type="string", length=10)
      */
     private $fname;
 

@@ -34,11 +34,6 @@ security:
       
                 
         merchant:
-#            remember_me:
-#                  name: REME 
-#                  secret:   '%secret%'
-#                  lifetime: 604800 # 1 week in seconds
-#                  path:     ^/merchant
             anonymous: ~   
             provider: merchant_db
             pattern: ^/merchant
@@ -81,5 +76,5 @@ security:
     access_control:
 #            - { path: ^/customer, roles: [ROLE_CUSTOMER,IS_AUTHENTICATED_FULLY,IS_AUTHENTICATED_REMEMBERED] }
 #            - { path: ^/merchant, roles: [ROLE_MERCHANT,IS_AUTHENTICATED_REMEMBERED] }
-           
+#           
            

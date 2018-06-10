@@ -10,13 +10,12 @@
 <p >Order Summary</p>
 </div>
 <div>
-<block>
-<p>Item Count:{{  }}</p>
-<p>Details{{  }}</p>
-<p>Expected Delivery Date: {{  }}</p>
-<p>Order Total: {{  }}</p>
-<p>Savings{{  }}</p>
-</block>
+{# <p>Item Count:{{  }}</p>#}
+<p><label>Details:</label>{{ product.productName}}</p>
+{# <p>Expected Delivery Date: {{  }}</p>#}
+{# <p>Order Total: {{  }}</p>#}
+{# <p>Savings{{  }}</p>#}
+</div>
 <button type="submit">Confirm Order</button>
 </div>
 {% endblock %}

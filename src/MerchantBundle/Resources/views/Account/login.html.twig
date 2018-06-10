@@ -2,7 +2,7 @@
 {% block body %}
     <div class="main" align="center">
     <h2 class="header">Merchant Login</h2>
-    <div  style=" padding: 20px 15px 15px 20px; left: 100px " align="left">
+    <div  class="container" style="padding: 20px 15px 15px 20px">
         {% if error %}
             <div style="color: darkred">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
@@ -16,7 +16,7 @@
             <br/>
              <input type="checkbox" id="remember_me" name="remember_me" />
              <label for="remember_me">Keep me logged in</label><br/>
-        <button type="submit">login</button>
+        <button type="submit"  style="width:60px" class="btn btn-log btn-primary">login</button><br/>
         <a href="{{ path('merchant_registration') }}" style="color: blue">New to Jinikart? SignUp!!</a>
         </form>
    </div>

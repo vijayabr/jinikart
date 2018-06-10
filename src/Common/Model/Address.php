@@ -57,7 +57,7 @@ class Address
 
     /**
      * @var int
-     *@Assert\Regex("/^[0-9]{5,6}$/", message="invalid pincode")
+     *@Assert\Regex("/^[0-9]{5,6}$/", message="Invalid pincode")
      * @ORM\Column(name="pincode", type="integer")
      */
     private $pincode;

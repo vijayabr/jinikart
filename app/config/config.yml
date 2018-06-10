@@ -86,3 +86,6 @@ swiftmailer:
     password: jini1234
     encryption: tls
     
+web_profiler:
+    toolbar:              false
+    intercept_redirects:  false    
