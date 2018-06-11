@@ -59,8 +59,9 @@
             {{ form_end(form) }}
         </div>
     <div>    
-               
+       
        <a href="{{ path('login') }}">Already have an account? SignIn!!</a>
+       <script src={{ asset('/js/form-validator.js') }}></script>
    </div>
 
 {% endblock %}

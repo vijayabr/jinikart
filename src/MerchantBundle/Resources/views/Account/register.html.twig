@@ -35,8 +35,8 @@
             {{ form_start(form)}}
             {{ form_row(form.companyName)}}
             {{ form_row(form.contactPersonName)}}
-            {{ form_row(form.email, {'attr': {'id':'email'}} )}}
-            {{ form_row(form.mobileNo, {'attr': {'id':'mobile'}})}}
+            {{ form_row(form.email)}}
+            {{ form_row(form.mobileNo)}}
             {{ form_row(form.password )}}
             {{ form_row(form.address_line1) }}
             {{ form_row(form.address_line2) }}
@@ -57,16 +57,36 @@
         
   <script>
   $(document).ready(function(){
-		$("button").onclick(function(){
-			$("#email").click(){
-				alert("Email should contain @")
-	        }
-		});
-		$("button").onclick(function(){
-			$("#mobile").click(){
-				alert("Mobile should contain 10 digits")
-	        }
-		});
+		$("#merchant_email").live('change',function() {
+			 var emailaddress = $j("#merchant_email").val();
+			  // validation here? 
+			  if(emailaddress){
+
+				  } 
+			  // end validation 
+			  $j.ajax({ type: "POST", 
+			  url: "../ff-admin/ff-register/ff-user-check.php", 
+			  data: "fld_emailaddress="+ emailaddress, success: function(msg) { 
+			  if(msg == 'OK') { $j("#fld_username").attr('disabled',false); 
+			  $j("#fld_password").attr('disabled',false);
+			  $j("#cmd_register_submit").attr('disabled',false);
+			  $j("#fld_emailaddress").removeClass('object_error');             
+             // if necessary 
+           $j("#fld_emailaddress").addClass("object_ok"); 
+           $j('#email_ac').html('&nbsp;<img src="img/cool.png" align="absmiddle"> <font color="Green">
+              Your email <strong>'+ emailaddress+'</strong> is OK.</font> '); 
+           } 
+		  else {
+            $j("#fld_username").attr('disabled',true);
+            $j("#fld_password").attr('disabled',true);
+            $j("#cmd_register_submit").attr('disabled',true); 
+            $j("#fld_emailaddress").removeClass('object_ok'); 
+            // if necessary
+            $j("#fld_emailaddress").addClass("object_error"); 
+            $j('#email_ac').html(msg); } } }); });
+			alert("Email should contain @")		
+	        });
+				
 	});
   </script>
   <script src="https://cdn.jsdelivr.net/jquery/1.12.4/jquery.min.js"></script>

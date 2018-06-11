@@ -118,7 +118,7 @@ class TransactionController extends Controller
             
             $em=$this->getDoctrine()->getManager();
             $product=$em->getRepository('Model:Product')->findProductDetails(['id'=>$id]);
-        
+          // dump($product);die;
             return $this->render("@Customer/Default/placeOrder.html.twig",array('product'=>$product));
             //             dump($product);die;
             

@@ -3,6 +3,7 @@
 <div>
 <h2>Confirm Order!!</h2>
 </div>
+
 <div style="margin:auto;">
 <span><label style="font-style:bold; font-size:20px">Delivery Address: </label>&nbsp&nbsp<textarea rows="2" cols="25"></textarea></span>
 </div>
@@ -11,10 +12,13 @@
 </div>
 <div>
 {# <p>Item Count:{{  }}</p>#}
-<p><label>Details:</label>{{ product.productName}}</p>
+{% foreach pro in product %}
+<p><label>Details:</label>{{ pro}} </p>
 {# <p>Expected Delivery Date: {{  }}</p>#}
 {# <p>Order Total: {{  }}</p>#}
 {# <p>Savings{{  }}</p>#}
+
+{% endfor %}
 </div>
 <button type="submit">Confirm Order</button>
 </div>
