@@ -32,12 +32,12 @@
 
          </div>
 
-          <div class="customerform" style=" padding: 20px 15px 15px 20px; left: 100px " align="left">
+          <div class="container" style="padding:50px 15px 15px 30px;margin-left:30%">
 
             {{ form_start(form) }}
             {{ form_row(form.fname,  { 'attr': {'class': 'form-group'} }) }}
             {{ form_row(form.lname,  { 'attr': {'class': 'form-group'} }) }}
-            {{ form_row(form.email,  { 'attr': {'class': 'form-group'} }) }}
+            {{ form_row(form.email,    { 'attr': {'class': 'form-group'} }) }}
             {{ form_row(form.mobile_no,  { 'attr': {'class': 'form-group'} }) }}
             {{ form_row(form.password,  { 'attr': {'class': 'form-group'} }) }}
 
@@ -59,8 +59,9 @@
             {{ form_end(form) }}
         </div>
     <div>    
-               
+       
        <a href="{{ path('login') }}">Already have an account? SignIn!!</a>
+       <script src={{ asset('/js/form-validator.js') }}></script>
    </div>
 
 {% endblock %}

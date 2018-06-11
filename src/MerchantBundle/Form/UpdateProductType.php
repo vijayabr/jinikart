@@ -16,10 +16,10 @@ class UpdateProductType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('product_name',TextType::class,array('label' => 'Product Name: '))
-        ->add('product_price',TextType::class,array('label' => 'Product Price: '))
+        $builder->add('product_name',TextType::class,array('label' => 'Product Name: ','required'=>false))
+        ->add('product_price',TextType::class,array('label' => 'Product Price: ','required'=>false))
         
-        ->add('product_discount',PercentType::class,array('label' => 'Discount:'))
+        ->add('product_discount',PercentType::class,array('label' => 'Discount:','required'=>false))
         ->add('categoryName',EntityType::class,array('class' => 'Common\Model\Category',
             'choice_label'=> function($cat){
             return $cat->getCategoryName();
@@ -29,19 +29,19 @@ class UpdateProductType extends AbstractType
                 return $brand->getBrandName();
                 },'placeholder' => 'Choose an option','label' =>'Brand Name:'))
         ->add('color',TextType::class,array('attr'=> array('class' => 'Model:Product_Description',
-                    'label'=> 'Color:'),
+            'label'=> 'Color:'),'required'=>false
                 ))
         ->add('ram_size',TextType::class,array('attr'=> array('class' => 'Model:Product_Description',
-                    'label'=> 'Ram size:'),
+            'label'=> 'Ram size:'),'required'=>false
                 ))
         ->add('camera',TextType::class,array('attr'=> array('class' => 'Model:Product_Description',
-                    'label'=> 'Camera:'),
+            'label'=> 'Camera:'),'required'=>false
                 ))
                 
         ->add('product_complete_info',TextareaType::class,array('attr'=> array('class' => 'Model:Product_Description',
-                    'label'=> 'Description:'),
+            'label'=> 'Description:'),'required'=>false
                 ))
-        ->add('product_photo', FileType::class, array('label' => 'Product Photo:'));
+                ->add('product_photo', FileType::class, array('label' => 'Product Photo:','required'=>false));
                 
     }
 }

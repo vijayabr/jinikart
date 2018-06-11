@@ -55,7 +55,7 @@ class Product
      * @ORM\Column(name="productDiscount", type="float", nullable=true)
      */
     private $productDiscount;
-  
+
     /**
      * @var int
      * One Product can have one category.
@@ -242,8 +242,7 @@ class Product
     {
         return $this->coupon;
     }
-    
-    
+
     /**
      * Set categoryId
      *

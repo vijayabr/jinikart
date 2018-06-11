@@ -13,6 +13,20 @@ input[type=password] {
     border: 2px solid dodgerblue;
     border-radius: 4px;
 }
+input[type=email] {
+    margin: 10px;
+    min-width: 200px;
+    max-width: 500px;
+    border: 2px solid dodgerblue;
+    border-radius: 4px;
+}
+input[type=tel] {
+    margin: 10px;
+    min-width: 200px;
+    max-width: 500px;
+    border: 2px solid dodgerblue;
+    border-radius: 4px;
+}
 input[type=text]{
     display:inline-block;
     margin: 10px;

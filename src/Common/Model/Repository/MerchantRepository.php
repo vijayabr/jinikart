@@ -10,4 +10,22 @@ namespace Common\Model\Repository;
  */
 class MerchantRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findAllDetails($id){
+       
+        $em = $this->getEntityManager();      
+        $qb = $em->createQueryBuilder();
+        $qb->select('p.productIMEI,d.productName,d.productCount')
+        ->from('Common\Model\Product_Detail_List', 'p')
+        ->join('p.productId','d')
+        ->where('p.merchantId = ?1')
+        ->setParameter(1,(int)$id);
+        $query=$qb->getQuery();
+      //  dump($query);die;
+        $result=$query->getResult();
+     //  dump($result);die;
+        return $result;
+          
+    }
+    
+  
 }

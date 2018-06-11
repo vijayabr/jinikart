@@ -145,6 +145,8 @@ class Product_Detail_List
         return $this->productIMEI;
     }
 
+   
+    
     /**
      * Set createdAt
      *

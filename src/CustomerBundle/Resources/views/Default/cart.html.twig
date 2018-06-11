@@ -1,0 +1,24 @@
+{% extends "@Customer/Default/index.html.twig" %}
+{% block body %}
+<div>
+<h2> Welcome To Your Cart</h2>
+<nav style="background-color:dodgerblue;">
+<a href="customer_profile_page" style="color:White" padding:20px;>My Profile</a>
+<a href="wish_cart" style="color:White" padding:20px;>My Wish List </a>
+</nav>
+</div>
+<div  class="grid" style="margin:10em; padding: 75px 90px 90px 90px">
+{{ form_start(form) }}
+<div>
+<p><label>Product Name:</label>{{ product.productName }}</p>
+<p><label>Product Price:</label>{{ product.productPrice}}</p>
+{# <p><label>Product Photo:</label>{{ path() }}</p>#}
+</div>
+{{ form_end(form) }}
+<div style="margin:10em; padding: 35px 70px 50px 50px">
+<button type="button">Delete</button>
+<button type="submit" onclick="window.location.href='{{ path('place_order',{'id':product.id}) }}'">Proceed To Checkout</button>
+<button type="button" onclick="window.location.href='{{ path('index_page') }}'">Continue Shopping</button>
+</div>
+</div>
+{% endblock %}

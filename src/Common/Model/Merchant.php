@@ -3,6 +3,7 @@
 namespace Common\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\BigIntType;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -14,7 +15,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class Merchant implements UserInterface
 {
+    const INACTIVE=0;
     const ACTIVE=1;
+    const SUSPENDED=2;
+    const ROLE="ROLE_MERCHANT";
     /**
      * @var int
      *
@@ -28,14 +32,14 @@ class Merchant implements UserInterface
      * @var string
      *@Assert\NotBlank()
      *@Assert\Regex("/^[a-z A-Z]+$/", message="Company name should only contain  alphabets")
-     * @ORM\Column(name="company_name", type="string", length=100)
+     * @ORM\Column(name="company_name", type="string", length=50)
      */
     private $companyName;
 
     /**
      * @var int
      *one customer has one default address
-     * @ORM\ManyToOne(targetEntity="Common\Model\Address")
+     * @ORM\ManyToOne(targetEntity="Common\Model\Address",cascade={"persist"})
      * @ORM\JoinColumn(name="addressId", referencedColumnName="id")
      */
     private $addressId;
@@ -43,23 +47,22 @@ class Merchant implements UserInterface
     /**
      * @var string
      *@Assert\NotBlank()
-     *@Assert\Regex("/^[a-z A-Z]+$/", message="Contact Person name should only contain  alphabets")
-     * @ORM\Column(name="contact_person_name", type="string", length=100)
+     *@Assert\Regex("/^[a-z A-Z]+$/", message="Name should only contain  alphabets")
+     * @ORM\Column(name="contact_person_name", type="string", length=50)
      */
     private $contactPersonName;
     
     /**
-     * @Assert\Type("numeric")
-     * @Assert\Regex("/^\d{10}$/", message="mobile number should be 10 digits")
-     * @var string
-     * @ORM\Column(name="mobile_no", type="string", length=15,unique=true)
+     *@var BigIntType
+     *@Assert\Regex("/^\d{10}$/", message="Mobile number should be 10 digits")
+     *@ORM\Column(name="mobile_no", type="bigint", length=13,unique=true)
      */
     private $mobileNo;
     /**
      * @var string
      *@Assert\NotBlank()
      *@Assert\Email(
-     *     message="the email is not valid email")
+     *     message="The email is not valid")
      * @ORM\Column(name="email", type="string", length=50,unique=true)
      */
     private $email;
@@ -75,7 +78,6 @@ class Merchant implements UserInterface
    
     /**
      * @var string
-     *@Assert\NotBlank(message="please,upload the image")
      * @ORM\Column(name="company_logo", type="string", length=50)
      */
     private $companyLogo;
@@ -120,9 +122,9 @@ class Merchant implements UserInterface
 
     public function __construct()
     {
-        $this->merchantStatus=Merchant::ACTIVE;
-        $this->merchantPlanId=Merchant_plan::DEFAULTMERCHANTPLAN;
-        $this->merchantRole="ROLE_MERCHANT";
+    //    $this->merchantStatus=Merchant::ACTIVE;
+    //    $this->merchantPlanId=Merchant_plan::DEFAULTMERCHANTPLAN;
+    //      $this->merchantRole="ROLE_MERCHANT";
       
             // we set up "created"+"modified"
             $this->setCreatedAt(new \DateTime());

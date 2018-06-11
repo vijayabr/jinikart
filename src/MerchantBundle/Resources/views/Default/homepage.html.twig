@@ -2,7 +2,7 @@
 {% block body %}
     <div class="header" style="color-interpolation: linearRGB;background-color: #7DA0B1;color:white">
       <h1 align="center">Welcome to jinikart</h1><br/>
-    
+      
        <h5 style="font-size: 50px;text-align: center;">{{ merchant.companyName }}</h5>
      <header id="header">
       <div class="container">
@@ -17,13 +17,14 @@
             <li>
               <a href="{{ path('list_products',{'id' :merchant.id})}}">List Products</a>
             </li>
-                        <li>
+            <li>
               <a href="{{ path('_order_page')}}">Order</a>
             </li>
             
           </ul>
         </nav>
-      </div>
+      </div>    
     </header>
+    <button type="button"  onclick="window.location.href='{{ path('merchant_logout') }}'">Logout</button>
     </div>
 {% endblock %}

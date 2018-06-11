@@ -54,16 +54,7 @@ class SecurityController extends Controller
                 'error'=> $error,
             ));
            
-         /*   $securityContext = $this->container->get('security.context');
-            $user = $securityContext->getToken()->getUser();
-            if (is_object($user) && $user instanceof UserInterface ) {
-                return $this->redirect($this->generateUrl('merchant_login'));
-            }else if( $securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
-                return $this->redirect($this->generateUrl('@Merchant/Default/homepage.html.twig'));
-            }else{
-                return $this->render('@Merchant/Default/landing.html.twig');
-            }*/
-         
+      
             
             }
         catch(\Exception $exception){

@@ -30,13 +30,13 @@
             {% endif %}
 
           </div>  
-    <div name="merchantform" style=" padding: 20px 15px 15px 20px; left: 100px ;align:left">
+    <div  name="merchantform" class="container" style="padding:50px 15px 15px 30px;margin-left:35%">
 
             {{ form_start(form)}}
             {{ form_row(form.companyName)}}
             {{ form_row(form.contactPersonName)}}
-            {{ form_row(form.email, {'attr': {'id':'email'}} )}}
-            {{ form_row(form.mobileNo, {'attr': {'id':'mobile'}})}}
+            {{ form_row(form.email)}}
+            {{ form_row(form.mobileNo)}}
             {{ form_row(form.password )}}
             {{ form_row(form.address_line1) }}
             {{ form_row(form.address_line2) }}
@@ -46,15 +46,40 @@
             <br/>
             {{ form_row(form.companylogo,{ 'attr':{'class': 'drop-down'}}) }}
           
-            <div id="buttons" class="btn">
-            <button type="submit">Register</button><br/>
-           <button type="reset">Clear</button><br/>
+            <div id="buttons" padding="10em">
+           <p><button type="submit" style="width:80px" class="btn btn-log btn-primary" >Register</button>
+           <button type="reset" style="width:80px" class="btn btn-log btn-primary">Clear</button><br/></p>
             </div>
            {{ form_end(form)}}
             <a href="{{ path('merchant_login') }}">Already have an account? SignIn!!</a>
-    </div>
-   <!--   <script src="https://cdn.jsdelivr.net/jquery/1.12.4/jquery.min.js"></script>
-      <script src="vendor/jquery-validation/dist/jquery.validate.min.js"></script> -->
+    </div> 
         
-         
-{% endblock %}
+  <script>
+  $(document).ready(function(){
+		$("#merchant_email").live('change',function validateEmail(email) {
+	    var re = "/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/"";
+				  return re.test(email);
+				}
+// 	       function validate() {
+// 				  var $result = $("#result");
+// 				  var email = $("#merchant_email").val();
+// 				  $result.text("");
+
+				  if (validateEmail(email)) {
+				    $result.text(email + " is valid :)");
+				    $result.css("color", "green");
+				  } else {
+				    $result.text(email + " is not valid :(");
+				    $result.css("color", "red");
+				  }
+				  return false;
+				}
+
+				$("#validate").bind("click", validate);
+				 
+	        });
+				
+	});
+  </script>
+  {% endblock %}
+ 

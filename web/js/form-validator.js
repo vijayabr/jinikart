@@ -74,13 +74,7 @@ $(function validate() {
   });
 });
 */
-$(document).ready(function(){
-	$("button").click(function(){
-		$("#email").click(){
-			alert("Email should contain @")
-        }
-	});
-});
+
 function validate() {
 	alert("hiiii");
 	var name = document.getElementByName("companyName");

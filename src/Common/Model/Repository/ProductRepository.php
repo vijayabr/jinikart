@@ -54,17 +54,67 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
           $em = $this->getEntityManager();
          
             $qb = $em->createQueryBuilder();
-            $qb->select('p')
-            ->from('Common\Model\Product', 'p')
-            ->join('p.productDescriptionId','d','WITH','p.merchantId=?1','d.id')
-            ->where('p.merchantId = ?1')   
+            $qb->select('l')
+            ->from('Common\Model\Product_Detail_List','l')
+            ->join('l.productId','p')
+            ->join('p.productDescriptionId','d')
+            ->where('l.merchantId = ?1')   
             ->setParameter(1,(int)$merchantId);
             $query=$qb->getQuery();
-            
+         
             $result=$query->getResult();
             return $result;
         
     }
+    public function findProductDetails($Id)
+    {
+        $em = $this->getEntityManager();
+        
+        $qb = $em->createQueryBuilder();
+        $qb->select('l.productName,l.productPrice,d.color,d.ramSize,d.productCompleteInfo')
+        ->from('Common\Model\Product','l')
+        ->join('l.productDescriptionId','d')
+       // ->innerJoin('p.productDescriptionId','d')
+        ->where('l.id = ?1')
+        ->setParameter(1,(int)$Id);
+        $query=$qb->getQuery();
+       
+        $result=$query->getResult();
+      //  dump($result);die;
+        return $result;
+    }
+ 
+    public function findIMEI() {
+        
+        $em = $this->getEntityManager();
+        
+        $qb = $em->createQueryBuilder();
+        $qb->select('pi.productIMEI')
+        ->from('Common\Model\Product_Detail_List','pi')
+        ->join('pi.productId','p')
+        ->where('p.id= ?1')
+        ->setParameter(1,1);
+        $query=$qb->getQuery();
+       
+        $result=$query->getResult();
+        
+        return $result;
+       
+    }
+   /* $em = $this->getEntityManager();
+    
+    $qb = $em->createQueryBuilder();
+    $qb->select('l.productIMEI,p.productName,p.productPrice,d.color,d.ramSize,d.productCompleteInfo')
+    ->from('Common\Model\Product_Detail_List','l')
+    ->join('l.productId','p')
+    ->innerJoin('p.productDescriptionId','d')
+    ->where('l.productId = ?1')
+    ->setParameter(1,(int)$Id);
+    $query=$qb->getQuery();
+    
+    $result=$query->getResult();
+    dump($result);die;
+    return $result;*/
  }
 
 

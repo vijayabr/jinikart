@@ -12,6 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ProductOrder
 {
+   const Order_Placed=1;
+   const Accepted =2;
+   const Processed =3;
+   const Rejected =4;
     /**
      * @var int
      * @ORM\Column(name="id", type="integer")
@@ -37,7 +41,7 @@ class ProductOrder
      * @var int
      *one customer has one default address
      * @ORM\ManyToOne(targetEntity="Common\Model\Address")
-     * @ORM\JoinColumn(name="addressId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="deliveryAddress", referencedColumnName="id")
      */
     private $deliveryAddress;
 

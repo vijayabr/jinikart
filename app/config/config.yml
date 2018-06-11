@@ -13,7 +13,7 @@ imports:
 parameters:
     locale: en
     image_directory: '%kernel.project_dir%/web/images'
-    company_image_directory: '%kernel.project_dir%/web/images/company_image'
+    company_image_directory: '%kernel.project_dir%/web/company_image'
     product_image_directory: '%kernel.project_dir%/web/images/product_photos'
     product_file_directory: '%kernel.project_dir%/web/pdfFile'
 framework:

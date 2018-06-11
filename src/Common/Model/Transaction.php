@@ -11,7 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Common\Model\Repository\TransactionRepository")
  */
 class Transaction
-{
+{   
+    const Fail=0;
+    const Success=1;
+   
     /**
      * @var int
      *
