@@ -17,7 +17,7 @@ $(document).ready(function(){
     
     	
     
-    $("#profile_fname").change(function(){
+   /* $("#profile_fname").change(function(){
         alert("Your first name will be changed");
       
     });
@@ -51,7 +51,22 @@ $(document).ready(function(){
     $("#profile_question2").change(function(){
         alert("Your Answer for the second question will be changed");
         });
-    
+*/    
+    var prev;
+    $(".profilePic").hover(function(){
+    	$("#editPicContent").fadeIn();
+    	$("#editPicImage").fadeOut(10);
+    	
+    	$("#editPicContent").html("Edit Image");
+    		
+    },
+    function() {
+    	$("#editPicContent").html(" ");
+    	$("#editPicContent").fadeOut();
+    	$("#editPicImage").fadeIn();    	
+
+    }
+    );
     $("#customerprofileupdate").click(function(){
     
     	var message ="successfuly  updated your profile with this changes:\n";
