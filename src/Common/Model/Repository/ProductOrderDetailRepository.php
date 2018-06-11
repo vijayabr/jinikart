@@ -15,7 +15,7 @@ class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
         $query = $this->createQueryBuilder('pod')
         ->select('pod.id','pi.productIMEI','p.productName','p.productPrice','p.productDiscount','pd.color','pd.ramSize',
             'pd.productCompleteInfo','pod.deliveryDate','c.fname','c.lname','c.lname','c.email','c.mobileNo',
-            'po.orderedDate','a.addressLine1','a.addressLine2','s.stateName','co.countryName','a.pincode','po.orderStatus',
+            'po.orderedDate','a.addressLine1','a.addressLine2','s.stateName','co.countryName','a.pincode','pod.orderStatus',
             '((100-p.productDiscount)*p.productPrice)/100 As price')
         ->leftJoin('pod.cartListId', 'cl')
         ->leftJoin('pod.productOrderId', 'po')
@@ -37,7 +37,7 @@ class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
         $query = $this->createQueryBuilder('pod')
         ->select('pod.id','pi.productIMEI','p.productName','p.productPrice','p.productDiscount','pd.color','pd.ramSize',
             'pd.productCompleteInfo','pod.deliveryDate','c.fname','c.lname','c.lname','c.email','c.mobileNo',
-            'po.orderedDate','a.addressLine1','a.addressLine2','s.stateName','co.countryName','a.pincode','po.orderStatus',
+            'po.orderedDate','a.addressLine1','a.addressLine2','s.stateName','co.countryName','a.pincode','pod.orderStatus',
             '((100-p.productDiscount)*p.productPrice)/100 As price')
             ->leftJoin('pod.cartListId', 'cl')
             ->leftJoin('pod.productOrderId', 'po')

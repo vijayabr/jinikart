@@ -8,6 +8,8 @@
 .profilePic:hover {
     opacity: 0.4;
     filter: alpha(opacity=40);
+    
+     
 }
 input:focus {
     background-color: #f1f1f1;
@@ -29,12 +31,16 @@ input:focus {
   	 
  <div class="container">
  	
-	  <div class = "profilePic" style="height:120px;width:120px; border:5px solid #A0A3A6; border-radius:5px; text-align: center;">
-          <img src="/images/{{ image }}" alt="Customer Profile" height=110 width=100 >
+	  <div class = "profilePic" style="height:120px;width:120px; border:5px solid #A0A3A6; border-radius:5px; text-align: center;"data-toggle="modal" data-target="#myModal">
+	  <div style="padding:2px 2px 2px 2px" id ="editPicImage">
+	  <img src="/images/{{ image }}" alt="Customer Profile" height=110 width=100 >
+	  </div>
+	  <div style="padding:50px 10px 10px 10px" id ="editPicContent">
+	    
+	  </div>
+
       </div>
-      <div class="profilepic"  id="editPicture">
-      <button type="button" data-toggle="modal" data-target="#myModal"> Edit image</button>
-     
+      <div class="profilepic"  id="editPicture">     
       <div class="modal fade" id="myModal" role="dialog">
         <div class="modal-dialog">    
           <div class="modal-content">

@@ -22,7 +22,7 @@ class ProductOrder
 
     /**
      * @var int
-     * @ORM\OneToOne(targetEntity="Common\Model\Customer")
+     * @ORM\ManyToOne(targetEntity="Common\Model\Customer")
      * @ORM\JoinColumn(name="customerId", referencedColumnName="id")
      */
     private $customerId;
@@ -41,11 +41,7 @@ class ProductOrder
      */
     private $deliveryAddress;
 
-    /**
-     * @var string
-     * @ORM\Column(name="order_status", type="string")
-     */
-    private $orderStatus;
+   
 
     /**
      * @var \DateTime
@@ -68,6 +64,9 @@ class ProductOrder
     {
         return $this->id;
     }
+    
+    
+   
 
     /**
      * Set customerId
@@ -129,26 +128,6 @@ class ProductOrder
         return $this->deliveryAddress;
     }
 
-    /**
-     * Set orderStatus
-     * @param string $orderStatus
-     * @return ProductOrder
-     */
-    public function setOrderStatus($orderStatus)
-    {
-        $this->orderStatus = $orderStatus;
-
-        return $this;
-    }
-
-    /**
-     * Get orderStatus
-     * @return string
-     */
-    public function getOrderStatus()
-    {
-        return $this->orderStatus;
-    }
 
     /**
      * Set createdAt

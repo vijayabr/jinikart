@@ -64,7 +64,7 @@ class AccountController extends Controller
                     $address->setPincode($pin);
                     $error1=$validator->validate($address);
                     $em->persist($address);
-                    //$em->flush();
+                    $em->flush();
                     
                     
                     $merchant->setCompanyName($form->getData()["companyName"]);

@@ -55,8 +55,20 @@ class AccountController extends Controller
                $error1=$validator->validate($address);
                 $em->persist($address);
                 $em->flush();
-                $customerMobileNoExist =$em->getRepository('Model:Customer')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
-                $customerEmailExist =$em->getRepository('Model:Customer')->findOneBy(['email'=>$form->getData()["email"]]);
+/* //                 $validityFlag = calling a function ($mobile, $email);
+
+                public static function checkExistance($mobile=null, $email=null) {
+                    $flag = true;
+//                     DB check query
+                    if ($data){
+                        $flag = false;
+                    }
+                    return $flag;
+                }
+                
+
+//                 $customerMobileNoExist =$em->getRepository('Model:Customer')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
+//     */             $customerEmailExist =$em->getRepository('Model:Customer')->findOneBy(['email'=>$form->getData()["email"]]);
                 if(!$customerEmailExist && !$customerMobileNoExist) {
                     $address = new Address();
                     $customer = new Customer();  
@@ -91,7 +103,7 @@ class AccountController extends Controller
                         $entityManager->persist($qA2);
                         $entityManager->flush();                       
                         $customer->setAddressId($address);
-                        $customer->setCustomerPlanId($customerPlan);
+                        $customer->setCustomerPlanId(Customer_plan::NONPRIME);
                         $customer->setPassword($this->get('security.encoder_factory.generic')->getEncoder($customer)->encodePassword($form->getData()['password'], ''));
                         
                         /**
@@ -239,7 +251,7 @@ class AccountController extends Controller
         $form->get('state')->setData($state->getstateName());
         $country=$em->getRepository('Model:Country')->findOneBy(['id' => $address->getcountryId()]);        ;
         $form->get('country')->setData($state->getstateName());
-        $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' => Customer_plan::DEFAULTPLAN]);        
+        $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' => '1']);        
         $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' => $customer->getcustomerPlanId()]);       
         $form->get('plan')->setData($customerPlan->getcustomerPlanName());
         $answers=$this->getDoctrine()->getRepository('Model:SecretAnswer')->getQuestionAnswer($customer->getId());
