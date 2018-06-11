@@ -15,8 +15,6 @@ use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Validator\Constraints\Length;
 
 
-
-
 class MerchantType extends AbstractType
 {
    
@@ -24,7 +22,7 @@ class MerchantType extends AbstractType
         {
             $builder->add('companyName', TextType::class, array('label' => 'Comapany Name:'))
             ->add('contactPersonName', TextType::class, array('label' => 'Contact Person Name:', 'required'=>''))
-            ->add('address_line1', TextType::class, array('label' => 'Address_line1:'))
+            ->add('address_line1', TextType::class, array('label' => 'Address_line1:','required'=>false))
             ->add('address_line2', TextType::class, array('label' => 'Address_line2:','required'=>false))
             ->add('email', EmailType::class, array('label' => 'Email Id:','required'=>''))
             ->add('mobileNo', TelType::class, array('label' => 'Mobile Number:',
@@ -43,7 +41,7 @@ class MerchantType extends AbstractType
                     'choice_label' => function ($country) {
                     return $country->getCountryName();
                     },'placeholder' => 'Choose a country'))
-            ->add('pincode',TextType::class, array('label' => 'Pincode:'))
+                    ->add('pincode',TextType::class, array('label' => 'Pincode:','required'=>false))
             ->add('companylogo', FileType::class, array('label' => 'Company Logo', 'required'=>false));
             
          }
