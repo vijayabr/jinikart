@@ -24,10 +24,11 @@ document.getElementById("merchantform").submit();
  }
 }*/
 
- /*
-$(function validate() {
+ 
+ /*$(document).ready(function validate() {
   // Initialize form validation on the registration form.
   // It has the name attribute "registration"
+	 alert("hii");
   $("form[name='merchantform']").validate({
     // Specify validation rules
     rules: {
@@ -73,7 +74,7 @@ $(function validate() {
     }
   });
 });
-*/
+/*
 
 function validate() {
 	alert("hiiii");
@@ -81,5 +82,5 @@ function validate() {
 	alert(name);
 	
 }
-
+*/
  

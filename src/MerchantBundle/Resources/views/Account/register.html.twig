@@ -32,19 +32,20 @@
             {% endif %}
 
           </div>  
-    <div  name="merchantform" class="container" style="padding:50px 15px 15px 30px;margin-left:35%">
+    <div  id="merchantform" class="container" style="padding:50px 15px 15px 30px;margin-left:35%">
 
             {{ form_start(form)}}
-            {{ form_row(form.companyName)}}
-            {{ form_row(form.contactPersonName)}}
-            {{ form_row(form.email)}}
-            {{ form_row(form.mobileNo)}}
+            {{ form_row(form.companyName)}}  <span id="checkCompanyName" style="color:red "></span>
+            {{ form_row(form.contactPersonName)}}<span id="checkContactPerson" style="color:red "></span>
+            {{ form_row(form.email)}}<span id="checkemail" style="color:red "></span>
+            {{ form_row(form.mobileNo)}}<span id="checkmobile" style="color:red "></span>
             {{ form_row(form.password )}}
             {{ form_row(form.address_line1) }}
             {{ form_row(form.address_line2) }}
-            {{ form_row(form.pincode) }}
+            {{ form_row(form.pincode) }}<span id="checkpincode" style="color:red "></span>
+              {{ form_row(form.country ,{'attr':{'class': 'drop-down'}}) }}
             {{ form_row(form.state ,{ 'attr':{'class': 'drop-down'}}) }}
-            {{ form_row(form.country ,{'attr':{'class': 'drop-down'}}) }}
+          
             <br/>
             {{ form_row(form.companylogo,{ 'attr':{'class': 'drop-down'}}) }}
           
@@ -56,32 +57,12 @@
             <a href="{{ path('merchant_login') }}">Already have an account? SignIn!!</a>
     </div> 
         
-  <script>
-  $(document).ready(function(){
-		$("#merchant_email").live('change',function validateEmail(email) {
-	    var re = "/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/"";
-				  return re.test(email);
-				}
-// 	       function validate() {
-// 				  var $result = $("#result");
-// 				  var email = $("#merchant_email").val();
-// 				  $result.text("");
-
-				  if (validateEmail(email)) {
-				    $result.text(email + " is valid :)");
-				    $result.css("color", "green");
-				  } else {
-				    $result.text(email + " is not valid :(");
-				    $result.css("color", "red");
-				  }
-				  return false;
-				}
-
-				$("#validate").bind("click", validate);
-				 
-	        });
-				
-	});
-  </script>
+ 
   {% endblock %}
+  {% block javascripts %}
+
+
+<script src={{ asset('/js/merchantRegister.js') }}></script>
+
+{% endblock %}
  
