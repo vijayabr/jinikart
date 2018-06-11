@@ -33,7 +33,11 @@
         "liuggio/excelbundle": "^2.1",
 =======
         "mpdf/mpdf": "^7.1",
+<<<<<<< HEAD
 >>>>>>> 34801fbbe52a6ca618f01f00f9459165f5190eaf
+=======
+>>>>>>> 3934fd5139dd5efd5f3b36f3029976caccc65998
+>>>>>>> invoice
         "sensio/distribution-bundle": "^5.0.19",
         "sensio/framework-extra-bundle": "^5.0.0",
         "spraed/pdf-generator-bundle": "^1.4",
