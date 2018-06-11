@@ -9,16 +9,25 @@ use Symfony\Component\HttpFoundation\Response;
 class DefaultController extends Controller
 {
     
-    public function mailSending($mailer,$to,$body,$subject, $filePath=null){
+    public function mailSending($mailer,$to,$body,$subject,$filePath=null){
                 
+        if($filePath){
         $message = \Swift_Message::newInstance()
         ->setSubject($subject)
         ->setFrom('jinikartecommerce@gmail.com')
         ->setTo($to)
-        ->setBody($body);
-        //->attach(\Swift_Attachment::fromPath($filePath));
-        $response = $mailer->send($message);
-        print_r($response);die;
+        ->setBody($body)
+        ->attach(\Swift_Attachment::fromPath($filePath));
+        }
+        else{
+            $message = \Swift_Message::newInstance()
+            ->setSubject($subject)
+            ->setFrom('jinikartecommerce@gmail.com')
+            ->setTo($to)
+            ->setBody($body);
+                      
+        }
+        $response = $mailer->send($message); 
         return $response;
         
      }

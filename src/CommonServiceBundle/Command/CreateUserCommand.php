@@ -20,10 +20,17 @@ class CreateUserCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
        $mailer = $this->getContainer()->get('mailer');
-       $a =new DefaultController();
-       
-       $a->mailSending($mailer ,'aishwaryamk96@gmail.com', 'hii','test');                
-        $output->writeln($a);
-       
+       $em = $this->getContainer()->get('doctrine')->getEntityManager();
+       $directory=$this->getContainer()->getParameter('product_file_directory');
+       $merchants = $em->getRepository('Model:Merchant')->findAll();
+       foreach ($merchants as $merchant){
+           $filePath=$directory."//".$merchant->getcompanyName().".pdf";
+           $body="Hello sir,Madam \nPlease find the attached file \n Thank you";
+           $subject='stock status';
+           $email =new DefaultController();
+           $email->mailSending($mailer,$to, $body,$subject,$filePath);
+           $output->writeln($email);           
+       }
+            
     }
-}
+}   

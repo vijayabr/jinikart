@@ -43,11 +43,13 @@ class ReportController extends Controller
     public function invoicePdfGeneratorData($merchant,$order){
         $em = $this->getDoctrine()->getManager();
         if($order){
+            
             $orders=$em->getRepository('Model:ProductOrderDetail')->productOrder($merchant,$order);
+         
             
         }
         else {
-        $orders=$em->getRepository('Model:ProductOrderDetail')->productOrders($merchant);
+            $orders=$em->getRepository('Model:ProductOrderDetail')->productOrders($merchant);   
         }
         if($orders){
             $msg = "<h1>Your orders list:</h1>";
@@ -166,7 +168,8 @@ class ReportController extends Controller
         
         return $response;
     }
-    /*
+    
+    /**
      * @Route("/merchant/orderInvoice/{order}",name="orderinvoicePdf_page");
      * @param Request $request
      */

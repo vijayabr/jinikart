@@ -22,6 +22,8 @@ use CustomerBundle\Form\ProfileType;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use CustomerBundle\Form\profileImageuploadType;
+use Aws\S3\S3Client;
+use Aws\S3\Exception\S3Exception;
 
 
 class AccountController extends Controller
