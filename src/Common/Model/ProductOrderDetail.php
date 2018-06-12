@@ -107,7 +107,7 @@ class ProductOrderDetail
      *
      * @return ProductOrderDetail
      */
-    public function setProductOrderIdId($productOrderId)
+    public function setProductOrderId($productOrderId)
     {
         $this->productOrderId = $productOrderId;
         

@@ -29,27 +29,23 @@ class TransactionController extends Controller
             $em=$this->getDoctrine()->getManager();
             $product=$em->getRepository('Model:Product')->findOneBy(['id'=>$id]);
             $customerId=$em->getRepository('Model:Customer')->findOneBy(['id'=>$cid]);
-           
-            
+              
            if($product){
-               //  dump($product->getId());die; 
+              
             $cart= new Cart();
             $cart->setCartStatus(Cart::FULL); //OCCUPIED
             $cart->setCustomerId($customerId);
-           // dump($cart);
             $em->persist($cart);
             $em->flush();
             
-          //  $proid=$product->getId(); 
-            $productimei=new Product_Detail_List();
-            
-            $productimei=$em->getRepository('Model:Product_Detail_List')->findIMEI(['id'=>$product->getId()]); 
-          // dump($productimei);die;
+          //  $productimei=$em->getRepository('Model:Product_Detail_List')->findIMEI(['id'=>$product->getId()]);
+           // $imei=$em->getRepository('Model:Product_Detail_List')->findIMEI(['id'=>$product->getId()]);
+          //  dump($productimei);die;
             
             $cartlist= new CartList();
-            $cartlist->setProductIMEI((bigint)($productimei['0']->getProductIMEI()));
+         // $cartlist->setProductImeiId();   //Error
             $cartlist->setCartId($cart);
-           // dump($cartlist);die;
+            //dump($cartlist);die;
             $em->persist($cartlist);
             $em->flush();
            
@@ -76,22 +72,14 @@ class TransactionController extends Controller
        
         try{
             
-//             $em=$this->getDoctrine()->getManager();
-//             $product=$em->getRepository('Model:Product')->findOneBy(['id'=>$id]);
-//             dump($product);die;
+            if($form->isSubmitted()){
             
+            $quantity=$form->getData()["product_count"];
+            $product->setProductCount($count);
+            
+          }
             return $this->render("@Customer/Default/wishList.html.twig");
-            //             dump($product);die;
-            
-            //         if($form->isSubmitted()){
-            
-            //                 $quantity=$form->getData()["product_count"];
-            //                 $product->setProductCount($count);
-            
-            
-            //              }
-            
-            
+       
         }catch(\Exception $exception){
             
             return new Response($exception);
@@ -110,25 +98,27 @@ class TransactionController extends Controller
           // dump($product);die;
        //     return $this->render("@Customer/Default/placeOrder.html.twig",array('product'=>$product));
             //             dump($product);die;
+         $customerId=$em->getRepository('Model:Customer')->findOneBy(['id'=>$cid]);
          $productOrder= new ProductOrder();
          $productOrder->setOrderedDate(new \DateTime());
-         $productOrder->setOrderStatus(1);
-         $productOrder->setCustomerId($cid);
+         $productOrder->setOrderStatus(ProductOrder::Order_Placed);
+         $productOrder->setCustomerId($customerId);
                      
-        // dump($productOrder);
-         //  $em->persist($productOrder);
-         //  $em->flush();
-                 
-         $cartlist= new CartList();
-         $cartlist=$em->getRepository('Model:Cart')->findCartListId(['id'=>$cid]);  //write query
-                     
-         $productOrderDetail= new ProductOrderDetail();
+         $em->persist($productOrder);
+         $em->flush();
+       //  dump($productOrder);
+       //  dump($customerId->getId());die;
+       //  $cartlist= new CartList();
+       //  $cartlist=$em->getRepository('Model:CartList')-> findCartListId();  //write query
+      
+         $productOrderDetail= new ProductOrderDetail(); 
          $productOrderDetail->setDeliveryDate(new \DateTime());
-         $productOrderDetail->setProductOrderIdId($productOrder);
-         $productOrderDetail->setCartListId($cartlist);
+         $productOrderDetail->setProductOrderId($productOrder);
+        //  $productOrderDetail->setCartListId($cartlist);  //Error
         // dump($productOrderDetail);
-         //  $em->persist($productOrder);
-         //  $em->flush();       
+         $em->persist($productOrderDetail);
+         $em->flush();  
+          
         return $this->render("@Customer/Default/placeOrder.html.twig");
              
     }
