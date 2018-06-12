@@ -19,7 +19,8 @@ class AppKernel extends Kernel
             new CustomerBundle\CustomerBundle(),
             new MerchantBundle\MerchantBundle(),
             new AdminBundle\AdminBundle(),
-            new CommonServiceBundle\CommonServiceBundle()
+            new CommonServiceBundle\CommonServiceBundle(),
+            
 
         ];
 

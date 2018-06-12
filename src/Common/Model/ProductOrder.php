@@ -63,7 +63,13 @@ class ProductOrder
      */
     private $updatedAt;
 
-
+    public function __construct() {
+        
+        $this->setCreatedAt(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
     /**
      * Get id
      * @return int

@@ -49,7 +49,13 @@ class CartList
      */
     private $updatedAt;
 
-
+    public function __construct() {
+        
+        $this->setCreatedAt(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
     /**
      * Get id
      * @return int
@@ -96,7 +102,7 @@ class CartList
      */
     public function setProductIMEI($productIMEI)
     {
-        $this->productId = $productIMEI;
+        $this->productIMEI = $productIMEI;
 
         return $this;
     }

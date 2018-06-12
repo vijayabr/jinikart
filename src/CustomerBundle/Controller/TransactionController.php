@@ -11,6 +11,8 @@ use Common\Model\Cart;
 use Common\Model\CartList;
 use Common\Model\ProductOrder;
 use Common\Model\ProductOrderDetail;
+use Common\Model\Product_Detail_List;
+use Doctrine\DBAL\Types\BigIntType;
 
 class TransactionController extends Controller
 {
@@ -22,50 +24,40 @@ class TransactionController extends Controller
     {
         $form = $this->createForm(AddCartType::class);
         $form->handleRequest($request);     
-       
+               
         try{
-          $em=$this->getDoctrine()->getManager();
-          $product=$em->getRepository('Model:Product')->findOneBy(['id'=>$id]);
-          
-          if($form->isSubmitted()){     
-              $cart= new Cart();       
-              $cart->setCartStatus(1);
-              $cart->setCustomerId($id);
-            //  dump($cart);die;
-            //  $em->persist($cart);
-            //  $em->flush();
-              
-              $cartlist= new CartList();
-              $em=$this->getDoctrine()->getManager();
-              $productimei=$em->getRepository('Model:Product')->findIMEI(['id'=>$id]);            
-              $cartlist->setProductIMEI($productimei);
-              $cartlist->setCartId($cart);
-            //   dump($cartlist);die;
-            //  $em->persist($cartlist);
-            //  $em->flush();
-              $productOrder= new ProductOrder();
-              $productOrder->setOrderedDate(new \DateTime());
-              $productOrder->setOrderStatus(1);
-              $productOrder->setCustomerId($cid);
+            $em=$this->getDoctrine()->getManager();
+            $product=$em->getRepository('Model:Product')->findOneBy(['id'=>$id]);
+            $customerId=$em->getRepository('Model:Customer')->findOneBy(['id'=>$cid]);
+           
             
-              //   dump(productOrder);die;
-              //  $em->persist($productOrder);
-              //  $em->flush();
-              
-              $productOrderDetail= new ProductOrderDetail();
-              $productOrderDetail->setDeliveryDate(new \DateTime());
-              $productOrderDetail->setProductOrderIdId($productOrder);
-              $productOrderDetail->setCartListId($cartlist);
-              //dump($productOrderDetail);die;
-              //  $em->persist($productOrder);
-              //  $em->flush();
-              
-              }
-              
-         
-         
-         
-       return $this->render("@Customer/Default/cart.html.twig",array('form'=>$form->createView(),'product'=>$product)); 
+           if($product){
+               //  dump($product->getId());die; 
+            $cart= new Cart();
+            $cart->setCartStatus(Cart::FULL); //OCCUPIED
+            $cart->setCustomerId($customerId);
+           // dump($cart);
+            $em->persist($cart);
+            $em->flush();
+            
+          //  $proid=$product->getId(); 
+            $productimei=new Product_Detail_List();
+            
+            $productimei=$em->getRepository('Model:Product_Detail_List')->findIMEI(['id'=>$product->getId()]); 
+          // dump($productimei);die;
+            
+            $cartlist= new CartList();
+            $cartlist->setProductIMEI((bigint)($productimei['0']->getProductIMEI()));
+            $cartlist->setCartId($cart);
+           // dump($cartlist);die;
+            $em->persist($cartlist);
+            $em->flush();
+           
+          //  return $this->render("@Customer/Default/placeOrder.html.twig",array('product'=>$product));
+          }
+            
+       
+       return $this->render("@Customer/Default/cart.html.twig",array('form'=>$form->createView(),'product'=>$product,'cid'=>$cid)); 
          
         } catch(\Exception $exception){
             
@@ -108,34 +100,36 @@ class TransactionController extends Controller
         
     }
     /**
-     * @Route("/customer/order/{id}", name="place_order");
+     * @Route("/customer/order/{cid}/{id}", name="place_order");
      * @param Request $request
      */
-    public function placeOrderAction(Request $request,$id)
+    public function placeOrderAction(Request $request,$cid,$id)
     {
-        
-        try{
-            
-            $em=$this->getDoctrine()->getManager();
-            $product=$em->getRepository('Model:Product')->findProductDetails(['id'=>$id]);
+         $em=$this->getDoctrine()->getManager();
+        //    $product=$em->getRepository('Model:Product')->findProductDetails(['id'=>$id]);
           // dump($product);die;
-            return $this->render("@Customer/Default/placeOrder.html.twig",array('product'=>$product));
+       //     return $this->render("@Customer/Default/placeOrder.html.twig",array('product'=>$product));
             //             dump($product);die;
-            
-            //         if($form->isSubmitted()){
-            
-            //                 $quantity=$form->getData()["product_count"];
-            //                 $product->setProductCount($count);
-            
-            
-            //              }
-            
-            
-        }catch(\Exception $exception){
-            
-            return new Response($exception);
-            die;
-        }
-        
+         $productOrder= new ProductOrder();
+         $productOrder->setOrderedDate(new \DateTime());
+         $productOrder->setOrderStatus(1);
+         $productOrder->setCustomerId($cid);
+                     
+        // dump($productOrder);
+         //  $em->persist($productOrder);
+         //  $em->flush();
+                 
+         $cartlist= new CartList();
+         $cartlist=$em->getRepository('Model:Cart')->findCartListId(['id'=>$cid]);  //write query
+                     
+         $productOrderDetail= new ProductOrderDetail();
+         $productOrderDetail->setDeliveryDate(new \DateTime());
+         $productOrderDetail->setProductOrderIdId($productOrder);
+         $productOrderDetail->setCartListId($cartlist);
+        // dump($productOrderDetail);
+         //  $em->persist($productOrder);
+         //  $em->flush();       
+        return $this->render("@Customer/Default/placeOrder.html.twig");
+             
     }
 }
