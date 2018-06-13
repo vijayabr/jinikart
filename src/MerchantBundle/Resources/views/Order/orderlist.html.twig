@@ -1,10 +1,6 @@
-{% extends "@Customer/Default/index.html.twig" %}
+{% extends "@Merchant/Default/homepage.html.twig" %}
 {% block body %}
-    <div class="header" style="color-interpolation: linearRGB;background-color: #7DA0B1;color:white">
-      <h1 align="center">Welcome to jinikart</h1>
-    </div>
-        
-     <div class="col-sm-10 col-md-8 col-lg-11"  id="orderlistContainer" style="padding:20px 20px 20px 20px;">
+   <div class="col-sm-10 col-md-8 col-lg-11"  id="orderlistContainer" style="padding:20px 20px 20px 20px;">
     {% if orders %}
     	{%  for order in orders %}
 			{% if order.orderStatus!="reject" %}

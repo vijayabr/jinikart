@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Common\Model\ProductOrderDetail;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Doctrine\ORM\Query\Expr\Math;
 
 
 class ReportController extends Controller
@@ -213,5 +214,21 @@ class ReportController extends Controller
         return $this->redirectToRoute('_order_page');
     }    
    
+    /**
+     * @Route("/merchant/notification",name="ordernotification_page");
+     * @param Request $request
+     */
+    public function notificationAction(Request $request)
+    {   
+    $merchant=$this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $product= $em->getRepository('Model:ProductOrderDetail')->productNotification($merchant);
 
+    $count = count($product);            
+    
+    return new Response($count);
+
+    
+    }
+    
 }

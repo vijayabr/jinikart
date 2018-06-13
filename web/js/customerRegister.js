@@ -23,7 +23,7 @@ $(document).ready(function(){
 	});
 	$('#customer_email').on('input', function() {
 		var input=$(this);
-		var rec = /^([a-zA-Z]{0,3}[a-zA-Z0-9]+@([a-zA-Z]{3,10}))\.([a-zA-Z]{2,5})$/;
+		var rec = /^([a-zA-Z]{0,3}[a-zA-Z0-9.]+@([a-zA-Z]{3,10}))\.([a-zA-Z]{2,5})$/;
 		var is_email=rec.test(input.val());
 		if(!is_email){
 			$("#checkemail").text("Incorrect data entered");
@@ -33,7 +33,7 @@ $(document).ready(function(){
 	});
 	$('#customer_mobile_no').on('input', function() {
 		var input=$(this);
-		var rec = /^[789]\d{9}$/;
+		var rec = /^[6789]\d{9}$/;
 		var is_mbno=rec.test(input.val());
 		if(!is_mbno){
 			$("#checkmobile").text("Incorrect data entered");
@@ -44,7 +44,7 @@ $(document).ready(function(){
 
 	$('#customer_pincode').on('input', function() {
 		var input=$(this);
-		var rec = /^[1-9][0-9]{5}$/;
+		var rec = /^[1-9][0-9]{4,5}$/;
 		var is_pin=rec.test(input.val());
 		if(!is_pin){
 			$("#checkpincode").text("Incorrect data entered");

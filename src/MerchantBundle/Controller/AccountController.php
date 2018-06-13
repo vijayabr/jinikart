@@ -14,31 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AccountController extends Controller
 {
-    /**
-     * @Route("/index")
-     */
-    public function newAction()   {
-        $from='aishwaryamk96@gmail.com';
-        $to='aishwaryamk96@gmail.com';
-        $subject = "Subject";
-        $header = "MIME-Version: 1.0\r\n";
-        $header .= "Content-type: text/html\r\n";
-        $emailContent="abcd123";
-        $mailer = $this->container->get('mailer');
-    
-        $message = \Swift_Message::newInstance ()
-        
-        ->setSubject ( $subject )
-        ->setFrom ( $from )
-        ->setTo ( $to )
-        ->setBody ( $emailContent )
-        ->setContentType ( "text/html" );
-        $reponse=$mailer->send ( $message );
-        dump($reponse);die;
-        return new Response("success");
-    }
-    
-    /**
+     /**
      * @Route("/merchant/registration", name="merchant_registration");
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response|\Symfony\Component\HttpFoundation\RedirectResponse
@@ -168,8 +144,7 @@ class AccountController extends Controller
      */
     
     public function merchantLandingAction(Request $request){
-       
-        
+              
         return $this->render("@Merchant/Default/landing.html.twig");
     }
     

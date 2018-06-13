@@ -1,13 +1,30 @@
 {% extends "@Merchant/Default/index.html.twig" %}
-{% block body %}
-    <div class="header" style="color-interpolation: linearRGB;background-color: #7DA0B1;color:white">
-      <h1 align="center">Welcome to jinikart</h1><br/>
-      
-       <h5 style="font-size: 50px;text-align: center;">{{ merchant.companyName }}</h5>
-     <header id="header">
-      <div class="container">
-        <nav id="nav">
-          <ul>
+
+{% block head %}
+<style>
+.icon-wrapper{
+    position:relative;
+    float:left;
+.badge{
+    background: rgba(0,0,0,0.5);
+    width: auto;
+    height: auto;
+    margin: 0;
+    border-radius: 50%;
+    position:absolute;
+    top:-13px;
+    right:-8px;
+    padding:5px;
+}
+</style>
+
+	  <div class="header" style="color-interpolation: linearRGB;background-color: #7DA0B1;color:white">
+      <h1 align="center">Welcome to jinikart</h1>
+      <div class="row">
+            <div class="col-sm-5 col-md6- col-lg-8" id="container" style="padding:10px 2px 5px 50px">
+            <h1 align="left">Merchantportal : {{ merchant.companyName }}</h1> 
+        	<nav id="nav">
+         	<ul>
             <li>
               <a href="{{ path('company_details') }}">Company Details</a>
             </li>
@@ -19,12 +36,48 @@
             </li>
             <li>
               <a href="{{ path('_order_page')}}">Order</a>
-            </li>
-            
-          </ul>
-        </nav>
-      </div>    
-    </header>
-    <button type="button"  onclick="window.location.href='{{ path('merchant_logout') }}'">Logout</button>
-    </div>
+            </li>            
+         	 </ul>
+       		 </nav>
+      		</div>  
+      		<input type="hidden" id="note" name="note" value="{{ path('ordernotification_page') }}"/>
+      		<div class="col-sm-1 col-md-2 col-lg-1" id="notification" style="padding:10px 2px 5px 50px"> 		 
+			<div class="icon-wrapper" style="position:relative;float:left" data-toggle="modal" data-target="#GSCCModal">
+   			<i class="fa fa-envelope fa-5x fa-border icon-grey">
+   			<img src="/images/notification.png" alt="notification icon" width=40 height=40>   		
+   			<span id="badge" style="rgba(0,0,0,0.5); width: auto; height: auto; margin: 0;border-radius: 50%;
+             position:absolute;top:-25px;right:-10px;padding:5px;">0</span>
+   			</i>
+			</div>
+      		     		 
+      	   </div>      		    	
+           <div class="col-sm-1 col-md-2 col-lg-1" id="button" style="align:right; padding:10px 2px 5px 50px">
+            <button align="right" type="button"onclick="window.location.href='{{ path('merchant_logout') }}'">Logout</button></h6></h6>
+           </div>
+      </div>
+      	<div id="GSCCModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      		<div class="modal-dialog">
+      		<div class="modal-content">
+      		<div class="modal-header"> 
+      		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      		   <h4 class="modal-title" id="myModalLabel">Product status</h4></div>
+      		   <div class="modal-body"> 
+      		   hiii
+      		   </div> 
+      		   <div class="modal-footer"> 
+      		   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> 
+       		   <button type="button" class="btn btn-primary">Save changes</button>
+       		   </div>
+       		   </div> 
+       		   </div> 
+       </div>
+      
+      </div>
+{% endblock %}    
+ {% block javascripts %}
+
+
+<script src={{ asset('/js/merchant.js') }}></script>
+
 {% endblock %}
+ 

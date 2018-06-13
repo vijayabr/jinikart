@@ -24,10 +24,12 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use CustomerBundle\Form\profileImageuploadType;
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
+use CommonServiceBundle\Helper\ImageUploader;
 
 
 class AccountController extends Controller
 {
+    
     /**
      * @Route("/customer/registration",name="customer_registration");
      * @param Request $request
@@ -35,11 +37,14 @@ class AccountController extends Controller
      */
     public function customerRegistrationAction(Request $request)
     {
+        
         $form = $this->createForm(CustomerType::class);
         $form->handleRequest($request);
         $validator=$this->get('validator');
         try {
             if ($form->isSubmitted()) { 
+         
+  
                 $em = $this->getDoctrine()->getManager();           
                 $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' => Customer_plan::DEFAULT_CUSTOMER_PLAN]);
          
@@ -54,25 +59,13 @@ class AccountController extends Controller
                 $address->setStateId($state);
                 $address->setCountryId($country);
 
-/* //                 $validityFlag = calling a function ($mobile, $email);
-
-                public static function checkExistance($mobile=null, $email=null) {
-                    $flag = true;
-//                     DB check query
-                    if ($data){
-                        $flag = false;
-                    }
-                    return $flag;
-                }
-                */
                 $address->setPincode($pin); 
                 $error1=$validator->validate($address);
                 if(!$error1){
                     $em->persist($address);
                     $em->flush();
                 }
-             //   $em->persist($address);
-             //   $em->flush();
+             
                 $customerMobileNoExist =$em->getRepository('Model:Customer')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
                 $customerEmailExist =$em->getRepository('Model:Customer')->findOneBy(['email'=>$form->getData()["email"]]);
 
@@ -117,62 +110,30 @@ class AccountController extends Controller
                         $customer->setAddressId($address);
                         $customer->setCustomerPlanId(Customer_plan::NONPRIME);
                         $customer->setPassword($this->get('security.encoder_factory.generic')->getEncoder($customer)->encodePassword($form->getData()['password'], ''));
-                        
                         /**
                          * @var uplodedFile images
                          */
                         $image = $form->getData()["profile_photo"];
+                        $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();
+                        
                         if($image)
                         {
-                            $bucketName = 'jiniproductphotos';
-                            $IAM_KEY = 'AKIAIYFN4B77GBAZAUMA';
-                             $IAM_SECRET = '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';
-
-                            if ($request->isMethod('POST')){
-                            try {
-       // You may need to change the region. It will say in the URL when the bucket is open                     // and on creation.
-                             $s3 = S3Client::factory(
-                              array(
-                                'credentials' => array(
-                                    'key' => $IAM_KEY,
-                                    'secret' => $IAM_SECRET
-                                ),
-                                'version' => 'latest',
-                                'region'  => 'us-east-1'
-                            )
-                        );
-                    } catch (Exception $e) {
-     // We use a die, so if this fails. It stops here. Typically this is a REST call so this would                        // return a json object.
-                        die("Error: " . $e->getMessage());
-                    }
-
-
-         // For this, I would generate a unqiue random string for the key name. But you can do whatever.
-                $keyName =  basename($_FILES["image"]['name']);
-                $pathInS3 = 'https://s3.console.aws.amazon.com/s3/buckets/jiniproductphotos/?region=us-east-1' . $keyName;
-                
-                    // Add it to S3
-                    try {
-                        // Uploaded:
-                        $file = $_FILES["image"]['tmp_name'];
-                        $s3->putObject(
-                            array(
-                                'Bucket'=>$bucketName,
-                                'Key' =>  $keyName,
-                                'SourceFile' => $file,
-                                'StorageClass' => 'REDUCED_REDUNDANCY',
-                                'ACL'    => 'public-read'
-                            )
-                        );
-                    } catch (S3Exception $e) {
-                        die('Error:' . $e->getMessage());
-                    } catch (Exception $e) {
-                        die('Error:' . $e->getMessage());
-                    }
-            } 
+                           
+                        try {  
                             
-                        $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();     
-                        $image->move($this->getParameter('image_directory'),$imageName);
+                            $_FILES['customer']['name']['profile_photo']= $imageName;
+                            $file = $_FILES['customer']['tmp_name']['profile_photo'];
+                            $keyName = 'profileImage/'. basename($_FILES['customer']['name']['profile_photo']);
+                            $pathInS3 = $this->getParameter('aws').$keyName;                            
+                            $fileUpload = new ImageUploader($this->container);
+                            $fileUpload->imageFileUpload($keyName, $file);
+                            
+                        } catch (S3Exception $e) {
+                            die('Error:' . $e->getMessage().$e->getLine().$e->getFile());
+                        } 
+                        
+               
+                       // $image->move($this->getParameter('image_directory'),$imageName);
                         $customer->setProfilePhoto($imageName);
                         }
                         $entityManager = $this->getDoctrine()->getManager();
@@ -188,7 +149,8 @@ class AccountController extends Controller
             }  return $this->render("@Customer/Account/register.html.twig", array('form' => $form->createView(),'message'=> '','errors'=>'', 'error1'=>'' ));
         }
         catch (\Exception $exception) {
-            var_dump($exception);
+            var_dump($exception->getMessage().$exception->getLine().$exception->getFile());
+            
             die;
         }        
     }
@@ -227,12 +189,32 @@ class AccountController extends Controller
              */
                 $image = $imageform->getData()["profile_photo"];
                 $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();
-            
-                $image->move($this->getParameter('image_directory'),$imageName); 
+                if($image)
+                {
+                    
+                    try {
+                        
+                    $_FILES['profile_imageupload']['name']['profile_photo']= $imageName;
+                        $file = $_FILES['profile_imageupload']['tmp_name']['profile_photo'];
+                        $keyName = 'profileImage/'. basename($_FILES['profile_imageupload']['name']['profile_photo']);
+                        $pathInS3 = $this->getParameter('aws').$keyName;
+                        $fileUpload = new ImageUploader($this->container);
+                        $fileUpload->DeleteimageFile($keyName);
+                        $fileUpload->imageFileUpload($keyName, $file);
+                        
+                    } catch (S3Exception $e) {
+                        die('Error:' . $e->getMessage().$e->getLine().$e->getFile());
+                    }
+                    
+                    
+                    // $image->move($this->getParameter('image_directory'),$imageName);
+                    $customer->setProfilePhoto($imageName);
+                }
+               // $image->move($this->getParameter('image_directory'),$imageName); 
                 $customer->setProfilePhoto($imageName);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($customer); 
-                $entityManager->flush();
+               // $entityManager->flush();
                 return $this->redirectToRoute("customer_profile_page");
             }
             if ($form->isSubmitted()) {

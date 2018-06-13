@@ -25,12 +25,14 @@ class CreateUserCommand extends ContainerAwareCommand
        $merchants = $em->getRepository('Model:Merchant')->findAll();
        foreach ($merchants as $merchant){
            $filePath=$directory."//".$merchant->getcompanyName().".pdf";
-           $body="Hello sir,Madam \nPlease find the attached file \n Thank you";
+           $body="Hello sir/Madam, \nPlease find the attached file \n Thank you";
            $subject='stock status';
+           $to=$merchant->getEmail();
            $email =new DefaultController();
            $email->mailSending($mailer,$to, $body,$subject,$filePath);
-           $output->writeln($email);           
+        
        }
-            
+       $output->writeln($email);   
+       return(1);
     }
 }   
