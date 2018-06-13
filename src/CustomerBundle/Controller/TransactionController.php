@@ -2,6 +2,7 @@
 
 namespace CustomerBundle\Controller;
 
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,8 +12,15 @@ use Common\Model\Cart;
 use Common\Model\CartList;
 use Common\Model\ProductOrder;
 use Common\Model\ProductOrderDetail;
-use Common\Model\Product_Detail_List;
-use Doctrine\DBAL\Types\BigIntType;
+//use Common\Model\Product_Detail_List;
+//use Doctrine\DBAL\Types\BigIntType;
+//use CustomerBundle\Form\OrderType;
+// use Ivory\GoogleMap\Service\Place\Autocomplete\PlaceAutocompleteService;
+// use Ivory\GoogleMap\Service\Serializer\SerializerBuilder;
+//use Http\Adapter\Guzzle6\Client;
+//use Http\Message\MessageFactory\GuzzleMessageFactory;
+//use Ivory\GoogleMap\Service\Place\Autocomplete\Request\PlaceAutocompleteRequest;
+
 
 class TransactionController extends Controller
 {
@@ -70,21 +78,21 @@ class TransactionController extends Controller
     public function addWishListAction(Request $request,$id)
     {
        
-        try{
+//         try{
             
-            if($form->isSubmitted()){
+//             if($form->isSubmitted()){
             
-            $quantity=$form->getData()["product_count"];
-            $product->setProductCount($count);
+//             $quantity=$form->getData()["product_count"];
+//             $product->setProductCount($count);
             
-          }
-            return $this->render("@Customer/Default/wishList.html.twig");
+//           }
+//             return $this->render("@Customer/Default/wishList.html.twig");
        
-        }catch(\Exception $exception){
+//         }catch(\Exception $exception){
             
-            return new Response($exception);
-            die;
-        }
+//             return new Response($exception);
+//             die;
+//         }
         
     }
     /**
@@ -93,33 +101,49 @@ class TransactionController extends Controller
      */
     public function placeOrderAction(Request $request,$cid,$id)
     {
-         $em=$this->getDoctrine()->getManager();
-        //    $product=$em->getRepository('Model:Product')->findProductDetails(['id'=>$id]);
-          // dump($product);die;
-       //     return $this->render("@Customer/Default/placeOrder.html.twig",array('product'=>$product));
-            //             dump($product);die;
-         $customerId=$em->getRepository('Model:Customer')->findOneBy(['id'=>$cid]);
-         $productOrder= new ProductOrder();
-         $productOrder->setOrderedDate(new \DateTime());
-         $productOrder->setOrderStatus(ProductOrder::Order_Placed);
-         $productOrder->setCustomerId($customerId);
-                     
-         $em->persist($productOrder);
-         $em->flush();
-       //  dump($productOrder);
-       //  dump($customerId->getId());die;
-       //  $cartlist= new CartList();
-       //  $cartlist=$em->getRepository('Model:CartList')-> findCartListId();  //write query
-      
-         $productOrderDetail= new ProductOrderDetail(); 
-         $productOrderDetail->setDeliveryDate(new \DateTime());
-         $productOrderDetail->setProductOrderId($productOrder);
-        //  $productOrderDetail->setCartListId($cartlist);  //Error
-        // dump($productOrderDetail);
-         $em->persist($productOrderDetail);
-         $em->flush();  
-          
-        return $this->render("@Customer/Default/placeOrder.html.twig");
-             
+//         $form=$this->createForm(OrderType::class);
+//         $form->handleRequest($request);
+        
+//         $autocomplete = new PlaceAutocompleteService(
+//             new Client(),
+//             new GuzzleMessageFactory(),
+//             SerializerBuilder::create($psr6Pool)
+//             );
+//        $response = $autocomplete->process(new PlaceAutocompleteRequest('Sydney'));
+        
+        
+//         $request = new PlaceAutocompleteRequest('Sydney');
+//         $response = $this->container->get('ivory.google_map.place_autocomplete')->process($request);
+        
+        try{
+            $em=$this->getDoctrine()->getManager();
+            $customerId=$em->getRepository('Model:Customer')->findOneBy(['id'=>$cid]);
+            $productOrder= new ProductOrder();
+            $productOrder->setOrderedDate(new \DateTime());
+            $productOrder->setOrderStatus(ProductOrder::Order_Placed);
+            $productOrder->setCustomerId($customerId);
+            
+            $em->persist($productOrder);
+            $em->flush();
+            //  dump($productOrder);
+            //  dump($customerId->getId());die;
+            //  $cartlist= new CartList();
+            //  $cartlist=$em->getRepository('Model:CartList')-> findCartListId();  //write query
+            
+            $productOrderDetail= new ProductOrderDetail();
+            $productOrderDetail->setDeliveryDate(new \DateTime());
+            $productOrderDetail->setProductOrderId($productOrder);
+            //  $productOrderDetail->setCartListId($cartlist);  //Error
+            // dump($productOrderDetail);
+            $em->persist($productOrderDetail);
+            $em->flush();
+            
+           
+          return $this->render("@Customer/Default/placeOrder.html.twig");
+      }catch(\Exception $exception){
+            
+            return new Response($exception);
+            die;
+       }
     }
 }

@@ -33,16 +33,19 @@ class MerchantType extends AbstractType
                 'first_options' => array('label' => 'Password:'),
                 'second_options' => array('label' => 'Confirm Password:','required'=>''),
             ))
+            ->add('country', EntityType::class, array('class' => 'Common\Model\Country',
+                'choice_label' => function ($country) {
+                return $country->getCountryName();
+                },'placeholder' => 'Choose a country'))
             ->add('state', EntityType::class, array('class' => 'Common\Model\State',
                 'choice_label' => function ($state) {
                 return $state->getStateName();
                 },'placeholder' => 'Choose a state'))
-            ->add('country', EntityType::class, array('class' => 'Common\Model\Country',
-                    'choice_label' => function ($country) {
-                    return $country->getCountryName();
-                    },'placeholder' => 'Choose a country'))
+           
                     ->add('pincode',TextType::class, array('label' => 'Pincode:','required'=>false))
-            ->add('companylogo', FileType::class, array('label' => 'Company Logo', 'required'=>false));
+            ->add('companylogo', FileType::class, array('label' => 'Company Logo', 'required'=>''))
+            ->add('question1',TextType::class,array('label'=>'what is your favourite color?'))
+            ->add('question2',TextType::class,array('label'=>'which is your favourite food?'));
             
          }
 }

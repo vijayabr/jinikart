@@ -19,9 +19,10 @@ class AppKernel extends Kernel
             new CustomerBundle\CustomerBundle(),
             new MerchantBundle\MerchantBundle(),
             new AdminBundle\AdminBundle(),
-            new CommonServiceBundle\CommonServiceBundle(),
+            new CommonServiceBundle\CommonServiceBundle(),    
+            new Ivory\GoogleMapBundle\IvoryGoogleMapBundle(),
+            new Ivory\SerializerBundle\IvorySerializerBundle(),
             
-
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
