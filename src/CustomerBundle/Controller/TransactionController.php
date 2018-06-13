@@ -131,13 +131,17 @@ class TransactionController extends Controller
             //  $cartlist=$em->getRepository('Model:CartList')-> findCartListId();  //write query
             
             $productOrderDetail= new ProductOrderDetail();
-            $productOrderDetail->setDeliveryDate(new \DateTime());
             $productOrderDetail->setProductOrderId($productOrder);
             //  $productOrderDetail->setCartListId($cartlist);  //Error
             // dump($productOrderDetail);
             $em->persist($productOrderDetail);
             $em->flush();
-            
+//             if(){
+//                 $productOrderDetail->setDeliveryDate(new \DateTime());
+//                 $em->persist($productOrderDetail);
+//                 $em->flush();
+//             }
+          
            
           return $this->render("@Customer/Default/placeOrder.html.twig");
       }catch(\Exception $exception){

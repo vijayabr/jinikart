@@ -301,7 +301,6 @@ class AccountController extends Controller
                   $role=$customer->getCustomerRole();
                   $answeredanswer=$_POST['answer'];
                   $existinganswerobj=$this->getDoctrine()->getRepository('Model:SecretAnswer')->getAnswerForAQuestion($randomquestion,$customerid,$role);
-                  dump( $existinganswerobj);die;
                   $existinganswer=$existinganswerobj[0]->getAnswer();
                   $flag=strcmp(strtolower($existinganswer), strtolower($answeredanswer)); 
                   if($flag==0){                 
