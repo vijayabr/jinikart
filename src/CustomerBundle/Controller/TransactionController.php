@@ -12,6 +12,7 @@ use Common\Model\Cart;
 use Common\Model\CartList;
 use Common\Model\ProductOrder;
 use Common\Model\ProductOrderDetail;
+use Common\Model\Product_Detail_List;
 //use Common\Model\Product_Detail_List;
 //use Doctrine\DBAL\Types\BigIntType;
 //use CustomerBundle\Form\OrderType;
@@ -45,19 +46,18 @@ class TransactionController extends Controller
             $cart->setCustomerId($customerId);
             $em->persist($cart);
             $em->flush();
-            
-          //  $productimei=$em->getRepository('Model:Product_Detail_List')->findIMEI(['id'=>$product->getId()]);
-           // $imei=$em->getRepository('Model:Product_Detail_List')->findIMEI(['id'=>$product->getId()]);
-          //  dump($productimei);die;
-            
+           
+            $imei=new Product_Detail_List();
+            $imei=$em->getRepository('Model:Product_Detail_List')->findOneBy(['productId'=>$product->getId()]);
+        
+      
             $cartlist= new CartList();
-         // $cartlist->setProductImeiId();   //Error
+            $cartlist->setProductImeiId($imei);   //Error
             $cartlist->setCartId($cart);
-            //dump($cartlist);die;
             $em->persist($cartlist);
             $em->flush();
-           
-          //  return $this->render("@Customer/Default/placeOrder.html.twig",array('product'=>$product));
+          
+         //   return $this->render("@Customer/Default/placeOrder.html.twig",array('product'=>$product));
           }
             
        
@@ -114,7 +114,7 @@ class TransactionController extends Controller
         
 //         $request = new PlaceAutocompleteRequest('Sydney');
 //         $response = $this->container->get('ivory.google_map.place_autocomplete')->process($request);
-        
+          
         try{
             $em=$this->getDoctrine()->getManager();
             $customerId=$em->getRepository('Model:Customer')->findOneBy(['id'=>$cid]);
@@ -123,19 +123,24 @@ class TransactionController extends Controller
             $productOrder->setOrderStatus(ProductOrder::Order_Placed);
             $productOrder->setCustomerId($customerId);
             
-            $em->persist($productOrder);
-            $em->flush();
-            //  dump($productOrder);
+//             $em->persist($productOrder);
+//             $em->flush();
             //  dump($customerId->getId());die;
-            //  $cartlist= new CartList();
-            //  $cartlist=$em->getRepository('Model:CartList')-> findCartListId();  //write query
+           
+             $cart= new Cart();
+             $cartlist= new CartList();
+             
+             $cart=$em->getRepository('Model:Cart')->findBy(['customerId'=>$cid]);
+             $cartlist=$em->getRepository('Model:CartList')-> findOneBy(['cartId'=>$cart]);
+                     
+             $productOrderDetail= new ProductOrderDetail();
+             $productOrderDetail->setProductOrderId($productOrder);
+             $productOrderDetail->setCartListId($cartlist);  
+             $productOrderDetail->setDeliveryDate(new \DateTime());
+             $em->persist($productOrderDetail);
+             $em->flush();
+           //  dump("done");die;
             
-            $productOrderDetail= new ProductOrderDetail();
-            $productOrderDetail->setProductOrderId($productOrder);
-            //  $productOrderDetail->setCartListId($cartlist);  //Error
-            // dump($productOrderDetail);
-            $em->persist($productOrderDetail);
-            $em->flush();
 //             if(){
 //                 $productOrderDetail->setDeliveryDate(new \DateTime());
 //                 $em->persist($productOrderDetail);

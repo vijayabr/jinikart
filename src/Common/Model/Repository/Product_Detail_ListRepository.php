@@ -121,11 +121,9 @@ class Product_Detail_ListRepository extends \Doctrine\ORM\EntityRepository
         return $filterQuery->getResult();
     }
     public function findIMEI($id) {
-       // dump($id);die;
-        $em = $this->getEntityManager();
-        
-        $qb = $em->createQueryBuilder();
-        
+       //dump($id);die;
+        $em = $this->getEntityManager();    
+        $qb = $em->createQueryBuilder();  
         $qb->select('pi')
         ->from('Common\Model\Product_Detail_List','pi')
         ->join('pi.productId','p')
@@ -134,7 +132,7 @@ class Product_Detail_ListRepository extends \Doctrine\ORM\EntityRepository
         $query=$qb->getQuery();
         
         $result=$query->getResult();
-       // dump($result);die;
+      // dump($result);die;
         return $result;
         
     }

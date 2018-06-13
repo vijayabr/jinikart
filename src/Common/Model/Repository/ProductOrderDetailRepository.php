@@ -20,7 +20,7 @@ class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
         ->leftJoin('pod.cartListId', 'cl')
         ->leftJoin('pod.productOrderId', 'po')
         ->leftJoin('po.customerId', 'c')
-        ->leftJoin('cl.productIMEI', 'pi')
+        ->leftJoin('cl.productImeiId', 'pi') //Changed
         ->leftJoin('pi.productId', 'p')  
         ->leftJoin('po.deliveryAddress','a' )
         ->leftJoin('a.stateId', 's')

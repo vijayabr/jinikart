@@ -16,20 +16,20 @@ class CartListRepository extends \Doctrine\ORM\EntityRepository
         $query = $query->getQuery()->useQueryCache(true);
         return $query->getResult();
     }
-    public function findCartListId(){
-        
+    
+    
+    public function findCartListId($id){
+        //dump($id);die;
         $em = $this->getEntityManager();
         $qb = $em->createQueryBuilder();
-        $qb->select('cl')
+        $qb->select('cl.id')
         ->from('Common\Model\CartList','cl')
-        ->join('cl.cartId','ct')
-        ->join('ct.customerId','c')
-        ->where('c.id= ?1')
-        ->setParameter(1,3);
+        ->where('cl.cartId= :id')
+        ->setParameter('id',(int)$id);
         $query=$qb->getQuery();
         
         $result=$query->getResult();
-        // dump($result);die;
+       // dump($result);die;
         return $result;
         
     }

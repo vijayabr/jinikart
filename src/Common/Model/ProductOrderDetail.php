@@ -24,7 +24,7 @@ class ProductOrderDetail
     
     /**
      * @var int
-     * @ORM\ManyToOne(targetEntity="Common\Model\CartList",cascade={"all"},fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="Common\Model\CartList",cascade={"all","persist"},fetch="EAGER")
      * @ORM\JoinColumn(name="cartListId", referencedColumnName="id")
      */
     private $cartListId;
