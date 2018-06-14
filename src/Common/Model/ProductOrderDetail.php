@@ -21,6 +21,7 @@ class ProductOrderDetail
      */
     private $id;
 
+
     
     /**
      * @var int
@@ -29,6 +30,7 @@ class ProductOrderDetail
      */
     private $cartListId;
     
+
     /**
      * @var int
      * @ORM\ManyToOne(targetEntity="Common\Model\ProductOrder",cascade={"all"},fetch="EAGER")
@@ -43,6 +45,13 @@ class ProductOrderDetail
      * @ORM\Column(name="delivery_date", type="datetime")
      */
     private $deliveryDate;
+    
+    /**
+     * @var string
+     * @ORM\Column(name="order_status", type="string")
+     */
+    private $orderStatus;
+    
 
     /**
      * @var \DateTime
@@ -75,6 +84,7 @@ class ProductOrderDetail
     {
         return $this->id;
     }
+    
     /**
      * Set cartListId
      *
@@ -99,7 +109,26 @@ class ProductOrderDetail
         return $this->cartListId;
     }
     
-
+    /**
+     * Set orderStatus
+     * @param string $orderStatus
+     * @return ProductOrderDetail
+     */
+    public function setOrderStatus($orderStatus)
+    {
+        $this->orderStatus = $orderStatus;
+        
+        return $this;
+    }
+    
+    /**
+     * Get orderStatus
+     * @return string
+     */
+    public function getOrderStatus()
+    {
+        return $this->orderStatus;
+    }
     /**
      * Set productOrderId
      *

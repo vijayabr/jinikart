@@ -23,10 +23,14 @@ use CustomerBundle\Form\ProfileType;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use CustomerBundle\Form\profileImageuploadType;
+use Aws\S3\S3Client;
+use Aws\S3\Exception\S3Exception;
+use CommonServiceBundle\Helper\ImageUploader;
 
 
 class AccountController extends Controller
 {
+    
     /**
      * @Route("/customer/registration",name="customer_registration");
      * @param Request $request
@@ -34,6 +38,7 @@ class AccountController extends Controller
      */
     public function customerRegistrationAction(Request $request)
     {
+        
         $form = $this->createForm(CustomerType::class);
         $form->handleRequest($request);
         $validator=$this->get('validator'); //validator service
@@ -41,7 +46,7 @@ class AccountController extends Controller
         try {
            
             if ($form->isSubmitted()) { 
-               
+
                 $em = $this->getDoctrine()->getManager();           
                 $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' => Customer_plan::DEFAULT_CUSTOMER_PLAN]);
                 $addr1 = $form->getData()["address_line1"];
@@ -55,6 +60,7 @@ class AccountController extends Controller
                 $address->setAddressLine2($addr2);
                 $address->setStateId($state);
                 $address->setCountryId($country);
+
                 $address->setPincode($pin); 
                
                 $error1=$validator->validate($address);
@@ -62,9 +68,10 @@ class AccountController extends Controller
                  $em->persist($address);
                  $em->flush();
                 }
-                
+
                 $customerMobileNoExist =$em->getRepository('Model:Customer')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
                 $customerEmailExist =$em->getRepository('Model:Customer')->findOneBy(['email'=>$form->getData()["email"]]);
+
                 if(!$customerEmailExist && !$customerMobileNoExist) {
                    
                     $address = new Address();
@@ -103,6 +110,7 @@ class AccountController extends Controller
                     
                         $qA1= new SecretAnswer();
                         $qA1->setAnswer($form->getData()['question1']);
+
                         $em = $this->getDoctrine()->getManager();
                         $qA1->setQuestionId($q1); 
                         $qA1->setRole(Customer::ROLE);
@@ -118,14 +126,42 @@ class AccountController extends Controller
                         $em->persist($qA2);
                         $em->flush();     
      
+
+                        $entityManager = $this->getDoctrine()->getManager();
+                        $entityManager->persist($qA1);
+                        $entityManager->flush();                        
+                        $qA2->setAnswer($form->getData()['question2']);
+                        $entityManager = $this->getDoctrine()->getManager();
+                        $entityManager->persist($qA2);
+                        $entityManager->flush();                       
+                        $customer->setAddressId($address);
+                        $customer->setCustomerPlanId(Customer_plan::NONPRIME);
+                        $customer->setPassword($this->get('security.encoder_factory.generic')->getEncoder($customer)->encodePassword($form->getData()['password'], ''));
+
                         /**
                          * @var uplodedFile images
                          */
                         $image = $form->getData()["profile_photo"];
+                        $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();
+                        
                         if($image)
                         {
-                        $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();     
-                        $image->move($this->getParameter('image_directory'),$imageName);
+                           
+                        try {  
+                            
+                            $_FILES['customer']['name']['profile_photo']= $imageName;
+                            $file = $_FILES['customer']['tmp_name']['profile_photo'];
+                            $keyName = 'profileImage/'. basename($_FILES['customer']['name']['profile_photo']);
+                            $pathInS3 = $this->getParameter('aws').$keyName;                            
+                            $fileUpload = new ImageUploader($this->container);
+                            $fileUpload->imageFileUpload($keyName, $file);
+                            
+                        } catch (S3Exception $e) {
+                            die('Error:' . $e->getMessage().$e->getLine().$e->getFile());
+                        } 
+                        
+               
+                       // $image->move($this->getParameter('image_directory'),$imageName);
                         $customer->setProfilePhoto($imageName);
                         }
                        
@@ -140,7 +176,8 @@ class AccountController extends Controller
             return $this->render("@Customer/Account/register.html.twig", array('form' => $form->createView(),'message'=> '','errors'=>'', 'error1'=>'' ));
         }
         catch (\Exception $exception) {
-            var_dump($exception);
+            var_dump($exception->getMessage().$exception->getLine().$exception->getFile());
+            
             die;
         }        
     }
@@ -179,12 +216,32 @@ class AccountController extends Controller
              */
                 $image = $imageform->getData()["profile_photo"];
                 $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();
-            
-                $image->move($this->getParameter('image_directory'),$imageName); 
+                if($image)
+                {
+                    
+                    try {
+                        
+                    $_FILES['profile_imageupload']['name']['profile_photo']= $imageName;
+                        $file = $_FILES['profile_imageupload']['tmp_name']['profile_photo'];
+                        $keyName = 'profileImage/'. basename($_FILES['profile_imageupload']['name']['profile_photo']);
+                        $pathInS3 = $this->getParameter('aws').$keyName;
+                        $fileUpload = new ImageUploader($this->container);
+                        $fileUpload->DeleteimageFile($keyName);
+                        $fileUpload->imageFileUpload($keyName, $file);
+                        
+                    } catch (S3Exception $e) {
+                        die('Error:' . $e->getMessage().$e->getLine().$e->getFile());
+                    }
+                    
+                    
+                    // $image->move($this->getParameter('image_directory'),$imageName);
+                    $customer->setProfilePhoto($imageName);
+                }
+               // $image->move($this->getParameter('image_directory'),$imageName); 
                 $customer->setProfilePhoto($imageName);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($customer); 
-                $entityManager->flush();
+               // $entityManager->flush();
                 return $this->redirectToRoute("customer_profile_page");
             }
             if ($form->isSubmitted()) {
@@ -263,7 +320,7 @@ class AccountController extends Controller
         $form->get('state')->setData($state->getstateName());
         $country=$em->getRepository('Model:Country')->findOneBy(['id' => $address->getcountryId()]);        ;
         $form->get('country')->setData($state->getstateName());
-        $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' => Customer_plan::DEFAULTPLAN]);        
+        $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' => '1']);        
         $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' => $customer->getcustomerPlanId()]);       
         $form->get('plan')->setData($customerPlan->getcustomerPlanName());
         $answers=$this->getDoctrine()->getRepository('Model:SecretAnswer')->getQuestionAnswer($customer->getId());

@@ -16,31 +16,7 @@ use Common\Model\SecretAnswer;
 
 class AccountController extends Controller
 {
-    /**
-     * @Route("/index")
-     */
-    public function newAction()   {
-        $from='aishwaryamk96@gmail.com';
-        $to='aishwaryamk96@gmail.com';
-        $subject = "Subject";
-        $header = "MIME-Version: 1.0\r\n";
-        $header .= "Content-type: text/html\r\n";
-        $emailContent="abcd123";
-        $mailer = $this->container->get('mailer');
-    
-        $message = \Swift_Message::newInstance ()
-        
-        ->setSubject ( $subject )
-        ->setFrom ( $from )
-        ->setTo ( $to )
-        ->setBody ( $emailContent )
-        ->setContentType ( "text/html" );
-        $reponse=$mailer->send ( $message );
-        dump($reponse);die;
-        return new Response("success");
-    }
-    
-    /**
+     /**
      * @Route("/merchant/registration", name="merchant_registration");
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response|\Symfony\Component\HttpFoundation\RedirectResponse
@@ -83,6 +59,20 @@ class AccountController extends Controller
                 if(!$merchantEmailExist && !$merchantMobileNoExist) {     
                     $merchant = new Merchant();
                     $address = new Address();
+
+                    $address->setAddressLine1($addr1);
+                    $address->setAddressLine2($addr2);
+                    $address->setStateId($state);
+                    $address->setCountryId($country);
+                    $address->setPincode($pin);
+                    $error1=$validator->validate($address);
+
+                    if(!$error1){
+                        $em->persist($address);
+                        $em->flush();
+                    }
+                 
+
                     $merchant->setCompanyName($form->getData()["companyName"]);
                     $merchant->setcontactPersonName($form->getData()["contactPersonName"]);
                     $merchant->setEmail($form->getData()["email"]);
@@ -185,8 +175,7 @@ class AccountController extends Controller
      */
     
     public function merchantLandingAction(Request $request){
-       
-        
+              
         return $this->render("@Merchant/Default/landing.html.twig");
     }
     

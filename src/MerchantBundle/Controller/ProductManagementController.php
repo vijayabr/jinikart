@@ -25,7 +25,7 @@ class ProductManagementController extends Controller
      * @param Request $Request
      */
     public function addProductAction(Request $request){
-        
+        $merchant = $this->getUser();
         $form = $this->createForm(AddProductType::class);
         $form->handleRequest($request);     
         
@@ -91,10 +91,10 @@ class ProductManagementController extends Controller
               return $this->render("@Merchant/Default/homepage.html.twig");
               
             }
-            return $this->render("@Merchant/Default/add.html.twig",array('form'=> $form->createView()));
+            return $this->render("@Merchant/Default/add.html.twig",array('form'=> $form->createView(),'merchant'=>$merchant));
                  }catch(\Exception $exception){
  
-                    return new Response($exception);
+                    return new Response($exception->getMessage());
                     die;
         }
   }
@@ -105,12 +105,12 @@ class ProductManagementController extends Controller
      */
     
   public function listProductAction(Request $Request,$id){
+            
+      $merchant = $this->getUser();
+      $merchantId = $Request->request->get('id');         
+      $product = $this->getDoctrine()->getRepository('Model:Product')->findAllProductDetails(['id'=>$merchantId]);
         
-          $merchantId = $Request->request->get('id');
-         
-          $product = $this->getDoctrine()->getRepository('Model:Product')->findAllProductDetails(['id'=>$merchantId]);
-        
-          return $this->render("@Merchant/Default/list.html.twig",array('product'=>$product,'merchant'=>$id));
+      return $this->render("@Merchant/Default/list.html.twig",array('product'=>$product,'merchant'=>$id,'merchant'=>$merchant));
         //'imei'=>$imei,'cat'=>$cat,'brand'=>$brand,'descp'=>$descp));
     }
     

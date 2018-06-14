@@ -25,6 +25,7 @@
 	},
 	"require" : {
 		"php": ">=5.5.9",
+<<<<<<< HEAD
 		"doctrine/doctrine-bundle": "^1.6",
 		"doctrine/orm": "^2.5",
 		"egeloen/google-map-bundle": "^3.0",
@@ -34,6 +35,14 @@
 		"liuggio/excelbundle": "^2.1",
 		"mpdf/mpdf": "^7.1",
 		"php-http/message": "^1.6",
+=======
+		"aws/aws-sdk-php": "^3.61",
+		"doctrine/doctrine-bundle": "^1.6",
+		"doctrine/orm": "^2.5",
+		"incenteev/composer-parameter-handler": "^2.0",
+		"liuggio/excelbundle": "^2.1",
+		"mpdf/mpdf": "^7.1",
+>>>>>>> 1cfc7cd6c0e0208670d012aa8d1f5d8eee04a8cf
 		"sensio/distribution-bundle": "^5.0.19",
 		"sensio/framework-extra-bundle": "^5.0.0",
 		"spraed/pdf-generator-bundle": "^1.4",

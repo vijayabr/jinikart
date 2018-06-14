@@ -137,7 +137,7 @@ class ProductController extends Controller
             $msg=$msg.$submsg;
         }
         $msg=$msg."</div>";        
-        return new Response($msg);   
+        return new Response($msg);
         }catch (\Exception $exception) {
             var_dump($exception);die;
         }

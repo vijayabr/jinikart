@@ -33,7 +33,7 @@ $(document).ready(function(){
 	});
 	$('#merchant_mobileNo').on('input', function() {
 		var input=$(this);
-		var rec = /^[789]\d{9}$/;
+		var rec = /^[6789]\d{9}$/;
 		var is_email=rec.test(input.val());
 		if(!is_email){
 			$("#checkmobile").text("Incorrect data entered");
