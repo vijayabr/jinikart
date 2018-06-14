@@ -13,14 +13,13 @@ use Common\Model\CartList;
 use Common\Model\ProductOrder;
 use Common\Model\ProductOrderDetail;
 use Common\Model\Product_Detail_List;
-//use Common\Model\Product_Detail_List;
-//use Doctrine\DBAL\Types\BigIntType;
-//use CustomerBundle\Form\OrderType;
-// use Ivory\GoogleMap\Service\Place\Autocomplete\PlaceAutocompleteService;
-// use Ivory\GoogleMap\Service\Serializer\SerializerBuilder;
-//use Http\Adapter\Guzzle6\Client;
-//use Http\Message\MessageFactory\GuzzleMessageFactory;
-//use Ivory\GoogleMap\Service\Place\Autocomplete\Request\PlaceAutocompleteRequest;
+use Doctrine\DBAL\Types\BigIntType;
+use CustomerBundle\Form\OrderType;
+use Ivory\GoogleMap\Service\Place\Autocomplete\PlaceAutocompleteService;
+use Ivory\GoogleMap\Service\Serializer\SerializerBuilder;
+use Http\Adapter\Guzzle6\Client;
+use Http\Message\MessageFactory\GuzzleMessageFactory;
+use Ivory\GoogleMap\Service\Place\Autocomplete\Request\PlaceAutocompleteRequest;
 
 
 class TransactionController extends Controller
@@ -120,7 +119,6 @@ class TransactionController extends Controller
             $customerId=$em->getRepository('Model:Customer')->findOneBy(['id'=>$cid]);
             $productOrder= new ProductOrder();
             $productOrder->setOrderedDate(new \DateTime());
-            $productOrder->setOrderStatus(ProductOrder::Order_Placed);
             $productOrder->setCustomerId($customerId);             
             $em->persist($productOrder);
             $em->flush();
@@ -137,15 +135,7 @@ class TransactionController extends Controller
              $productOrderDetail->setDeliveryDate(new \DateTime());
              $em->persist($productOrderDetail);
              $em->flush();
-           //  dump("done");die;
-            
-//             if(){
-//                 $productOrderDetail->setDeliveryDate(new \DateTime());
-//                 $em->persist($productOrderDetail);
-//                 $em->flush();
-//             }
-          
-           
+        
           return $this->render("@Customer/Default/placeOrder.html.twig");
       }catch(\Exception $exception){
             

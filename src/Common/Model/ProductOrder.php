@@ -12,10 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ProductOrder
 {
-   const Order_Placed=1;
-   const Accepted =2;
-   const Processed =3;
-   const Rejected =4;
+  
     /**
      * @var int
      * @ORM\Column(name="id", type="integer")
