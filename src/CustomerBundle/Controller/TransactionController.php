@@ -121,11 +121,9 @@ class TransactionController extends Controller
             $productOrder= new ProductOrder();
             $productOrder->setOrderedDate(new \DateTime());
             $productOrder->setOrderStatus(ProductOrder::Order_Placed);
-            $productOrder->setCustomerId($customerId);
-            
-//             $em->persist($productOrder);
-//             $em->flush();
-            //  dump($customerId->getId());die;
+            $productOrder->setCustomerId($customerId);             
+            $em->persist($productOrder);
+            $em->flush();
            
              $cart= new Cart();
              $cartlist= new CartList();

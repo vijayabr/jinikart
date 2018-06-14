@@ -49,8 +49,7 @@ security:
                 target: merchant_login
                 
         customer:
-#            remember_me:
-#                name: REME 
+#            remember_me: 
 #                secret:   '%secret%'
 #                lifetime: 604800 # 1 week in seconds
 #                path:     ^/customer
@@ -68,7 +67,7 @@ security:
             logout:
                 path:   logout
                 target: login        
-
+              
         main:
             anonymous: ~  
             pattern: ^/
