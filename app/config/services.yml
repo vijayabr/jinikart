@@ -19,3 +19,9 @@ services:
         exclude: '../../src/CommonServiceBundle/{Entity,Repository}'
     
     
+    admin.template:
+        class: AdminBundle\Controller\Admin\EmailTemplateAdmin
+        arguments: [~, Common\Model\email_template, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label:Email template }
+        public: true

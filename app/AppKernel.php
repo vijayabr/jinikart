@@ -19,7 +19,19 @@ class AppKernel extends Kernel
             new CustomerBundle\CustomerBundle(),
             new MerchantBundle\MerchantBundle(),
             new AdminBundle\AdminBundle(),
-            new CommonServiceBundle\CommonServiceBundle()
+            new CommonServiceBundle\CommonServiceBundle(),
+            // These are the other bundles the SonataAdminBundle relies on
+            new Sonata\CoreBundle\SonataCoreBundle(),
+            new Sonata\BlockBundle\SonataBlockBundle(),
+            new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+
+            // And finally
+            new Sonata\AdminBundle\SonataAdminBundle(),
+            new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
+            new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
+            new Sonata\UserBundle\SonataUserBundle(),
+            new Application\Sonata\UserBundle\ApplicationSonataUserBundle()
 
         ];
 
