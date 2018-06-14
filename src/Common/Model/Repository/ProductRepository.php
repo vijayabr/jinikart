@@ -61,8 +61,9 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             ->where('l.merchantId = ?1')   
             ->setParameter(1,(int)$merchantId);
             $query=$qb->getQuery();
-         
+           
             $result=$query->getResult();
+            
             return $result;
         
     }

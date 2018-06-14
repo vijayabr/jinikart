@@ -77,7 +77,7 @@ class TransactionController extends Controller
     public function addWishListAction(Request $request,$id)
     {
        
-//         try{
+         try{
             
 //             if($form->isSubmitted()){
             
@@ -85,13 +85,13 @@ class TransactionController extends Controller
 //             $product->setProductCount($count);
             
 //           }
-//             return $this->render("@Customer/Default/wishList.html.twig");
+             return $this->render("@Customer/Default/wishList.html.twig");
        
-//         }catch(\Exception $exception){
+          }catch(\Exception $exception){
             
-//             return new Response($exception);
-//             die;
-//         }
+            return new Response($exception);
+            die;
+         }
         
     }
     /**

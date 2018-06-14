@@ -45,16 +45,7 @@ class ProductOrderDetail
      * @ORM\Column(name="delivery_date", type="datetime")
      */
     private $deliveryDate;
-    
-
-   
-    
-    /**
-     * @var int
-     * @ORM\ManyToOne(targetEntity="Common\Model\CartList",cascade={"all"},fetch="EAGER")
-     * @ORM\JoinColumn(name="cartListId", referencedColumnName="id")
-     */
-    private $cartListId;
+ 
 
     /**
      * @var \DateTime

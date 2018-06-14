@@ -32,7 +32,7 @@ class ProductManagementController extends Controller
           try{     
             //  $id="";
             if ($form->isSubmitted() && $form->isValid()) {
-   
+           dump("hii");
                  $em = $this->getDoctrine()->getManager(); 
               //   $product=$em->getRepository('Model:Product')->getDataForm($form);
                  $id=$form->getData()["merchantId"];
@@ -45,6 +45,7 @@ class ProductManagementController extends Controller
                  $color = $form->getData()["color"];
                  $ram = $form->getData()["ram_size"];
                  $cam = $form->getData()["camera"];
+                 $count=$form->getData()["product_count"];
                  $info = $form->getData()["product_complete_info"];
                  $image = $form->getData()["product_photo"];
                  
@@ -66,6 +67,7 @@ class ProductManagementController extends Controller
                  $product->setBrandId($brand);
                  $product->setCategoryId($category);
                  $product->setProductDescriptionId($descp);
+                 $product->setProductCount($count);
                 
                
                  $em->persist($product);
@@ -85,10 +87,8 @@ class ProductManagementController extends Controller
                  $imei1->setMerchantId($merchant);
                  $em->persist($imei1);
                  $em->flush();
-                
-               
-              return new Response("Added to Database");
-              return $this->render("@Merchant/Default/homepage.html.twig");
+                   
+                 return $this->render("@Merchant/Default/homepage.html.twig",array('merchant'=>$merchant));
               
             }
             return $this->render("@Merchant/Default/add.html.twig",array('form'=> $form->createView(),'merchant'=>$merchant));
@@ -109,8 +109,8 @@ class ProductManagementController extends Controller
       $merchant = $this->getUser();
       $merchantId = $Request->request->get('id');         
       $product = $this->getDoctrine()->getRepository('Model:Product')->findAllProductDetails(['id'=>$merchantId]);
-        
-      return $this->render("@Merchant/Default/list.html.twig",array('product'=>$product,'merchant'=>$id,'merchant'=>$merchant));
+    
+      return $this->render("@Merchant/Default/list.html.twig",array('product'=>$product,'merchantId'=>$id,'merchant'=>$merchant));
         //'imei'=>$imei,'cat'=>$cat,'brand'=>$brand,'descp'=>$descp));
     }
     
