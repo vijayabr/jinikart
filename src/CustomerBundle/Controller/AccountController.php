@@ -38,6 +38,7 @@ class AccountController extends Controller
     public function customerRegistrationAction(Request $request)
     {
         
+        
         $form = $this->createForm(CustomerType::class);
         $form->handleRequest($request);
         $validator=$this->get('validator');
@@ -120,7 +121,7 @@ class AccountController extends Controller
                         {
                            
                         try {  
-                            
+                                                       
                             $_FILES['customer']['name']['profile_photo']= $imageName;
                             $file = $_FILES['customer']['tmp_name']['profile_photo'];
                             $keyName = 'profileImage/'. basename($_FILES['customer']['name']['profile_photo']);

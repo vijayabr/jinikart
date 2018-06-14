@@ -8,14 +8,14 @@ $(document).ready(function(){
 				  if(data['data']['totalcount']){
 				   $("#badge").text(data['data']['totalcount']);
 				  }
-				  if(data['data']['requestedProductCount']){
-				   $("#requested").text("order product count : "+data['data']['requestedProductCount']);
+				   if(data['data']['requestedProductCount']){
+				   $("#requested").text("Ordered product's count : "+data['data']['requestedProductCount']);
 				  }
 				  if(data['data']['deliveredProductCount']){
-				   $("#delivered").text("Delvered product count :  "+data['data']['deliveredProductCount']);
+				   $("#delivered").text("Delvered product's count :  "+data['data']['deliveredProductCount']);
 				  }
 				  if(data['data']['processedProductCount']){
-				   $("#processed").text("processed product count : " +data['data']['processedProductCount']);
+				   $("#processed").text("processed product's count : " +data['data']['processedProductCount']);
 				  }
 			     }
         }); 

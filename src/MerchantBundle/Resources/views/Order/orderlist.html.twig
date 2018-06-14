@@ -12,7 +12,7 @@
                 </h4><h5>IMEI number&nbsp&nbsp:&nbsp&nbsp&nbsp&nbsp{{ order.productIMEI }}<br>
                 Order Status&nbsp&nbsp:&nbsp&nbsp&nbsp&nbsp{{ order.orderStatus}}</h6></p>
 		 		<button type="submit"  onclick="window.location.href='{{ path('orderinvoicePdf_page', {'order':order.id }) }}'">download product Order pdf</button>
-		 		{% if order.orderStatus=="proceed" %}
+		 		{% if order.orderStatus=="requested" %}
 		 		<input type="hidden" id="url" name="url" value="{{ path('orderaccept_page', {'order':order.id }) }}"/> 		 		
 		 		<button type="submit"  onclick="window.location.href='{{ path('orderaccept_page', {'order':order.id }) }}'">Accept</button>	 
 		 		<button type="submit"  onclick="window.location.href='{{ path('orderreject_page', {'order':order.id }) }}'">Reject</button>	 
@@ -31,6 +31,7 @@
 {% block javascripts %}
 
 <script src={{ asset('/js/Order.js') }}></script>
+<script src={{ asset('/js/merchant.js') }}></script>
 
 {% endblock %}
 

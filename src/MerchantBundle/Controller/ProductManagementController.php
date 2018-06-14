@@ -211,9 +211,7 @@ public function updateAction(Request $request)
     public function detailAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $merchant=$this->getUser();
-       
-       
+        $merchant=$this->getUser();      
         return $this->render("@Merchant/Account/detail.html.twig",array('merchant'=> $merchant));
      
   }

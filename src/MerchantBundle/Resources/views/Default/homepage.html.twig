@@ -35,33 +35,25 @@
 			<div class="notificationmessage" id="notificationmessage" style="display:none; height:auto; width:250px;
 			 position: absolute;z-index:1;top: 50px;left:0;right: 0;background:#d1d1e0;color:#00004d; padding:20px 10px 10px 10px">
       	   	<div id="orders" style="cursor: pointer">
-      	   	<span id="requested"> </span>
+      	   		<a href="{{ path('_order_page')}}"><span id="requested" > </span></a>
       	   	</div>
       	   	<div id="delivery" style="cursor: pointer">
-      	   	<span id="delivered"></span>
+      	   	<a href="{{ path('_order_page')}}"><span id="delivered" ></span></a>
       	   	</div>
       	   	<div id="process" style="cursor: pointer">
-      	   	 <span id="processed"></span>
+      	   	<a href="{{ path('_order_page')}}"><span id="processed"></span></a>
       	   	</div>
       	    </div>     		    	      		 
       	   </div>     	 
             <div class="col-sm-1 col-md-2 col-lg-1" id="button" style="align:right; padding:10px 2px 5px 50px">
            <button align="right" type="button"onclick="window.location.href='{{ path('merchant_logout') }}'">Logout</button></h6></h6>
             </div>
-            </div>
-            
+            </div>            
            
-      </div>
-      
-     
-      	
-      
+      </div>  
       
 {% endblock %}    
- {% block javascripts %}
-
-
+{% block javascripts %}
 <script src={{ asset('/js/merchant.js') }}></script>
-
 {% endblock %}
  

@@ -193,7 +193,7 @@ class ReportController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $productOrderDetail=$em->getRepository('Model:ProductOrderDetail')->find($order);
-        $productOrderDetail->setOrderStatus("accept");      
+        $productOrderDetail->setOrderStatus("processed");        
         $em->persist($productOrderDetail);
         $em->flush();
         return $this->redirectToRoute('_order_page');        
@@ -209,7 +209,7 @@ class ReportController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         $productOrderDetail=$em->getRepository('Model:ProductOrderDetail')->find($order);
-        $productOrderDetail->setOrderStatus("reject");
+        $productOrderDetail->setOrderStatus("rejected");
         $em->persist($productOrderDetail);
         $em->flush();
         return $this->redirectToRoute('_order_page');
@@ -233,15 +233,17 @@ class ReportController extends Controller
     $deliveredProductCount=0;
     $processedProductCount=0;
     foreach ($products as $product){dump($product);
-        if($product['orderStatus']=="request"){
+        if($product['orderStatus']=="requested"){
             $requestedProductCount +=1;            
         }
-        elseif ($product['orderStatus']=="accept"){
-            $deliveredProductCount +=1;
+        elseif ($product['orderStatus']=="processed"){
+            $processedProductCount +=1;
             
         }elseif($product['orderStatus']=="delivered"){
          
             $deliveredProductCount +=1;
+        }else {
+            $totalcount -=1;
         }
     }
     }
