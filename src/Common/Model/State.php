@@ -28,6 +28,14 @@ class State
      * @ORM\Column(name="state_name", type="string", length=50,unique=true)
      */
     private $stateName;
+    
+    /**
+     * @var int
+     *one address belongs to one country
+     * @ORM\ManyToOne(targetEntity="Common\Model\Country")
+     * @ORM\JoinColumn(name="CountryId", referencedColumnName="id")
+     */
+    private $countryId;
 
 
     /**
@@ -85,7 +93,30 @@ class State
         return $this->stateName;
     }
 
-
+    /**
+     * Set countryId
+     *
+     * @param integer $countryId
+     *
+     * @return State
+     */
+    public function setCountryId($countryId)
+    {
+        $this->countryId = $countryId;
+        
+        return $this;
+    }
+    
+    /**
+     * Get countryId
+     *
+     * @return integer
+     */
+    public function getCountryId()
+    {
+        return $this->countryId;
+    }
+    
 
 
 

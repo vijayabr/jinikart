@@ -21,7 +21,16 @@ class ProductOrderDetail
      */
     private $id;
 
-     
+
+    
+    /**
+     * @var int
+     * @ORM\ManyToOne(targetEntity="Common\Model\CartList",cascade={"all","persist"},fetch="EAGER")
+     * @ORM\JoinColumn(name="cartListId", referencedColumnName="id")
+     */
+    private $cartListId;
+    
+
     /**
      * @var int
      * @ORM\ManyToOne(targetEntity="Common\Model\ProductOrder",cascade={"all"},fetch="EAGER")
@@ -37,6 +46,7 @@ class ProductOrderDetail
      */
     private $deliveryDate;
     
+
    
     
     /**
@@ -59,7 +69,14 @@ class ProductOrderDetail
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-
+    
+    public function __construct() {
+        
+        $this->setCreatedAt(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
 
     /**
      * Get id
@@ -103,7 +120,7 @@ class ProductOrderDetail
      *
      * @return ProductOrderDetail
      */
-    public function setProductOrderIdId($productOrderId)
+    public function setProductOrderId($productOrderId)
     {
         $this->productOrderId = $productOrderId;
         

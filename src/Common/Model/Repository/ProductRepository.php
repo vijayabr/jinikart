@@ -84,20 +84,21 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         return $result;
     }
  
-    public function findIMEI() {
+    public function findIMEI($id) {
         
         $em = $this->getEntityManager();
         
         $qb = $em->createQueryBuilder();
+    
         $qb->select('pi.productIMEI')
         ->from('Common\Model\Product_Detail_List','pi')
         ->join('pi.productId','p')
         ->where('p.id= ?1')
-        ->setParameter(1,1);
+        ->setParameter(1,$id);
         $query=$qb->getQuery();
        
         $result=$query->getResult();
-        
+      
         return $result;
        
     }

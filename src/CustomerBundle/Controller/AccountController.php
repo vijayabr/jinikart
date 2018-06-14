@@ -2,6 +2,7 @@
 
 namespace CustomerBundle\Controller;
 
+
 use Common\Model\Address;
 use Common\Model\Customer;
 use CustomerBundle\Form\CustomerType;
@@ -40,19 +41,20 @@ class AccountController extends Controller
         
         $form = $this->createForm(CustomerType::class);
         $form->handleRequest($request);
-        $validator=$this->get('validator');
+        $validator=$this->get('validator'); //validator service
+        
         try {
+           
             if ($form->isSubmitted()) { 
-         
-  
+
                 $em = $this->getDoctrine()->getManager();           
                 $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' => Customer_plan::DEFAULT_CUSTOMER_PLAN]);
-         
                 $addr1 = $form->getData()["address_line1"];
                 $pin = $form->getData()["pincode"];
                 $state = $form->getData()["state"];
                 $addr2 = $form->getData()["address_line2"];
                 $country = $form->getData()["country"];
+                
                 $address = new Address();
                 $address->setAddressLine1($addr1);
                 $address->setAddressLine2($addr2);
@@ -60,12 +62,13 @@ class AccountController extends Controller
                 $address->setCountryId($country);
 
                 $address->setPincode($pin); 
+               
                 $error1=$validator->validate($address);
                 if(!$error1){
-                    $em->persist($address);
-                    $em->flush();
+                 $em->persist($address);
+                 $em->flush();
                 }
-             
+
                 $customerMobileNoExist =$em->getRepository('Model:Customer')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
                 $customerEmailExist =$em->getRepository('Model:Customer')->findOneBy(['email'=>$form->getData()["email"]]);
 
@@ -83,6 +86,10 @@ class AccountController extends Controller
                     $customer->setCustomerRole(Customer::ROLE);
                     $errors =$validator->validate($customer); 
                     $error1=$validator->validate($address);
+                    $customer->setAddressId($address);
+                    $customer->setPassword($this->get('security.encoder_factory.generic')->getEncoder($customer)->encodePassword($form->getData()['password'], ''));
+                    $entityManager = $this->getDoctrine()->getManager();
+                   
                     if(count($errors) > 0 || count($error1)>0){
                         return $this->render("@Customer/Account/register.html.twig", array( 'form' => $form->createView(), 'message'=> '','errors'=>$errors, 'error1'=>$error1 ));
                     }
@@ -92,14 +99,34 @@ class AccountController extends Controller
                         $address->setStateId($state);
                         $address->setCountryId($country);
                         $address->setPincode($pin);
+                        
                         $em->persist($address);
-                        $em->flush();                        
+                        $em->flush();    
+                        $entityManager->persist($customer);
+                        $entityManager->flush();
                         $q1=$em->getRepository('Model:SecretQuestion')->find(1);
                         $q2=$em->getRepository('Model:SecretQuestion')->find(2);
-                        $qA1=$em->getRepository('Model:SecretAnswer')->findOneBy(['questionId'=>$q1]);
-                        $qA2=$em->getRepository('Model:SecretAnswer')->findOneBy(['questionId'=>$q2]);        
-                     
+                 
+                    
+                        $qA1= new SecretAnswer();
                         $qA1->setAnswer($form->getData()['question1']);
+
+                        $em = $this->getDoctrine()->getManager();
+                        $qA1->setQuestionId($q1); 
+                        $qA1->setRole(Customer::ROLE);
+                        $qA1->setRoleId($customer);
+                        $em->persist($qA1);
+                        $em->flush();  
+                        
+                        $qA2= new SecretAnswer();
+                        $qA2->setAnswer($form->getData()['question2']);
+                        $qA2->setQuestionId($q2); 
+                        $qA2->setRole(Customer::ROLE);
+                        $qA2->setRoleId($customer);
+                        $em->persist($qA2);
+                        $em->flush();     
+     
+
                         $entityManager = $this->getDoctrine()->getManager();
                         $entityManager->persist($qA1);
                         $entityManager->flush();                        
@@ -110,6 +137,7 @@ class AccountController extends Controller
                         $customer->setAddressId($address);
                         $customer->setCustomerPlanId(Customer_plan::NONPRIME);
                         $customer->setPassword($this->get('security.encoder_factory.generic')->getEncoder($customer)->encodePassword($form->getData()['password'], ''));
+
                         /**
                          * @var uplodedFile images
                          */
@@ -136,9 +164,7 @@ class AccountController extends Controller
                        // $image->move($this->getParameter('image_directory'),$imageName);
                         $customer->setProfilePhoto($imageName);
                         }
-                        $entityManager = $this->getDoctrine()->getManager();
-                        $entityManager->persist($customer);
-                        $entityManager->flush();
+                       
                         return $this->redirectToRoute("login");
                     }
                 }
@@ -146,7 +172,8 @@ class AccountController extends Controller
                     $infomessage="you already have an account!!!";
                     return $this->render("@Customer/Account/register.html.twig", array('form' => $form->createView(),'message'=> $infomessage,'errors'=>'', 'error1'=>'' ));
                 }
-            }  return $this->render("@Customer/Account/register.html.twig", array('form' => $form->createView(),'message'=> '','errors'=>'', 'error1'=>'' ));
+            } 
+            return $this->render("@Customer/Account/register.html.twig", array('form' => $form->createView(),'message'=> '','errors'=>'', 'error1'=>'' ));
         }
         catch (\Exception $exception) {
             var_dump($exception->getMessage().$exception->getLine().$exception->getFile());
@@ -227,7 +254,7 @@ class AccountController extends Controller
             $qA2=$em->getRepository('Model:SecretAnswer')->findOneBy(['questionId'=>$q2]);            
             $customerMobileNoExist =$em->getRepository('Model:Customer')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
             $customerEmailExist =$em->getRepository('Model:Customer')->findOneBy(['email'=>$form->getData()["email"]]);     
-            if($customerEmailExist || $customerMobloginileNoExist) {                       
+            if($customerEmailExist || $customerMobileNoExist) {                       
                  if(($customer->getEmail()== $form->getData()["email"]) && ($customer->getMobileNo()== $form->getData()["mobile_no"]) ){
                     $address =$em->getRepository('Model:Address')->findOneBy(['id' => $customer->getAddressId()]);
                     $address->setAddressLine1($form->getData()["address_line1"]);
@@ -328,8 +355,9 @@ class AccountController extends Controller
                  $customer=$em->getRepository('Model:Customer')->findOneBy(['email'=>$email]);
                   if($customer){
                   $customerid=$customer->getId();
+                  $role=$customer->getCustomerRole();
                   $answeredanswer=$_POST['answer'];
-                  $existinganswerobj=$this->getDoctrine()->getRepository('Model:SecretAnswer')->getAnswerForAQuestion($randomquestion,$customerid);
+                  $existinganswerobj=$this->getDoctrine()->getRepository('Model:SecretAnswer')->getAnswerForAQuestion($randomquestion,$customerid,$role);
                   $existinganswer=$existinganswerobj[0]->getAnswer();
                   $flag=strcmp(strtolower($existinganswer), strtolower($answeredanswer)); 
                   if($flag==0){                 

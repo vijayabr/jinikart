@@ -33,14 +33,15 @@ class CustomerType extends AbstractType
             ))
             ->add('address_line1', TextType::class, array('label' => 'Address_line1:'))
             ->add('address_line2', TextType::class, array('label' => 'Address_line2:','required'=>false))
-            ->add('state', EntityType::class, array('class' => 'Common\Model\State',
-                'choice_label' => function ($state) {
-                    return $state->getStateName();
-                },'placeholder' => 'Choose an option'))
+           
             ->add('country', EntityType::class, array('class' => 'Common\Model\Country',
                 'choice_label' => function ($country) {
                     return $country->getCountryName();
                 },'placeholder' => 'Choose an option'))
+                ->add('state', EntityType::class, array('class' => 'Common\Model\State',
+                    'choice_label' => function ($state) {
+                    return $state->getStateName();
+                    },'placeholder' => 'Choose an option'))
             ->add('pincode',TextType::class, array('label' => 'Pincode:'))
             ->add('profile_photo', FileType::class, array('label' => 'Profile photo', 'required'=>false))
             ->add('question1',TextType::class,array('label'=>'what is your favourite color?'))
