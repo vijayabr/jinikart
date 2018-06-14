@@ -42,7 +42,7 @@ class MerchantType extends AbstractType
                     return $country->getCountryName();
                     },'placeholder' => 'Choose a country'))
                     ->add('pincode',TextType::class, array('label' => 'Pincode:','required'=>false))
-            ->add('companylogo', FileType::class, array('label' => 'Company Logo', 'required'=>false));
+            ->add('companylogo', FileType::class, array('label' => 'Company Logo', 'required'=>''));
             
          }
 }

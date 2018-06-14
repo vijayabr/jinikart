@@ -38,6 +38,12 @@ class ProductOrder
     private $orderedDate;
 
     /**
+     * @var string
+     * @ORM\Column(name="order_status", type="string")
+     */
+    private $orderStatus;
+    
+    /**
      * @var int
      *one customer has one default address
      * @ORM\ManyToOne(targetEntity="Common\Model\Address")
@@ -111,7 +117,26 @@ class ProductOrder
     {
         return $this->orderedDate;
     }
-
+    /**
+     * Set orderStatus
+     * @param string $orderStatus
+     * @return ProductOrderDetail
+     */
+    public function setOrderStatus($orderStatus)
+    {
+        $this->orderStatus = $orderStatus;
+        
+        return $this;
+    }
+    
+    /**
+     * Get orderStatus
+     * @return string
+     */
+    public function getOrderStatus()
+    {
+        return $this->orderStatus;
+    }
     /**
      * Set deliveryAddress
      * @param integer $deliveryAddress

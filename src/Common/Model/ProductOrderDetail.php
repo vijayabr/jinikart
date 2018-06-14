@@ -37,12 +37,7 @@ class ProductOrderDetail
      */
     private $deliveryDate;
     
-    /**
-     * @var string
-     * @ORM\Column(name="order_status", type="string")
-     */
-    private $orderStatus;
-    
+   
     
     /**
      * @var int
@@ -100,26 +95,7 @@ class ProductOrderDetail
         return $this->cartListId;
     }
     
-    /**
-     * Set orderStatus
-     * @param string $orderStatus
-     * @return ProductOrderDetail
-     */
-    public function setOrderStatus($orderStatus)
-    {
-        $this->orderStatus = $orderStatus;
-        
-        return $this;
-    }
-    
-    /**
-     * Get orderStatus
-     * @return string
-     */
-    public function getOrderStatus()
-    {
-        return $this->orderStatus;
-    }
+   
     /**
      * Set productOrderId
      *

@@ -74,7 +74,6 @@ class Merchant implements UserInterface
      */
     private $password;
 
-  
    
     /**
      * @var string
