@@ -20,6 +20,8 @@ use Ivory\GoogleMap\Service\Serializer\SerializerBuilder;
 use Http\Adapter\Guzzle6\Client;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Ivory\GoogleMap\Service\Place\Autocomplete\Request\PlaceAutocompleteRequest;
+use Common\Model\WishList;
+use Symfony\Component\Validator\Constraints\Length;
 
 
 class TransactionController extends Controller
@@ -37,7 +39,7 @@ class TransactionController extends Controller
             $em=$this->getDoctrine()->getManager();
             $product=$em->getRepository('Model:Product')->findOneBy(['id'=>$id]);
             $customerId=$em->getRepository('Model:Customer')->findOneBy(['id'=>$cid]);
-              
+            
            if($product){
               
             $cart= new Cart();
@@ -51,15 +53,29 @@ class TransactionController extends Controller
         
       
             $cartlist= new CartList();
-            $cartlist->setProductImeiId($imei);   //Error
+            $cartlist->setProductImeiId($imei); 
             $cartlist->setCartId($cart);
             $em->persist($cartlist);
             $em->flush();
-          
-         //   return $this->render("@Customer/Default/placeOrder.html.twig",array('product'=>$product));
-          }
+           
+            $count= $em->getRepository('Model:Product')->findOneBy(['id'=>$id]);
+           
+            $wishlist= new WishList();
+            if($count->getProductCount()){
+                $wishlist->setWishlistStatus(Wishlist::IN_STOCK);
+                $wishlist->setProductId($product);
+                $wishlist->setCustomerId($customerId);
+              
+              $em->persist($wishlist);
+              $em->flush();
+             }
+             else
+             {
+                $wishlist->setWishlistStatus(Wishlist::OUT_OF_STOCK);
+                
+             }
             
-       
+           } 
        return $this->render("@Customer/Default/cart.html.twig",array('form'=>$form->createView(),'product'=>$product,'cid'=>$cid)); 
          
         } catch(\Exception $exception){
@@ -74,18 +90,16 @@ class TransactionController extends Controller
      * @Route("/customer/wish/{cid}/{id}", name="wish_cart");
      * @param Request $request
      */
-    public function addWishListAction(Request $request,$id)
+    public function addWishListAction(Request $request,$cid,$id)
     {
        
          try{
-            
-//             if($form->isSubmitted()){
-            
-//             $quantity=$form->getData()["product_count"];
-//             $product->setProductCount($count);
-            
-//           }
-             return $this->render("@Customer/Default/wishList.html.twig");
+             $em=$this->getDoctrine()->getManager();
+            $product= $em->getRepository('Model:Product')->findOneBy(['id'=>$id]);
+            $wish=$em->getrepository('Model:WishList')->findBy(['customerId'=>$cid]);
+//             dump($product);
+ //            dump($wish);die;
+            return $this->render("@Customer/Default/wishList.html.twig",array('product'=>$product,'wish'=>$wish));
        
           }catch(\Exception $exception){
             
@@ -100,19 +114,19 @@ class TransactionController extends Controller
      */
     public function placeOrderAction(Request $request,$cid,$id)
     {
-//         $form=$this->createForm(OrderType::class);
-//         $form->handleRequest($request);
+        $form=$this->createForm(OrderType::class);
+        $form->handleRequest($request);
         
-//         $autocomplete = new PlaceAutocompleteService(
-//             new Client(),
-//             new GuzzleMessageFactory(),
-//             SerializerBuilder::create($psr6Pool)
-//             );
-//        $response = $autocomplete->process(new PlaceAutocompleteRequest('Sydney'));
+        $autocomplete = new PlaceAutocompleteService(
+            new Client(),
+            new GuzzleMessageFactory(),
+            SerializerBuilder::create($psr6Pool)
+            );
+        $response = $autocomplete->process(new PlaceAutocompleteRequest('Sydney'));
         
         
-//         $request = new PlaceAutocompleteRequest('Sydney');
-//         $response = $this->container->get('ivory.google_map.place_autocomplete')->process($request);
+        $request = new PlaceAutocompleteRequest('Sydney');
+        $response = $this->container->get('ivory.google_map.place_autocomplete')->process($request);
           
         try{
             $em=$this->getDoctrine()->getManager();
@@ -142,5 +156,26 @@ class TransactionController extends Controller
             return new Response($exception);
             die;
        }
+    }
+    /**
+     * @Route("/customer/delete/{cid}/{id}", name="delete_item");
+     * @param Request $request
+     */
+    public function deleteAction(Request $request,$cid,$id)
+    {
+        $em=$this->getDoctrine()->getManager();
+        $cartId=$em->getRepository('Model:Cart')->findBy($cid);
+        dump($cartId);
+        $item=$em->getRepository('Model:CartList')->findBy($cartId);
+        dump($item);
+        $em->remove($item);
+        $em->flush();
+        $cart= new Cart();
+        $cart= $em->getRepository('Model:Cart')->findBy($cartId);
+        $cart->setCartStatus(Cart::DEFAULT_CART_STATUS);
+        $wish=$em->getRepository('Model:WishList')->findBy($id);
+        $em->remove($wish);
+        $em->flush();
+        return $this->redirectToRoute("add_cart");
     }
 }

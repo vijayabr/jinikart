@@ -10,4 +10,6 @@ namespace Common\Model\Repository;
  */
 class WishListRepository extends \Doctrine\ORM\EntityRepository
 {
+    
+  
 }

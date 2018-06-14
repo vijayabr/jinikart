@@ -38,7 +38,7 @@ class ProductOrder
 
     /**
      * @var string
-     * @ORM\Column(name="order_status", type="string")
+     * @ORM\Column(name="order_status", type="string",nullable=true)
      */
     private $orderStatus;
     

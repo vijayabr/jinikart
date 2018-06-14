@@ -24,7 +24,7 @@ class Cart
 
     /**
      * @var int
-     * @ORM\OneToOne(targetEntity="Common\Model\Customer")
+     * @ORM\ManyToOne(targetEntity="Common\Model\Customer")
      * @ORM\JoinColumn(name="customerId", referencedColumnName="id")
      */
     private $customerId;

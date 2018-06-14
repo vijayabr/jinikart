@@ -32,7 +32,7 @@ class ProductManagementController extends Controller
           try{     
             //  $id="";
             if ($form->isSubmitted() && $form->isValid()) {
-           dump("hii");
+          
                  $em = $this->getDoctrine()->getManager(); 
               //   $product=$em->getRepository('Model:Product')->getDataForm($form);
                  $id=$form->getData()["merchantId"];
