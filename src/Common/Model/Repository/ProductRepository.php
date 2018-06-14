@@ -48,25 +48,25 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
           return $productinfo;
     }
     
-     
-    public function findAllProductDetails($merchantId)
+    //Used in listing (Merchant)
+    public function findAllProductDetails($id)
     {
           $em = $this->getEntityManager();
-         
+          // dump($id);die;
             $qb = $em->createQueryBuilder();
             $qb->select('l')
             ->from('Common\Model\Product_Detail_List','l')
             ->join('l.productId','p')
             ->join('p.productDescriptionId','d')
             ->where('l.merchantId = ?1')   
-            ->setParameter(1,(int)$merchantId);
+            ->setParameter(1,(int)$id);
             $query=$qb->getQuery();
-           
             $result=$query->getResult();
-            
+       //  dump($result);die;
             return $result;
         
     }
+    
     public function findProductDetails($Id)
     {
         $em = $this->getEntityManager();
@@ -103,20 +103,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         return $result;
        
     }
-   /* $em = $this->getEntityManager();
-    
-    $qb = $em->createQueryBuilder();
-    $qb->select('l.productIMEI,p.productName,p.productPrice,d.color,d.ramSize,d.productCompleteInfo')
-    ->from('Common\Model\Product_Detail_List','l')
-    ->join('l.productId','p')
-    ->innerJoin('p.productDescriptionId','d')
-    ->where('l.productId = ?1')
-    ->setParameter(1,(int)$Id);
-    $query=$qb->getQuery();
-    
-    $result=$query->getResult();
-    dump($result);die;
-    return $result;*/
+ 
  }
 
 

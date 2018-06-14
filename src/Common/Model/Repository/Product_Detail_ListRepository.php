@@ -121,7 +121,7 @@ class Product_Detail_ListRepository extends \Doctrine\ORM\EntityRepository
         return $filterQuery->getResult();
     }
     public function findIMEI($id) {
-       //dump($id);die;
+      
         $em = $this->getEntityManager();    
         $qb = $em->createQueryBuilder();  
         $qb->select('pi')
@@ -132,8 +132,23 @@ class Product_Detail_ListRepository extends \Doctrine\ORM\EntityRepository
         $query=$qb->getQuery();
         
         $result=$query->getResult();
-      // dump($result);die;
+    
         return $result;
         
+    }
+    public function findCount($merchantId)
+    {
+       
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+        $qb->select('count(pi.merchantId)')
+        ->from('Common\Model\Product_Detail_List','pi')
+        ->where('pi.merchantId=:id')
+        ->setParameter('id',(int)$merchantId);
+        $query=$qb->getQuery();
+        
+        $result=$query->getResult();
+        
+        return $result;
     }
 }

@@ -12,7 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ProductOrder
 {
-  
+   const Order_Placed=1;
+   const Processed=2; 
+   const Rejected=3;
     /**
      * @var int
      * @ORM\Column(name="id", type="integer")
