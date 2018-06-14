@@ -24,8 +24,7 @@ class DefaultController extends Controller
             ->setSubject($subject)
             ->setFrom('jinikartecommerce@gmail.com')
             ->setTo($to)
-            ->setBody($body);
-                      
+            ->setBody($body);                      
         }
         $response = $mailer->send($message); 
         return $response;

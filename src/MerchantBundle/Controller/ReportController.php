@@ -10,6 +10,7 @@ use Common\Model\ProductOrderDetail;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Doctrine\ORM\Query\Expr\Math;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 class ReportController extends Controller
@@ -222,12 +223,34 @@ class ReportController extends Controller
     {   
     $merchant=$this->getUser();
     $em = $this->getDoctrine()->getManager();
-    $product= $em->getRepository('Model:ProductOrderDetail')->productNotification($merchant);
-
-    $count = count($product);            
+    $products= $em->getRepository('Model:ProductOrderDetail')->productNotification($merchant);
+    if ($products){
+        $result=array();
+        $result['status']="success";
     
-    return new Response($count);
-
+    $totalcount = count($products);  
+    $requestedProductCount=0;
+    $deliveredProductCount=0;
+    $processedProductCount=0;
+    foreach ($products as $product){dump($product);
+        if($product['orderStatus']=="request"){
+            $requestedProductCount +=1;            
+        }
+        elseif ($product['orderStatus']=="accept"){
+            $deliveredProductCount +=1;
+            
+        }elseif($product['orderStatus']=="delivered"){
+         
+            $deliveredProductCount +=1;
+        }
+    }
+    }
+    $result['data']['totalcount']=$totalcount;
+    $result['data']['requestedProductCount']=$requestedProductCount;
+    $result['data']['deliveredProductCount']=$deliveredProductCount;
+    $result['data']['processedProductCount']=$processedProductCount;
+    
+    return new JsonResponse($result);
     
     }
     
