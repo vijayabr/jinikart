@@ -18,3 +18,7 @@ parameters:
     
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt
+
+    bucket: jiniproductphotos
+    IAM_KEY: AKIAIYFN4B77GBAZAUMA
+    IAM_SECRET: mGrhG+0qk57+ZgpIHcLZHOJavInVNXtP5Fep

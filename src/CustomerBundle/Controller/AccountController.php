@@ -25,6 +25,7 @@ use CustomerBundle\Form\profileImageuploadType;
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
 use CommonServiceBundle\Helper\ImageUploader;
+use Gumlet\ImageResize;
 
 
 class AccountController extends Controller
@@ -43,35 +44,18 @@ class AccountController extends Controller
         $form->handleRequest($request);
         $validator=$this->get('validator');
         try {
-            if ($form->isSubmitted()) { 
-         
-  
+            if ($form->isSubmitted()) {     
                 $em = $this->getDoctrine()->getManager();           
-                $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' => Customer_plan::DEFAULT_CUSTOMER_PLAN]);
-         
+                $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' => Customer_plan::DEFAULT_CUSTOMER_PLAN]);         
                 $addr1 = $form->getData()["address_line1"];
                 $pin = $form->getData()["pincode"];
                 $state = $form->getData()["state"];
                 $addr2 = $form->getData()["address_line2"];
-                $country = $form->getData()["country"];
-                $address = new Address();
-                $address->setAddressLine1($addr1);
-                $address->setAddressLine2($addr2);
-                $address->setStateId($state);
-                $address->setCountryId($country);
-
-                $address->setPincode($pin); 
-                $error1=$validator->validate($address);
-                if(!$error1){
-                    $em->persist($address);
-                    $em->flush();
-                }
-             
+                $country = $form->getData()["country"];                          
                 $customerMobileNoExist =$em->getRepository('Model:Customer')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
                 $customerEmailExist =$em->getRepository('Model:Customer')->findOneBy(['email'=>$form->getData()["email"]]);
-
                 if(!$customerEmailExist && !$customerMobileNoExist) {
-                   
+                  
                     $address = new Address();
                     $customer = new Customer();  
                     $customer->setFname($form->getData()["fname"]);
@@ -98,8 +82,7 @@ class AccountController extends Controller
                         $q1=$em->getRepository('Model:SecretQuestion')->find(1);
                         $q2=$em->getRepository('Model:SecretQuestion')->find(2);
                         $qA1=$em->getRepository('Model:SecretAnswer')->findOneBy(['questionId'=>$q1]);
-                        $qA2=$em->getRepository('Model:SecretAnswer')->findOneBy(['questionId'=>$q2]);        
-                     
+                        $qA2=$em->getRepository('Model:SecretAnswer')->findOneBy(['questionId'=>$q2]);                      
                         $qA1->setAnswer($form->getData()['question1']);
                         $entityManager = $this->getDoctrine()->getManager();
                         $entityManager->persist($qA1);
@@ -115,26 +98,17 @@ class AccountController extends Controller
                          * @var uplodedFile images
                          */
                         $image = $form->getData()["profile_photo"];
-                        $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();
-                        
                         if($image)
-                        {
-                           
-                        try {  
-                                                       
-                            $_FILES['customer']['name']['profile_photo']= $imageName;
-                            $file = $_FILES['customer']['tmp_name']['profile_photo'];
-                            $keyName = 'profileImage/'. basename($_FILES['customer']['name']['profile_photo']);
-                            $pathInS3 = $this->getParameter('aws').$keyName;                            
+                        {  $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();
+                        try {                            
+                            $dest ='profileImage';
                             $fileUpload = new ImageUploader($this->container);
-                            $fileUpload->imageFileUpload($keyName, $file);
-                            
-                        } catch (S3Exception $e) {
+                            $fileUpload->imageFileUpload($image,$imageName,$dest);                     
+                         }
+                         catch (S3Exception $e) {
                             die('Error:' . $e->getMessage().$e->getLine().$e->getFile());
-                        } 
-                        
-               
-                       // $image->move($this->getParameter('image_directory'),$imageName);
+                         }                
+                        // $image->move($this->getParameter('image_directory'),$imageName);
                         $customer->setProfilePhoto($imageName);
                         }
                         $entityManager = $this->getDoctrine()->getManager();
@@ -183,39 +157,26 @@ class AccountController extends Controller
         $em = $this->getDoctrine()->getManager();
       
         try{
-            if($imageform->isSubmitted()){
-                        
+            if($imageform->isSubmitted()){                        
             /**
              * @var uplodedFile images
              */
-                $image = $imageform->getData()["profile_photo"];
-                $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();
                 if($image)
-                {
-                    
-                    try {
-                        
-                    $_FILES['profile_imageupload']['name']['profile_photo']= $imageName;
-                        $file = $_FILES['profile_imageupload']['tmp_name']['profile_photo'];
-                        $keyName = 'profileImage/'. basename($_FILES['profile_imageupload']['name']['profile_photo']);
-                        $pathInS3 = $this->getParameter('aws').$keyName;
-                        $fileUpload = new ImageUploader($this->container);
-                        $fileUpload->DeleteimageFile($keyName);
-                        $fileUpload->imageFileUpload($keyName, $file);
-                        
-                    } catch (S3Exception $e) {
-                        die('Error:' . $e->getMessage().$e->getLine().$e->getFile());
-                    }
-                    
-                    
-                    // $image->move($this->getParameter('image_directory'),$imageName);
-                    $customer->setProfilePhoto($imageName);
+                {  $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();
+                try {
+                    $dest ='profileImage';
+                    $fileUpload = new ImageUploader($this->container);
+                    $fileUpload->imageFileUpload($image,$imageName,$dest);
+                }
+                catch (S3Exception $e) {
+                    die('Error:' . $e->getMessage().$e->getLine().$e->getFile());
+                }
                 }
                // $image->move($this->getParameter('image_directory'),$imageName); 
                 $customer->setProfilePhoto($imageName);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($customer); 
-               // $entityManager->flush();
+                $entityManager->flush();
                 return $this->redirectToRoute("customer_profile_page");
             }
             if ($form->isSubmitted()) {

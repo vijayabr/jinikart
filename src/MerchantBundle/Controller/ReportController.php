@@ -183,21 +183,21 @@ class ReportController extends Controller
         return new Response("save the file");
         
     } 
-    
-    
+       
     /**
      * @Route("/merchant/orderaccept/{order}",name="orderaccept_page");
      * @param Request $request
      */
     public function OrderAcceptAction($order, Request $request)
     {
+        $time = new \DateTime();        
         $em = $this->getDoctrine()->getManager();
         $productOrderDetail=$em->getRepository('Model:ProductOrderDetail')->find($order);
-        $productOrderDetail->setOrderStatus("processed");        
+        $productOrderDetail->setOrderStatus("processed"); 
+        $productOrderDetail->setDeliveryDate($time);
         $em->persist($productOrderDetail);
         $em->flush();
         return $this->redirectToRoute('_order_page');        
-        
     }
     
     /**
@@ -226,8 +226,7 @@ class ReportController extends Controller
     $products= $em->getRepository('Model:ProductOrderDetail')->productNotification($merchant);
     if ($products){
         $result=array();
-        $result['status']="success";
-    
+        $result['status']="success";    
     $totalcount = count($products);  
     $requestedProductCount=0;
     $deliveredProductCount=0;

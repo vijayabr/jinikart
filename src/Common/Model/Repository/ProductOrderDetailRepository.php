@@ -98,6 +98,22 @@ class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
             return $query->getResult();
             
     }
+    public function productDelivered($time){
+        $query = $this->createQueryBuilder('pod')
+        ->select('pod')
+        ->leftJoin('pod.cartListId', 'cl')
+        ->leftJoin('pod.productOrderId', 'po')
+        ->leftJoin('po.customerId', 'c')
+        ->leftJoin('cl.productIMEI', 'pi')
+        ->leftJoin('pi.productId', 'p')
+        ->andWhere('pod.orderStatus=:status')
+        ->setParameter('status', 'processed')
+        ->andWhere('pod.deliveryDate=:date')
+        ->setParameter('date', $time);        
+        $query = $query->getQuery()->useQueryCache(true);
+        return $query->getResult();
+        
+    }
     
 }
 
