@@ -7,17 +7,24 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Model\ProductOrderDetail;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Doctrine\ORM\Query\Expr\Math;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 
 class ReportController extends Controller
 {
     public function pdffilegenerator($data,$merchant){
         $filename=$merchant.".pdf";
         
-        $directoryPath=$this->getParameter('company_image_directory');
+        $directoryPath=$this->getParameter('product_file_directory');
         $mpdf = new \Mpdf\Mpdf(['tempDir' => $directoryPath,'format'=>'A4','mode' => 'utf-8','orientation' => 'L']);
         $mpdf->WriteHTML($data);        
+        $mpdf->Output($directoryPath.'//'.$filename,'F');
+        //download the file in browser to show
         $mpdf->Output($filename,'D');
-        $mpdf->Output($directoryPath . $filename, \Mpdf\Output\Destination::FILE);
+
     }
         
    
@@ -38,11 +45,13 @@ class ReportController extends Controller
     public function invoicePdfGeneratorData($merchant,$order){
         $em = $this->getDoctrine()->getManager();
         if($order){
+            
             $orders=$em->getRepository('Model:ProductOrderDetail')->productOrder($merchant,$order);
+         
             
         }
         else {
-        $orders=$em->getRepository('Model:ProductOrderDetail')->productOrders($merchant);
+            $orders=$em->getRepository('Model:ProductOrderDetail')->productOrders($merchant);   
         }
         if($orders){
             $msg = "<h1>Your orders list:</h1>";
@@ -79,7 +88,7 @@ class ReportController extends Controller
         $merchant=$this->getUser();
         $msg=$this->invoicePdfGeneratorData($merchant,$order);
         $this->pdffilegenerator($msg,$merchant->getCompanyName());
-        return $this->render("@Merchant/Order/orderlist.html.twig",array('merchant'=> $merchant));
+        return new Response("save the file");
         
     }
     
@@ -161,7 +170,8 @@ class ReportController extends Controller
         
         return $response;
     }
-    /*
+    
+    /**
      * @Route("/merchant/orderInvoice/{order}",name="orderinvoicePdf_page");
      * @param Request $request
      */
@@ -170,9 +180,78 @@ class ReportController extends Controller
         $merchant=$this->getUser();
         $msg=$this->invoicePdfGeneratorData($merchant,$order);
         $this->pdffilegenerator($msg,$merchant->getcompanyName());
-        return $this->render("@Merchant/Order/orderlist.html.twig",array('merchant'=> $merchant));
+        return new Response("save the file");
         
-    }    
+    } 
     
-
+    
+    /**
+     * @Route("/merchant/orderaccept/{order}",name="orderaccept_page");
+     * @param Request $request
+     */
+    public function OrderAcceptAction($order, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $productOrderDetail=$em->getRepository('Model:ProductOrderDetail')->find($order);
+        $productOrderDetail->setOrderStatus("accept");      
+        $em->persist($productOrderDetail);
+        $em->flush();
+        return $this->redirectToRoute('_order_page');        
+        
+    }
+    
+    /**
+     * @Route("/merchant/orderreject/{order}",name="orderreject_page");
+     * @param Request $request
+     */
+    public function OrderRejectAction($order, Request $request)
+    {
+        
+        $em = $this->getDoctrine()->getManager();
+        $productOrderDetail=$em->getRepository('Model:ProductOrderDetail')->find($order);
+        $productOrderDetail->setOrderStatus("reject");
+        $em->persist($productOrderDetail);
+        $em->flush();
+        return $this->redirectToRoute('_order_page');
+    }    
+   
+    /**
+     * @Route("/merchant/notification",name="ordernotification_page");
+     * @param Request $request
+     */
+    public function notificationAction(Request $request)
+    {   
+    $merchant=$this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $products= $em->getRepository('Model:ProductOrderDetail')->productNotification($merchant);
+    if ($products){
+        $result=array();
+        $result['status']="success";
+    
+    $totalcount = count($products);  
+    $requestedProductCount=0;
+    $deliveredProductCount=0;
+    $processedProductCount=0;
+    foreach ($products as $product){dump($product);
+        if($product['orderStatus']=="request"){
+            $requestedProductCount +=1;            
+        }
+        elseif ($product['orderStatus']=="accept"){
+            $deliveredProductCount +=1;
+            
+        }elseif($product['orderStatus']=="delivered"){
+         
+            $deliveredProductCount +=1;
+        }
+    }
+    }
+    $result['data']['totalcount']=$totalcount;
+    $result['data']['requestedProductCount']=$requestedProductCount;
+    $result['data']['deliveredProductCount']=$deliveredProductCount;
+    $result['data']['processedProductCount']=$processedProductCount;
+    
+    return new JsonResponse($result);
+    
+    }
+    
 }

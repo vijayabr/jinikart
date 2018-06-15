@@ -65,8 +65,7 @@ security:
                 target: merchant_login
                 
         customer:
-#            remember_me:
-#                name: REME 
+#            remember_me: 
 #                secret:   '%secret%'
 #                lifetime: 604800 # 1 week in seconds
 #                path:     ^/customer
@@ -83,6 +82,7 @@ security:
                 remember_me: true
             logout:
                 path:   logout
+
                 target: login       
 
         # -> custom firewall for the admin area of the URL
@@ -106,6 +106,7 @@ security:
 
         # This firewall is used to handle the public login area
         # This part is handled by the FOS User Bundle
+
         main:
             pattern:             .*
             context:             user

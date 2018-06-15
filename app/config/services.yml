@@ -19,6 +19,7 @@ services:
         exclude: '../../src/CommonServiceBundle/{Entity,Repository}'
     
     
+
     admin.template:
         class: AdminBundle\Controller\Admin\EmailTemplateAdmin
         arguments: [~, Common\Model\email_template, ~]

@@ -14,11 +14,16 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>
 <body>
+{% block head %}
+	  <div class="header" style="color-interpolation: linearRGB;background-color: #7DA0B1;color:white">
+      <h1 align="center">Welcome to jinikart</h1>
+      <h1 align="left">Merchant portal</h1>
+      </div>
+    {% endblock %}
 {% block body %}{% endblock %}
  
 {% block javascripts %}
-{# <script src="/js/coupon.js"></script> #}
-{# <script src="/js/form-validator.js"></script> #}
+
 {% endblock %}
 </body>
 </html>

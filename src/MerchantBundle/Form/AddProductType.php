@@ -39,7 +39,7 @@ class AddProductType extends AbstractType
         ->add('camera',TextType::class,array('attr'=> array('class' => 'Model:Product_Description',
             'label'=> 'Camera:'),
         ))
-        
+        ->add('product_count',TextType::class,array('label'=> 'Product Count:'))
         ->add('product_complete_info',TextareaType::class,array('attr'=> array('class' => 'Model:Product_Description',
             'label'=> 'Description:'),
         ))

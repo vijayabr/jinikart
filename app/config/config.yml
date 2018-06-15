@@ -104,7 +104,7 @@ fos_user:
 swiftmailer:
     transport: smtp
     host: smtp.gmail.com
-    username: jinikartecommerce@gmail.com
+    username: 'jinikartecommerce@gmail.com'
     password: jini1234
     encryption: tls
     

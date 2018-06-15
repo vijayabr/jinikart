@@ -10,4 +10,14 @@ namespace Common\Model\Repository;
  */
 class StateRepository extends \Doctrine\ORM\EntityRepository
 {
+    
+    public function stateListForCountry($country){
+        $query = $this->createQueryBuilder('s')
+        ->select('s')
+        ->leftJoin('s.countryId', 'c')
+        ->andWhere('c.Id =:country')
+        ->setParameter('country', $country);
+        $query = $query->getQuery()->useQueryCache(true);
+        return $query->getResult();
+    }
 }

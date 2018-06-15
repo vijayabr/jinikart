@@ -31,7 +31,6 @@
             {% endif %}
 
          </div>
-
           <div class="container" style="padding:50px 15px 15px 30px;margin-left:30%">
 
             {{ form_start(form) }}<span id="checkfName" style="color:red "></span>
@@ -66,15 +65,11 @@
         </div>
     <div>    
        
-       <a href="{{ path('login') }}">Already have an account? SignIn!!</a>
-       <script src={{ asset('/js/form-validator.js') }}></script>
+       <a href="{{ path('login') }}">Already have an account? SignIn!!</a>s
    </div>
 
 {% endblock %}
- {% block javascripts %}
-
-
+{% block javascripts %}
 <script src={{ asset('/js/customerRegister.js') }}></script>
-
 {% endblock %}
  

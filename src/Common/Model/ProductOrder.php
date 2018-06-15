@@ -13,9 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
 class ProductOrder
 {
    const Order_Placed=1;
-   const Accepted =2;
-   const Processed =3;
-   const Rejected =4;
+   const Processed=2; 
+   const Rejected=3;
     /**
      * @var int
      * @ORM\Column(name="id", type="integer")
@@ -26,7 +25,7 @@ class ProductOrder
 
     /**
      * @var int
-     * @ORM\OneToOne(targetEntity="Common\Model\Customer")
+     * @ORM\ManyToOne(targetEntity="Common\Model\Customer")
      * @ORM\JoinColumn(name="customerId", referencedColumnName="id")
      */
     private $customerId;
@@ -38,6 +37,12 @@ class ProductOrder
     private $orderedDate;
 
     /**
+     * @var string
+     * @ORM\Column(name="order_status", type="string",nullable=true)
+     */
+    private $orderStatus;
+    
+    /**
      * @var int
      *one customer has one default address
      * @ORM\ManyToOne(targetEntity="Common\Model\Address")
@@ -45,11 +50,7 @@ class ProductOrder
      */
     private $deliveryAddress;
 
-    /**
-     * @var string
-     * @ORM\Column(name="order_status", type="string")
-     */
-    private $orderStatus;
+   
 
     /**
      * @var \DateTime
@@ -63,7 +64,13 @@ class ProductOrder
      */
     private $updatedAt;
 
-
+    public function __construct() {
+        
+        $this->setCreatedAt(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
     /**
      * Get id
      * @return int
@@ -72,6 +79,9 @@ class ProductOrder
     {
         return $this->id;
     }
+    
+    
+   
 
     /**
      * Set customerId
@@ -112,7 +122,26 @@ class ProductOrder
     {
         return $this->orderedDate;
     }
-
+    /**
+     * Set orderStatus
+     * @param string $orderStatus
+     * @return ProductOrderDetail
+     */
+    public function setOrderStatus($orderStatus)
+    {
+        $this->orderStatus = $orderStatus;
+        
+        return $this;
+    }
+    
+    /**
+     * Get orderStatus
+     * @return string
+     */
+    public function getOrderStatus()
+    {
+        return $this->orderStatus;
+    }
     /**
      * Set deliveryAddress
      * @param integer $deliveryAddress
@@ -133,26 +162,6 @@ class ProductOrder
         return $this->deliveryAddress;
     }
 
-    /**
-     * Set orderStatus
-     * @param string $orderStatus
-     * @return ProductOrder
-     */
-    public function setOrderStatus($orderStatus)
-    {
-        $this->orderStatus = $orderStatus;
-
-        return $this;
-    }
-
-    /**
-     * Get orderStatus
-     * @return string
-     */
-    public function getOrderStatus()
-    {
-        return $this->orderStatus;
-    }
 
     /**
      * Set createdAt

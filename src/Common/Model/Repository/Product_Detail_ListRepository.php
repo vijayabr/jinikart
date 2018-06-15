@@ -120,5 +120,35 @@ class Product_Detail_ListRepository extends \Doctrine\ORM\EntityRepository
         $filterQuery = $filterQuery->getQuery()->useQueryCache(true);
         return $filterQuery->getResult();
     }
+    public function findIMEI($id) {
+      
+        $em = $this->getEntityManager();    
+        $qb = $em->createQueryBuilder();  
+        $qb->select('pi')
+        ->from('Common\Model\Product_Detail_List','pi')
+        ->join('pi.productId','p')
+        ->where('p.id= :id')
+        ->setParameter('id',(int)$id);
+        $query=$qb->getQuery();
+        
+        $result=$query->getResult();
     
+        return $result;
+        
+    }
+    public function findCount($merchantId)
+    {
+       
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+        $qb->select('count(pi.merchantId)')
+        ->from('Common\Model\Product_Detail_List','pi')
+        ->where('pi.merchantId=:id')
+        ->setParameter('id',(int)$merchantId);
+        $query=$qb->getQuery();
+        
+        $result=$query->getResult();
+        
+        return $result;
+    }
 }

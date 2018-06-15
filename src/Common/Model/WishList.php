@@ -32,7 +32,7 @@ class WishList
 
     /**
      * @var int
-     * @ORM\OneToOne(targetEntity="Common\Model\Customer")
+     * @ORM\ManyToOne(targetEntity="Common\Model\Customer")
      * @ORM\JoinColumn(name="customerId", referencedColumnName="id")
      */
     private $customerId;
@@ -58,6 +58,13 @@ class WishList
      */
     private $updatedAt;
 
+    public function __construct() {
+        
+        $this->setCreatedAt(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
 
     /**
      * Get id

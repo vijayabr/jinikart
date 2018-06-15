@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new CustomerBundle\CustomerBundle(),
             new MerchantBundle\MerchantBundle(),
             new AdminBundle\AdminBundle(),
+
             new CommonServiceBundle\CommonServiceBundle(),
             // These are the other bundles the SonataAdminBundle relies on
             new Sonata\CoreBundle\SonataCoreBundle(),
@@ -34,7 +35,9 @@ class AppKernel extends Kernel
             new Application\Sonata\UserBundle\ApplicationSonataUserBundle(),
             new FOS\RestBundle\FOSRestBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
-            new Nelmio\CorsBundle\NelmioCorsBundle(),
+            new Nelmio\CorsBundle\NelmioCorsBundle(),  
+            new Ivory\GoogleMapBundle\IvoryGoogleMapBundle(),
+            new Ivory\SerializerBundle\IvorySerializerBundle(),
 
         ];
 

@@ -3,7 +3,7 @@
 namespace CommonServiceBundle\Service;
 
 
- class MessageGenerator
+ class EmailGenerator
 {
     public function getHappyMessage()
     {
@@ -17,4 +17,4 @@ namespace CommonServiceBundle\Service;
 
         return $messages[$index];
     }
-}
+  }

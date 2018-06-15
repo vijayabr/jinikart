@@ -1,8 +1,11 @@
 {% extends "@Merchant/Default/index.html.twig" %}
+{% block head %}
+{% endblock%}
 {% block body %}
     <div class=" main" align="center">
-        <h2>Merchant Signup</h2>
+        <h2>Merchant Signup port</h2>
     </div> 
+   
          <div align="left">
          {% if errors  %}
                <ul>
@@ -30,37 +33,34 @@
             {% endif %}
 
           </div>  
-    <div  id="merchantform" class="container" style="padding:50px 15px 15px 30px;margin-left:35%">
-
-            {{ form_start(form)}}
-            {{ form_row(form.companyName)}}  <span id="checkCompanyName" style="color:red "></span>
-            {{ form_row(form.contactPersonName)}}<span id="checkContactPerson" style="color:red "></span>
-            {{ form_row(form.email)}}<span id="checkemail" style="color:red "></span>
-            {{ form_row(form.mobileNo)}}<span id="checkmobile" style="color:red "></span>
+    <div class="container" style="padding:50px 15px 15px 30px;margin-left:35%">
+            {{ form_start(form)}} <span id="checkCompanyName" style="color:red "></span>
+            {{ form_row(form.companyName)}}
+            <span id="checkContactPerson" style="color:red "></span> 
+            {{ form_row(form.contactPersonName)}}
+            <span id="checkemail" style="color:red "></span>
+            {{ form_row(form.email)}}
+            <span id="checkmobile" style="color:red "></span>
+            {{ form_row(form.mobileNo)}}
             {{ form_row(form.password )}}
             {{ form_row(form.address_line1) }}
             {{ form_row(form.address_line2) }}
-            {{ form_row(form.pincode) }}<span id="checkpincode" style="color:red "></span>
+            <span id="checkpincode" style="color:red "></span>
+            {{ form_row(form.pincode) }}
               {{ form_row(form.country ,{'attr':{'class': 'drop-down'}}) }}
-            {{ form_row(form.state ,{ 'attr':{'class': 'drop-down'}}) }}
-          
+            {{ form_row(form.state ,{ 'attr':{'class': 'drop-down'}}) }} 
             <br/>
             {{ form_row(form.companylogo,{ 'attr':{'class': 'drop-down'}}) }}
-          
+           
             <div id="buttons" padding="10em">
            <p><button type="submit" style="width:80px" class="btn btn-log btn-primary" >Register</button>
            <button type="reset" style="width:80px" class="btn btn-log btn-primary">Clear</button><br/></p>
             </div>
-           {{ form_end(form)}}
+          {{ form_end(form)}}
             <a href="{{ path('merchant_login') }}">Already have an account? SignIn!!</a>
     </div> 
-        
- 
-  {% endblock %}
-  {% block javascripts %}
-
-
+ {% endblock %}
+ {% block javascripts %}
 <script src={{ asset('/js/merchantRegister.js') }}></script>
-
 {% endblock %}
  

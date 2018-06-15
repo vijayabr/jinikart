@@ -46,7 +46,7 @@ class Merchant implements UserInterface
 
     /**
      * @var string
-     *@Assert\NotBlank()
+     *@Assert\NotBlank(message="Enter Contact Person Name")
      *@Assert\Regex("/^[a-z A-Z]+$/", message="Name should only contain  alphabets")
      * @ORM\Column(name="contact_person_name", type="string", length=50)
      */
@@ -74,11 +74,9 @@ class Merchant implements UserInterface
      */
     private $password;
 
-  
-   
     /**
      * @var string
-     * @ORM\Column(name="company_logo", type="string", length=50)
+     * @ORM\Column(name="company_logo", type="string", length=50,nullable=true)
      */
     private $companyLogo;
 
@@ -122,11 +120,7 @@ class Merchant implements UserInterface
 
     public function __construct()
     {
-    //    $this->merchantStatus=Merchant::ACTIVE;
-    //    $this->merchantPlanId=Merchant_plan::DEFAULTMERCHANTPLAN;
-    //      $this->merchantRole="ROLE_MERCHANT";
-      
-            // we set up "created"+"modified"
+
             $this->setCreatedAt(new \DateTime());
             if ($this->getUpdatedAt() == null) {
                 $this->setUpdatedAt(new \DateTime());

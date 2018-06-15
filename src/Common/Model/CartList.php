@@ -28,13 +28,14 @@ class CartList
      * 
      */
     private $cartId;
+  
     /**
      * @var int
-     * @ORM\ManyToOne(targetEntity="Common\Model\Product_Detail_List")
-     * @ORM\JoinColumn(name="productIMEI", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Common\Model\Product_Detail_List",cascade={"all"},fetch="EAGER")
+     * @ORM\JoinColumn(name="productImeiId", referencedColumnName="id")
      */
-    private $productIMEI;
-
+    private $productImeiId;
+    
      /**
      * @var \DateTime
      *
@@ -49,7 +50,13 @@ class CartList
      */
     private $updatedAt;
 
-
+    public function __construct() {
+        
+        $this->setCreatedAt(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
     /**
      * Get id
      * @return int
@@ -88,27 +95,27 @@ class CartList
     
     
     /**
-     * Set productIMEI
+     * Set productImeiId
      *
-     * @param integer $productIMEI
+     * @param integer $productImeiId
      *
      * @return CartList
      */
-    public function setProductIMEI($productIMEI)
+    public function setProductImeiId($productImeiId)
     {
-        $this->productId = $productIMEI;
+        $this->productImeiId= $productImeiId;
 
         return $this;
     }
 
     /**
-     * Get productIMEI
+     * Get productImeiId
      *
      * @return int
      */
-    public function getProductIMEI()
+    public function getProductImeiId()
     {
-        return $this->$productIMEI;
+        return $this->productImeiId;
     }
 
 
