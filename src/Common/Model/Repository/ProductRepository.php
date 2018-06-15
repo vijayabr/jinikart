@@ -62,11 +62,28 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter(1,(int)$id);
             $query=$qb->getQuery();
             $result=$query->getResult();
-       //  dump($result);die;
             return $result;
         
     }
     
+    public function findProductDetailsById($id)
+    {
+          $em = $this->getEntityManager();
+
+            $qb = $em->createQueryBuilder();
+            $qb->select('l')
+            ->from('Common\Model\Product_Detail_List','l')
+            ->join('l.productId','p')
+            ->join('p.productDescriptionId','d')
+            ->where('l.merchantId = ?1')   
+            ->setParameter(1,(int)$id);
+            $query=$qb->getQuery();
+            $result=$query->getResult();
+            return $result;
+        
+    }
+
+
     public function findProductDetails($Id)
     {
         $em = $this->getEntityManager();

@@ -48,7 +48,7 @@ class AccountController extends Controller
             if ($form->isSubmitted()) { 
 
                 $em = $this->getDoctrine()->getManager();           
-                $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' => Customer_plan::DEFAULT_CUSTOMER_PLAN]);
+                $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' =>Customer_plan::DEFAULT_CUSTOMER_PLAN]);
                 $addr1 = $form->getData()["address_line1"];
                 $pin = $form->getData()["pincode"];
                 $state = $form->getData()["state"];

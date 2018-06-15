@@ -17,7 +17,7 @@ class Customer_plan
     
     const DEFAULT_CUSTOMER_PLAN=1; //1 = NON-PRIME
 
-    CONST PRIME= 2;
+    const PRIME= 2;
 
     /**
      * @var int

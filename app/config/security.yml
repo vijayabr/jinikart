@@ -11,9 +11,6 @@ security:
             - ROLE_SONATA_PAGE_ADMIN_PAGE_EDIT  # if you are using acl then this line must be commented
 
     encoders:
-        FOS\UserBundle\Model\UserInterface: bcrypt
-
-    encoders:
         Common\Model\Customer: bcrypt
         Common\Model\Merchant: bcrypt
         FOS\UserBundle\Model\UserInterface: bcrypt

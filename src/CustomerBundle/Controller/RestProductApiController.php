@@ -8,6 +8,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 
+
 class RestProductApiController extends FOSRestController
 {
     /**
@@ -16,8 +17,23 @@ class RestProductApiController extends FOSRestController
      */
     public function ProductDisplayAction()
     {
-    	$myArr = array("name"=>"rolwin", "d"=>"a");
-        return $myArr;
+    	$em = $this->getDoctrine()->getManager();
+    	$products = $em->getRepository('Model:Product')->productsearch();
+    	$products['status_code'] = "OK";
+    	return $products;
+    }
+
+    /**
+     * @Rest\Get("api/product_display/{id}", name="blog_list", requirements={"page"="\d+"})
+     *
+     */
+    public function ProductDisplayByIdAction($id)
+    {
+    	$em = $this->getDoctrine()->getManager();
+    	$products = $em->getRepository('Model:Product')->findAllProductDetails(1);
+    	dump($products);die;
+    	$products['status_code'] = "OK";
+    	return $products;
     }
 
 }
