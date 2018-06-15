@@ -104,7 +104,7 @@ class ProductController extends Controller
         dump($product->getBrandId()->getbrandname());  */       
         return $this->render("@Customer/Default/productinfo.html.twig",array('customer' => $customer,'product'=>$product));
          }catch (\Exception $exception) {
-            var_dump($exception);die;
+            var_dump($exception->getMessage());die;
         }
     }
     
@@ -139,7 +139,7 @@ class ProductController extends Controller
         $msg=$msg."</div>";        
         return new Response($msg);
         }catch (\Exception $exception) {
-            var_dump($exception);die;
+            var_dump($exception->getMessage());die;
         }
     }   
 }

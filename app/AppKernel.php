@@ -19,7 +19,6 @@ class AppKernel extends Kernel
             new CustomerBundle\CustomerBundle(),
             new MerchantBundle\MerchantBundle(),
             new AdminBundle\AdminBundle(),
-            new Ivory\GoogleMapBundle\IvoryGoogleMapBundle(),
             new CommonServiceBundle\CommonServiceBundle()
 
         ];

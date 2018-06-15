@@ -57,7 +57,12 @@ class AccountController extends Controller
                 if(!$customerEmailExist && !$customerMobileNoExist) {
                   
                     $address = new Address();
-                    $customer = new Customer();  
+                    $customer = new Customer();
+                    $address->setAddressLine1($addr1);
+                    $address->setAddressLine2($addr2);
+                    $address->setStateId($state);
+                    $address->setCountryId($country);
+                    $address->setPincode($pin);
                     $customer->setFname($form->getData()["fname"]);
                     $customer->setLname($form->getData()["lname"]);
                     $customer->setEmail($form->getData()["email"]);

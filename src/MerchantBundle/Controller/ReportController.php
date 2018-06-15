@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Doctrine\ORM\Query\Expr\Math;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Ivory\GoogleMap\Map;
 
 
 class ReportController extends Controller
@@ -84,12 +85,17 @@ class ReportController extends Controller
      * @param Request $request
      */
     public function invoicePdfGeneratorAction(Request $request)
-    {   $order="";
+    {  
+       /*  $map =new Map();
+        
+        dump($map);
+        die; */
+        $order="";
         $merchant=$this->getUser();
         $msg=$this->invoicePdfGeneratorData($merchant,$order);
         $this->pdffilegenerator($msg,$merchant->getCompanyName());
         return new Response("save the file");
-        
+   
     }
     
     /**

@@ -31,14 +31,7 @@ class SecurityController extends Controller
     { 
        
         try {
-//             $session = new Session();
-//             // $session->get('name');
-//             if(IsGranted("IS_AUTHENTICATED_REMEMBERED")){
-//                 $session->invalidate(604800);
-//             }
-            
-           // $request = Request::createFromGlobals();
-            
+          
           
             $authenticationUtils=$this->get('security.authentication_utils');
 
@@ -52,10 +45,8 @@ class SecurityController extends Controller
             return $this->render('@Merchant/Account/login.html.twig',array(
                 'last_username' => $lastUsername,
                 'error'=> $error,
-            ));
-           
-      
-            
+            ));           
+                
             }
         catch(\Exception $exception){
             var_dump($exception);die;
