@@ -68,17 +68,16 @@
 	    {% for merchant in merchants %}
          <option value="{{merchant.companyName }}">{{merchant.companyName }}</option>
         {% endfor %}
-     
 		</select><br>
 		<br>
-        
+         <label style="font-size: 20px;">Keyword&nbsp:&nbsp&nbsp</label><br>
+         <input type="text" id="keyword" name="keyword" placeholder="keyword"><br>
 		<input type="hidden" id="url" name="url" value="{{ path('advancedproductList_page') }}"/> 
 		<button type="submit" name="search" id="search">search</button>
        </div>
        <div class="col-sm-9 col-md-6 col-lg-8"  id="productsList" style="padding:20px 20px 20px 20px;">
         {%  if products %}   
-     	{%  for product in products %}
-           
+     	{%  for product in products %}     
      	 <div class=" well" id="product" style="background-color: #ff9800;margin-Top:2em; margin-left:5em; padding:20px 20px 20px 20px;" >        
 		 <a href="{{ path('productdetails_page', { 'pName': product.productName }) }}"> {{  product.productName}}</a>
 		 &nbsp&nbsp&nbsp&nbsp price: {{  product.productPrice}}

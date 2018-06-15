@@ -86,3 +86,20 @@ swiftmailer:
     password: jini1234
     encryption: tls
     
+httplug:
+    classes:
+        client: Http\Adapter\Guzzle6\Client
+        message_factory: Http\Message\MessageFactory\GuzzleMessageFactory
+    clients:
+        vendor:
+            factory: httplug.factory.guzzle6
+                
+ivory_google_map:
+    place_autocomplete:
+        format: json
+        api_key: AIzaSyBS0QxKaN2qWu2sUF4uXeyxe4syAclNEEA 
+        client: httplug.client.default
+        message_factory: httplug.message_factory.default
+    
+
+       

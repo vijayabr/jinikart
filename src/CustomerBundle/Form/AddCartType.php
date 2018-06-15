@@ -17,7 +17,6 @@ class AddCartType extends AbstractType
         ->add('product_count',ChoiceType::class,array(
         'choices'=>array('2','3')   
         ,'label'=> 'Quantity' , 'placeholder' => 'Choose an option'));
-     
     }
     
 }

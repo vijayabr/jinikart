@@ -11,13 +11,12 @@
 <div  class="grid" style="margin:10em; padding: 75px 90px 90px 90px">
 {{ form_start(form) }}
 <!--  Newly added to cart-->
-<div>
-{% for pro in product %}
-<p><label>Product Name:</label>{{ pro.productName }}</p>
-<p><label>Product Price:</label>{{ pro.productPrice}}</p>
-<button type="button" onclick="window.location.href='{{ path('delete',{'id':product.id,'cid': cid}) }}'">Delete</button>
-{% endfor %}
-{ </div>
+
+<p><label>Product Name:</label>{{ product.productName }}</p>
+<p><label>Product Price:</label>{{ product.productPrice}}</p>
+{# <button type="button" onclick="window.location.href='{{ path('delete',{'id':product.id,'cid': cid}) }}'">Delete</button>#}
+{{ form_end(form) }}
+</div>
  <!-- Existing item in the cart --> 
 {# <div>#}
 {# {% for item in cart %}#}
@@ -26,7 +25,7 @@
 {# <button type="button" onclick="window.location.href='{{ path('delete',{'id':product.id,'cid': cid}) }}'">Delete</button>#}
 {#  </div> #}
 {# {% endfor %}#}
-{{ form_end(form) }}
+
 <div style="margin:10em; padding: 35px 70px 50px 50px">
 
 <button type="submit" onclick="window.location.href='{{ path('place_order',{'id':product.id,'cid': cid}) }}'">Proceed To Checkout</button>

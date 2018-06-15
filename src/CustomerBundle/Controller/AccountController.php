@@ -177,7 +177,6 @@ class AccountController extends Controller
         }
         catch (\Exception $exception) {
             var_dump($exception->getMessage().$exception->getLine().$exception->getFile());
-            
             die;
         }        
     }

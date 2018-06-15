@@ -22,6 +22,10 @@ use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Ivory\GoogleMap\Service\Place\Autocomplete\Request\PlaceAutocompleteRequest;
 use Common\Model\WishList;
 use Symfony\Component\Validator\Constraints\Length;
+use Ivory\GoogleMap\Service\Place\Autocomplete\Response\PlaceAutocompleteResponse;
+use Ivory\GoogleMap\Place\Autocomplete;
+use Ivory\GoogleMap\Helper\Builder\PlaceAutocompleteHelperBuilder;
+use Ivory\GoogleMap\Helper\Builder\ApiHelperBuilder;
 
 
 class TransactionController extends Controller
@@ -41,13 +45,25 @@ class TransactionController extends Controller
             $customerId=$em->getRepository('Model:Customer')->findOneBy(['id'=>$cid]);
             
            if($product){
-              
+            
             $cart= new Cart();
+            $cart=$em->getRepository('Model:Cart')->findOneBy(['customerId'=>$cid]);
+             
+            if($cart!=null)
+            {
             $cart->setCartStatus(Cart::FULL); //OCCUPIED
-            $cart->setCustomerId($customerId);
             $em->persist($cart);
             $em->flush();
-           
+            }
+            else{
+                $cart= new Cart();
+                
+                $cart->setCustomerId($customerId);
+                $cart->setCartStatus(Cart::FULL);
+              
+                $em->persist($cart);
+                $em->flush();
+            }
             $imei=new Product_Detail_List();
             $imei=$em->getRepository('Model:Product_Detail_List')->findOneBy(['productId'=>$product->getId()]);
         
@@ -76,6 +92,7 @@ class TransactionController extends Controller
              }
             
            } 
+          // dump($product);die;
        return $this->render("@Customer/Default/cart.html.twig",array('form'=>$form->createView(),'product'=>$product,'cid'=>$cid)); 
          
         } catch(\Exception $exception){
@@ -97,8 +114,6 @@ class TransactionController extends Controller
              $em=$this->getDoctrine()->getManager();
             $product= $em->getRepository('Model:Product')->findOneBy(['id'=>$id]);
             $wish=$em->getrepository('Model:WishList')->findBy(['customerId'=>$cid]);
-//             dump($product);
- //            dump($wish);die;
             return $this->render("@Customer/Default/wishList.html.twig",array('product'=>$product,'wish'=>$wish));
        
           }catch(\Exception $exception){
@@ -114,24 +129,27 @@ class TransactionController extends Controller
      */
     public function placeOrderAction(Request $request,$cid,$id)
     {
-        $form=$this->createForm(OrderType::class);
-        $form->handleRequest($request);
+        return $this->render("@Customer/Default/placeOrder.html.twig");
         
-        $autocomplete = new PlaceAutocompleteService(
-            new Client(),
-            new GuzzleMessageFactory(),
-            SerializerBuilder::create($psr6Pool)
-            );
-        $response = $autocomplete->process(new PlaceAutocompleteRequest('Sydney'));
+//         $form=$this->createForm(OrderType::class);
+//         $form->handleRequest($request);
+        $autocomplete = new Autocomplete();
+        $autocomplete->setVariable('place_autocomplete');
+        //dump($autocomplete);die;
         
+        $placeAutocompleteHelperBuilder = PlaceAutocompleteHelperBuilder::create();
+        $placeAutocompleteHelper = $placeAutocompleteHelperBuilder->build();
+       // dump($placeAutocompleteHelper);die;
+       echo  $placeAutocompleteHelper->renderHtml($autocomplete);
+       echo  $placeAutocompleteHelper->renderJavascript($autocomplete);
         
-        $request = new PlaceAutocompleteRequest('Sydney');
-        $response = $this->container->get('ivory.google_map.place_autocomplete')->process($request);
-          
+        $apiHelper = ApiHelperBuilder::create()->build();
+        echo    $apiHelper->render([$autocomplete]);
         try{
             $em=$this->getDoctrine()->getManager();
             $customerId=$em->getRepository('Model:Customer')->findOneBy(['id'=>$cid]);
             $productOrder= new ProductOrder();
+            $productOrder->setOrderStatus("Requested");
             $productOrder->setOrderedDate(new \DateTime());
             $productOrder->setCustomerId($customerId);             
             $em->persist($productOrder);
@@ -150,8 +168,7 @@ class TransactionController extends Controller
              $em->persist($productOrderDetail);
              $em->flush();
         
-          return $this->render("@Customer/Default/placeOrder.html.twig");
-      }catch(\Exception $exception){
+           }catch(\Exception $exception){
             
             return new Response($exception);
             die;
