@@ -7,4 +7,5 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class ProductManagementController extends Controller
 {
+	
 }
