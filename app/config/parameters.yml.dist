@@ -4,16 +4,17 @@
 parameters:
     database_host: 127.0.0.1
     database_port: ~
-    database_name: symfony
+    database_name: jinikart
     database_user: root
-    database_password: ~
+    database_password: techjini
     # You should uncomment this if you want to use pdo_sqlite
     #database_path: '%kernel.project_dir%/var/data/data.sqlite'
 
     mailer_transport: smtp
-    mailer_host: 127.0.0.1
-    mailer_user: ~
-    mailer_password: ~
-
+    mailer_host: 'smtp.gmail.com'
+    mailer_user: "jinikartecommerce@gmail.com"
+    mailer_password: 'jini1234'
+    mailer_encryption: 'tls'
+    
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt

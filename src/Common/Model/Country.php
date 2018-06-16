@@ -3,6 +3,7 @@
 namespace Common\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Country
@@ -42,6 +43,16 @@ class Country
      */
     private $updatedAt;
 
+    
+    public function __construct() {
+        // we set up "created"+"modified"
+        $this->setCreated(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
+    
+    
 
     /**
      * Get id

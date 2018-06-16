@@ -1,0 +1,20 @@
+.container {
+	font-family:"Times New Roman";
+	font-size: 20px;
+	display: inline;
+	width:200px;
+}
+
+.details{
+	font: bold;
+	font-family:"Times New Roman";
+	font-size:35px;
+}
+
+
+
+table,th,td{
+    border: 1px solid black;
+}
+
+

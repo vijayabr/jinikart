@@ -3,15 +3,22 @@
 namespace Common\Model;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Doctrine\DBAL\Types\BigIntType;
+use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * Merchant
  *
  * @ORM\Table(name="merchant")
  * @ORM\Entity(repositoryClass="Common\Model\Repository\MerchantRepository")
  */
-class Merchant
+class Merchant implements UserInterface
 {
+    const INACTIVE=0;
+    const ACTIVE=1;
+    const SUSPENDED=2;
+    const ROLE="ROLE_MERCHANT";
     /**
      * @var int
      *
@@ -23,29 +30,39 @@ class Merchant
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="company_name", type="string", length=100)
+     *@Assert\NotBlank()
+     *@Assert\Regex("/^[a-z A-Z]+$/", message="Company name should only contain  alphabets")
+     * @ORM\Column(name="company_name", type="string", length=50)
      */
     private $companyName;
 
     /**
      * @var int
      *one customer has one default address
-     * @ORM\OneToOne(targetEntity="Common\Model\Address")
+     * @ORM\ManyToOne(targetEntity="Common\Model\Address",cascade={"persist"})
      * @ORM\JoinColumn(name="addressId", referencedColumnName="id")
      */
     private $addressId;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="contact_person_name", type="string", length=100)
+     *@Assert\NotBlank(message="Enter Contact Person Name")
+     *@Assert\Regex("/^[a-z A-Z]+$/", message="Name should only contain  alphabets")
+     * @ORM\Column(name="contact_person_name", type="string", length=50)
      */
     private $contactPersonName;
-
+    
+    /**
+     *@var BigIntType
+     *@Assert\Regex("/^\d{10}$/", message="Mobile number should be 10 digits")
+     *@ORM\Column(name="mobile_no", type="bigint", length=13,unique=true)
+     */
+    private $mobileNo;
     /**
      * @var string
-     *
+     *@Assert\NotBlank()
+     *@Assert\Email(
+     *     message="The email is not valid")
      * @ORM\Column(name="email", type="string", length=50,unique=true)
      */
     private $email;
@@ -53,14 +70,13 @@ class Merchant
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=15)
+     * @ORM\Column(name="password", type="string", length=255)
      */
     private $password;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="company_logo", type="string", length=50)
+     * @ORM\Column(name="company_logo", type="string", length=50,nullable=true)
      */
     private $companyLogo;
 
@@ -81,7 +97,7 @@ class Merchant
     /**
      * @var int
      *one customer has one plan
-     * @ORM\OneToOne(targetEntity="Common\Model\Merchant_plan")
+     * @ORM\ManyToOne(targetEntity="Common\Model\Merchant_plan")
      * @ORM\JoinColumn(name="merchantPlanId", referencedColumnName="id")
      */
     private $merchantPlanId;
@@ -98,18 +114,19 @@ class Merchant
      *
      * @ORM\Column(name="updated_at", type="datetime")
      */
+   
     private $updatedAt;
 
 
     public function __construct()
     {
-        $this->merchantStatus=1;
-        $this->merchantPlanId=1;
-        $this->merchantRole="ROLE_MERCHANT";
-        $this->setUpdatedAt();
-        $this->setCreatedAt();
-    }
 
+            $this->setCreatedAt(new \DateTime());
+            if ($this->getUpdatedAt() == null) {
+                $this->setUpdatedAt(new \DateTime());
+            }
+        }
+        
 
     /**
      * Get id
@@ -264,7 +281,30 @@ class Merchant
     {
         return $this->companyLogo;
     }
-
+    /**
+     * Set mobileNo
+     *
+     * @param string $mobileNo
+     *
+     * @return Customer
+     */
+    public function setMobileNo($mobileNo)
+    {
+        $this->mobileNo = $mobileNo;
+        
+        return $this;
+    }
+    
+    /**
+     * Get mobileNo
+     *
+     * @return string
+     */
+    public function getMobileNo()
+    {
+        return $this->mobileNo;
+    }
+    
     /**
      * Set merchantStatus
      *
@@ -384,5 +424,26 @@ class Merchant
     {
         return $this->updatedAt;
     }
+    public function getRoles()
+    {
+        return array('ROLE_MERCHANT');
+        
+    }
+    
+    public function getSalt()
+    {
+        return null;
+    }
+    
+    public function getUsername()
+    {
+        return $this->email;
+    }
+    
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+    
 }
 

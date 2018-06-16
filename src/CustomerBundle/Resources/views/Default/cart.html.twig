@@ -1,0 +1,36 @@
+{% extends "@Customer/Default/index.html.twig" %}
+{% block body %}
+<div>
+
+<h2> Welcome To Your Cart</h2>
+<nav style="background-color:dodgerblue;">
+<a href="customer_profile_page" style="color:White" padding:20px;>My Profile</a>
+<a href="{{ path('wish_cart',{'id':product.id,'cid': cid}) }}" style="color:White" padding:20px;>My Wish List </a>
+</nav>
+</div>
+<div  class="grid" style="margin:10em; padding: 75px 90px 90px 90px">
+{{ form_start(form) }}
+<!--  Newly added to cart-->
+<div>
+{% for pro in product %}
+<p><label>Product Name:</label>{{ pro.productName }}</p>
+<p><label>Product Price:</label>{{ pro.productPrice}}</p>
+<button type="button" onclick="window.location.href='{{ path('delete',{'id':product.id,'cid': cid}) }}'">Delete</button>
+{% endfor %}
+{ </div>
+ <!-- Existing item in the cart --> 
+{# <div>#}
+{# {% for item in cart %}#}
+{# <p><label>Product Name:</label>{{ item.id.productId.productName }}</p>#}
+{# {# <p><label>Product Price:</label>{{ item.id.productId.productPrice}}</p>#}
+{# <button type="button" onclick="window.location.href='{{ path('delete',{'id':product.id,'cid': cid}) }}'">Delete</button>#}
+{#  </div> #}
+{# {% endfor %}#}
+{{ form_end(form) }}
+<div style="margin:10em; padding: 35px 70px 50px 50px">
+
+<button type="submit" onclick="window.location.href='{{ path('place_order',{'id':product.id,'cid': cid}) }}'">Proceed To Checkout</button>
+<button type="button" onclick="window.location.href='{{ path('index_page') }}'">Continue Shopping</button>
+</div>
+</div>
+{% endblock %}

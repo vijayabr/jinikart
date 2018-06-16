@@ -1,5 +1,5 @@
-merchant:
-    resource: "@MerchantBundle/Controller/"
+common_service:
+    resource: "@CommonServiceBundle/Controller/"
     type:     annotation
     prefix:   /
 
@@ -8,33 +8,32 @@ admin:
     type:     annotation
     prefix:   /
 
+merchant:
+    resource: "@MerchantBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 customer:
     resource: "@CustomerBundle/Controller/"
     type:     annotation
     prefix:   /
 
-app:
-    resource: '@AppBundle/Controller/'
-    type: annotation
-    
-langing_page:
-    path: /customer
-    defaults: { _controller: 'CustomerBundle\Controller\AccountController::customerLandingAction' }    
-index_page:
-    path: /customer/index
-    defaults: { _controller: 'CustomerBundle\Controller\AccountController::customerIndexAction' }
-    
-customer_registration:
-    path: /customer/registration
-    defaults: { _controller: 'CustomerBundle\Controller\AccountController::customerRegistrationAction' }
-       
-login:
-   path: /login
-   defaults: { _controller: 'CustomerBundle\Controller\SecurityController::loginAction' }
-   
-logout:
-   path: /logout
-   defaults: { _controller: 'CustomerBundle\Controller\SecurityController::logoutAction' }   
+admin_area:
+    resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
+    prefix: /admin
 
-   
+_sonata_admin:
+    resource: .
+    type: sonata_admin
+    prefix: /admin 
+
+sonata_user_admin_security:
+    resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
+    prefix: /admin
+
+sonata_user_admin_resetting:
+    resource: '@SonataUserBundle/Resources/config/routing/admin_resetting.xml'
+    prefix: /admin/resetting
+
+
        

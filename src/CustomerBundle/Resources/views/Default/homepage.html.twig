@@ -2,6 +2,38 @@
 {% block body %}
     <div class="header" style="color-interpolation: linearRGB;background-color: #7DA0B1;color:white">
       <h1 align="center">Welcome to jinikart</h1>
-       <h5>Hello {{ customer.fname }}!!!!</h5>
-    </div>
+       <h5>Hello<a href="{{ path('customer_profile_page') }}">
+         {{ customer.fname }}</a>
+          !!!!</h5>
+          <div class="productSearch">		
+            {{ form_start(form) }}
+            {{ form_label(form.brand) }}&nbsp
+            {{ form_errors(form.brand) }}
+            {{ form_widget(form.brand) }}
+            {{ form_label(form.min) }}&nbsp=&nbsp<span id="min"></span>
+            {{ form_errors(form.min) }}
+            {{ form_widget(form.min) }}
+            {{ form_label(form.max) }}&nbsp=&nbsp<span id="max"></span>
+            {{ form_errors(form.max) }}
+            {{ form_widget(form.max) }}
+            <button type="submit" name="search">Search</button>
+            {{ form_end(form) }}
+             
+          <button type="button"  onclick="window.location.href='{{ path('logout') }}'">Logout</button>   
+          </div>    
+ 
+      <script>
+		var slider1 = document.getElementById("form_min");
+		var minVal = document.getElementById("min");
+		minVal.innerHTML = 0;
+		slider1.oninput = function() {
+  		minVal.innerHTML = this.value;}
+		var slider2 = document.getElementById("form_max");
+		var maxVal = document.getElementById("max");
+		maxVal.innerHTML = 100000;
+		slider2.oninput = function() {
+  		maxVal.innerHTML = this.value;}
+</script>
+</div>
+      
 {% endblock %}

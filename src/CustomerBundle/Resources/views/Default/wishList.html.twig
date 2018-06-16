@@ -1,0 +1,21 @@
+{% extends "@Customer/Default/index.html.twig" %}
+{% block body %}
+<div>
+<h2>Welcome To Your WishList</h2>
+</div>
+
+<!--  Newly added to wishlist-->
+{% for product in product  %}
+<div style="margin:auto; padding: 35px 70px 70px 70px">
+<p><label>Product Name:</label>{{ product.productName }}</p>
+<p><label>Product Price:</label>{{product.productPrice}}</p>
+</div>
+{% endfor %}
+<!-- Existing item in the wishlist -->
+{% for item in wish  %}
+<div style="margin:auto; padding: 75px 90px 90px 90px">
+<p><label>Product Name:</label>{{ item.productId.productName }}</p>
+<p><label>Product Price:</label>{{item.productId.productPrice}}</p>
+</div>
+{% endfor %}
+{% endblock %}

@@ -3,6 +3,7 @@
 namespace Common\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * State
@@ -27,23 +28,37 @@ class State
      * @ORM\Column(name="state_name", type="string", length=50,unique=true)
      */
     private $stateName;
+    
+    /**
+     * @var int
+     *one address belongs to one country
+     * @ORM\ManyToOne(targetEntity="Common\Model\Country")
+     * @ORM\JoinColumn(name="CountryId", referencedColumnName="id")
+     */
+    private $countryId;
 
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
 
-
+    public function __construct() {
+        // we set up "created"+"modified"
+        $this->setCreatedAt(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
     /**
      * Get id
      *
@@ -78,14 +93,37 @@ class State
         return $this->stateName;
     }
 
-
+    /**
+     * Set countryId
+     *
+     * @param integer $countryId
+     *
+     * @return State
+     */
+    public function setCountryId($countryId)
+    {
+        $this->countryId = $countryId;
+        
+        return $this;
+    }
+    
+    /**
+     * Get countryId
+     *
+     * @return integer
+     */
+    public function getCountryId()
+    {
+        return $this->countryId;
+    }
+    
 
 
 
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
+     * @param DateTime $createdAt
      *
      * @return State
      */
@@ -99,7 +137,7 @@ class State
     /**
      * Get createdAt
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -109,7 +147,7 @@ class State
     /**
      * Set updatedAt
      *
-     * @param \DateTime $updatedAt
+     * @param DateTime $updatedAt
      *
      * @return State
      */
@@ -123,7 +161,7 @@ class State
     /**
      * Get updatedAt
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdatedAt()
     {

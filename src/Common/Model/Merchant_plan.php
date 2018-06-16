@@ -3,6 +3,7 @@
 namespace Common\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Merchant_plan
@@ -12,6 +13,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Merchant_plan
 {
+    
+    const DEFAULT_MERCHANT_PLAN =1; //1 = Silver Plan
+    const GOLD_PLAN =2;
+    const SILVER_PLAN=3;
     /**
      * @var int
      *
@@ -62,6 +67,14 @@ class Merchant_plan
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
+    public function __construct() {
+        // we set up "created"+"modified"
+        $this->setCreatedAt(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
+    
 
 
     /**
@@ -73,8 +86,6 @@ class Merchant_plan
     {
         return $this->id;
     }
-
-
 
     /**
      * Set merchantPlanName

@@ -10,4 +10,10 @@ namespace Common\Model\Repository;
  */
 class CustomerRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findAllCustomer(){
+        $query = $this->createQueryBuilder('c')
+        ->select('c');
+//         $query = $query->getQuery()->useQueryCache(true);
+        return $query->getResult();
+    }
 }

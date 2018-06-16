@@ -1,0 +1,25 @@
+{% extends "@Customer/Default/index.html.twig" %}
+{% block body %}
+<div>
+<h2>Confirm Order!!</h2>
+</div>
+
+<div style="margin:auto;">
+<span><label style="font-style:bold; font-size:20px">Delivery Address: </label>&nbsp&nbsp<textarea rows="2" cols="25"></textarea></span>
+</div>
+<div style="font-style:bold;font-size:20px;margin:relative;text-decoration:underline;padding:20px;color:blue">
+<p >Order Summary</p>
+</div>
+<div>
+{# <p>Item Count:{{  }}</p>#}
+{# {% for pro in product %}#}
+{# <p><label>Details:</label>{{ pro.productDescriptionId.color}} </p>#}
+{# <p>Expected Delivery Date: {{  }}</p>#}
+{# <p>Order Total: {{  }}</p>#}
+{# <p>Savings{{  }}</p>#}
+
+{# {% endfor %}#}
+</div>
+<button type="submit">Confirm Order</button>
+</div>
+{% endblock %}

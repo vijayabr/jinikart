@@ -1,6 +1,6 @@
 <?php
 
-namespace  Common\Model;
+namespace  Common\Model\Repository;
 /**
  * AddressRepository
  *
@@ -9,4 +9,10 @@ namespace  Common\Model;
  */
 class AddressRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findAllAddress(){
+        $query = $this->createQueryBuilder('a')
+        ->select('a');
+        $query = $query->getQuery()->useQueryCache(true);
+        return $query->getResult();
+    }
 }

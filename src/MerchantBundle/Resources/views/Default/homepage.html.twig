@@ -1,0 +1,67 @@
+{% extends "@Merchant/Default/index.html.twig" %}
+
+{% block head %}
+	  <div class="header" style="color-interpolation: linearRGB;background-color: #7DA0B1;color:white">
+      <h1 align="center">Welcome to jinikart</h1>
+      <div class="row">
+            <div class="col-sm-5 col-md6- col-lg-8" id="container" style="padding:10px 2px 5px 50px">
+            <h1 align="left">Merchantportal : {{ merchant.companyName }}</h1> 
+        	<nav id="nav">
+         	<ul>
+            <li>
+              <a href="{{ path('company_details') }}">Company Details</a>
+            </li>
+            <li>
+              <a href="{{ path('add_products') }}">Add Products</a>
+            </li>
+            <li>
+              <a href="{{ path('list_products',{'id' :merchant.id})}}">List Products</a>
+            </li>
+            <li>
+              <a href="{{ path('_order_page')}}">Order</a>
+            </li>            
+         	 </ul>
+       		 </nav>
+      		</div>  
+      		<input type="hidden" id="note" name="note" value="{{ path('ordernotification_page') }}"/>
+      		<div class="col-sm-1 col-md-2 col-lg-1 style="padding:10px 2px 5px 50px"> 		 
+			<div class="icon-wrapper" style="position:relative;float:left">
+   			<i class="fa fa-envelope fa-5x fa-border icon-grey">
+   			<img id ="notification" src="/images/notification.png" alt="notification icon" width=40 height=40>   		
+   			<span id="badge" style="rgba(0,0,0,0.5); width: auto; height: auto; margin: 0;border-radius: 50%;
+             position:absolute;top:-25px;right:-10px;padding:5px;">0</span>
+   			</i>
+			</div>
+			<div class="notificationmessage" id="notificationmessage" style="display:none; height:auto; width:250px;
+			 position: absolute;z-index:1;top: 50px;left:0;right: 0;background:#d1d1e0;color:#00004d; padding:20px 10px 10px 10px">
+      	   	<div id="orders" style="cursor: pointer">
+      	   	<span id="requested"> </span>
+      	   	</div>
+      	   	<div id="delivery" style="cursor: pointer">
+      	   	<span id="delivered"></span>
+      	   	</div>
+      	   	<div id="process" style="cursor: pointer">
+      	   	 <span id="processed"></span>
+      	   	</div>
+      	    </div>     		    	      		 
+      	   </div>     	 
+            <div class="col-sm-1 col-md-2 col-lg-1" id="button" style="align:right; padding:10px 2px 5px 50px">
+           <button align="right" type="button"onclick="window.location.href='{{ path('merchant_logout') }}'">Logout</button></h6></h6>
+            </div>
+            </div>
+            
+           
+      </div>
+      
+     
+      	
+      
+      
+{% endblock %}    
+ {% block javascripts %}
+
+
+<script src={{ asset('/js/merchant.js') }}></script>
+
+{% endblock %}
+ 

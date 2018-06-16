@@ -5,6 +5,8 @@ namespace Common\Model;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\DBAL\Types\BigIntType;
+
 
 /**
  * Customer
@@ -12,8 +14,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="customer")
  * @ORM\Entity(repositoryClass="Common\Model\Repository\CustomerRepository")
  */
-class Customer implements  UserInterface
+class Customer implements UserInterface
 {
+    
+    
+    const INACTIVE= 0;
+    const ACTIVE=1;
+    const SUSPENDED=2;
+    const ROLE="ROLE_CUSTOMER";
     /**
      * @var int
      *
@@ -27,15 +35,14 @@ class Customer implements  UserInterface
      * @var string
      * @Assert\NotBlank()
      * @Assert\Regex("/^[a-z A-Z]+$/", message="First name should only contain  alphabets")
-     * @ORM\Column(name="fname", type="string", length=50)
+     * @ORM\Column(name="fname", type="string", length=10)
      */
     private $fname;
 
     /**
      * @var string
-     * @Assert\NotBlank()
      * @Assert\Regex("/^[A-Z a-z]+$/", message="Last name should only contain  alphabets")
-     * @ORM\Column(name="lname", type="string", length=50)
+     * @ORM\Column(name="lname", type="string", length=10,nullable=true)
      */
     private $lname;
 
@@ -43,7 +50,7 @@ class Customer implements  UserInterface
     /**
      * @var int
      *one customer has one default address
-     * @ORM\OneToOne(targetEntity="Common\Model\Address")
+     * @ORM\ManyToOne(targetEntity="Common\Model\Address",cascade={"persist"})
      * @ORM\JoinColumn(name="addressId", referencedColumnName="id")
      */
     private $addressId;
@@ -52,28 +59,26 @@ class Customer implements  UserInterface
      * @var string
      * @Assert\NotBlank()
      * @Assert\Email(
-     *     message="the email is not valid email"
-     * )
+     *     message="The email is not valid!")
      * @ORM\Column(name="email", type="string", length=50)
      */
     private $email;
 
     /**
-     * @Assert\Regex("/^\d{10}$/", message="mobile number should be 10 digits")
-     * @var string
-     * @ORM\Column(name="mobile_no", type="string", length=15,unique=true)
+     * @Assert\Regex("/^\d{10}$/", message="Mobile number should have 10 digits")
+     * @var BigIntType
+     * @ORM\Column(name="mobile_no", type="bigint", length=13,unique=true)
      */
     private $mobileNo;
 
     /**
      * @var string
-     * @ORM\Column(name="profile_photo", type="string", length=50)
+     * @ORM\Column(name="profile_photo", type="string", length=50,nullable=true)
      */
     private $profilePhoto;
 
     /**
      * @var string
-     *@Assert\NotBlank(message="please,upload the image")
      * @ORM\Column(name="password", type="string", length=255)
      */
     private $password;
@@ -117,14 +122,14 @@ class Customer implements  UserInterface
 
     public function __construct()
     {
-
-//        $this->customerPlanId=1;
-        $this->customerStatus=1;
-//        $this->addressId=1;
-        $this->customerRole="ROLE_CUSTOMER";
-        $this->setUpdatedAt(new \DateTime());
+        
         $this->setCreatedAt(new \DateTime());
-    }
+       
+            if ($this->getUpdatedAt() == null) {
+                $this->setUpdatedAt(new \DateTime());
+            }
+     }
+        
 
     /**
      * Get id
@@ -235,7 +240,7 @@ class Customer implements  UserInterface
     /**
      * Set mobileNo
      *
-     * @param string $mobileNo
+     * @param integer $mobileNo
      *
      * @return Customer
      */
@@ -249,7 +254,7 @@ class Customer implements  UserInterface
     /**
      * Get mobileNo
      *
-     * @return string
+     * @return int
      */
     public function getMobileNo()
     {

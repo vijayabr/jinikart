@@ -3,6 +3,7 @@
 namespace Common\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Customer_plan
@@ -12,6 +13,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Customer_plan
 {
+    const NONPRIME = 1;
+    
+    const DEFAULT_CUSTOMER_PLAN=1; //1 = NON-PRIME
+
+    const PRIME= 2;
+
     /**
      * @var int
      *
@@ -55,6 +62,17 @@ class Customer_plan
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
+    
+   
+    public function __construct() {
+        // we set up "created"+"modified"
+        $this->setCreatedAt(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
+    
+    
 
 
     /**
@@ -142,7 +160,7 @@ class Customer_plan
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
+     * @param DateTime $createdAt
      *
      * @return Customer_plan
      */

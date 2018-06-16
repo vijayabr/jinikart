@@ -1,0 +1,38 @@
+{% extends "@Customer/Default/index.html.twig" %}
+{% block body %}
+    <div class="header" style="color-interpolation: linearRGB;background-color: #7DA0B1;color:white">
+      <h1 align="center">Welcome to jinikart</h1>
+       <h5>Hello<a href="{{ path('customer_profile_page') }}">
+         {{ customer.fname }}</a>
+          !!!!</h5>    
+        
+     </div>
+        <div  class="container" id="productlistContainer">
+          <h1>product details:</h1>  
+     	  <div class=" well" id="product" style="background-color: #ff9800;margin-Top:2em; margin-left:5em;padding:20px 20px 20px 20px; width:60em;color:white" >        
+		  
+		  <h3>{{ product.productName }}&nbsp&nbsp&nbsp(&nbsp{{ product.productDescriptionId.ramSize }}&nbsp,&nbsp{{ product.productDescriptionId.color }}&nbsp,&nbsp{{ product.productDescriptionId.camera }}&nbspcamera&nbsp)</h3>
+		  <br/>
+		  <div id="price">
+		  <h5>Price={{ product.productPrice }}</h5>
+		  <h5>Discount={{ product.productDiscount }}%</h5>
+		  <h5>Sealing Price=15000 </h5>
+		  </div>
+		  <h4>Brand :&nbsp{{ product.brandId.brandName }}</h4>
+		  <h4>category:&nbsp{{ product.categoryId.categoryName }}</h4>
+		  <p>{{ product.productDescriptionId.productCompleteInfo }}
+		  </p>
+		  
+	    </div>
+     </div>
+     <div align="center">
+     <br/><br/>
+     <button type="submit" onclick="window.location.href='{{ path('add_cart',{'cid':customer.id,'id':product.id}) }}'">Add To Cart</button>
+     </div>	 
+{% endblock %}
+{% block javascripts %}
+
+<script src={{ asset('/js/CustomerProfile.js') }}></script>
+
+
+{% endblock %}

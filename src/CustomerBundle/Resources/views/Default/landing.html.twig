@@ -5,10 +5,11 @@
     </div>  
       <div class="customer" style="border">
       <h1>If you are customer?</h1>
-                    
+      <input type="button" value="SignIn" onclick="window.location.href='{{ path('login') }}'" />
+      <input type="button" value="Sign up" onclick="window.location.href='{{ path('customer_registration') }}'" />                 
       </div>
       <div class="customer" style="">
-      <h1>If you are merchant?</h1>          
+      <a href='{{ path('merchant_landing') }}'>If you are merchant?</a>                
       </div>
 
 {% endblock %}

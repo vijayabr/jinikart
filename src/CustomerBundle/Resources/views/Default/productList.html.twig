@@ -1,0 +1,99 @@
+{% extends "@Customer/Default/index.html.twig" %}
+{% block body %}
+    <div class="header" style="color-interpolation: linearRGB;background-color: #7DA0B1;color:white">
+      <h1 align="center">Welcome to jinikart</h1>
+       <h5>Hello<a href="{{ path('customer_profile_page') }}">
+         {{ customer.fname }}</a>
+          !!!!</h5>    
+     </div>
+        <div  id="productlistContainer">
+     	<div class="row">
+        <div class="col-sm-2 col-md-5 col-lg-3" id="advancedform"style="background-color:#936c6c;padding:10px 2px 5px 50px; color:white">
+        <br><br><label style="font-size: 20px;">Brand&nbsp:&nbsp&nbsp</label>
+        <select id="brandlist" name="brand">
+        <option value="">brand name</option>
+	    {% for brand in brand %}
+        
+        <option value="{{ brand.brandName }}">{{ brand.brandName }}</option>
+        {% endfor %}
+	   </select><br>
+	   <label style="font-size: 20px;">Mobile phone operating system&nbsp:&nbsp&nbsp</label>
+        <select id="categorylist" name="category">
+        <option value="">category name</option>
+	    {% for category in category %}
+        <option value="{{category.categoryName }}">{{category.categoryName }}</option>
+        {% endfor %}
+		</select><br><br>	
+		
+		<label style="font-size: 20px;">Price&nbsp:</label><br>
+
+		min&nbsp:&nbsp&nbsp<input type="text" id="min" name="min" value=0><br> max:
+	
+		<input type="text" id="max" name="max" value=100000><br>
+				
+		<label style="font-size: 20px;">Discount&nbsp&nbsp:&nbsp</label><br>
+		<select id="discount" name="discount">
+		<option value="">discount%</option>
+        <option value=1>less then 10%</option>
+        <option value=10>10% off or More</option>
+        <option value=25>25% off or More</option>
+        <option value=35>35% off or More</option>
+        <option value=50>50% off or More</option>
+		</select><br>
+  				
+		<label style="font-size: 20px;">RamSize&nbsp:&nbsp&nbsp</label><br>
+		<select id="ramsize" name="ramsize">
+        <option value="">ramsize</option>
+        <option value="KB">less than 1gb</option>
+        <option value="1GB">1GB</option>
+        <option value="2GB">2GB</option>
+        <option value="3GB">3GB</option>
+        <option value="4GB">4GB and more</option>
+        </select>
+		<br>
+		
+				
+        <label style="font-size: 20px;">Camera&nbsp:&nbsp&nbsp</label><br>
+        <select id="camera" name="camera">
+        <option value="">Camera</option>
+        <option value="front">front</option>
+        <option value="back">back</option>
+        <option value="dual">dual</option>
+		</select>
+		<br>
+		<label style="font-size: 20px;">Merchant&nbsp:&nbsp&nbsp</label>
+        <br>             
+        <select id="merchantlist" name="merchant">
+        <option value="">merchant name</option>
+	    {% for merchant in merchants %}
+         <option value="{{merchant.companyName }}">{{merchant.companyName }}</option>
+        {% endfor %}
+     
+		</select><br>
+		<br>
+        
+		<input type="hidden" id="url" name="url" value="{{ path('advancedproductList_page') }}"/> 
+		<button type="submit" name="search" id="search">search</button>
+       </div>
+       <div class="col-sm-9 col-md-6 col-lg-8"  id="productsList" style="padding:20px 20px 20px 20px;">
+        {%  if products %}   
+     	{%  for product in products %}
+           
+     	 <div class=" well" id="product" style="background-color: #ff9800;margin-Top:2em; margin-left:5em; padding:20px 20px 20px 20px;" >        
+		 <a href="{{ path('productdetails_page', { 'pName': product.productName }) }}"> {{  product.productName}}</a>
+		 &nbsp&nbsp&nbsp&nbsp price: {{  product.productPrice}}
+	     </div>
+	    {% endfor %}
+        {% endif %}
+    
+     </div>
+       </div>
+ 	 </div>
+
+{% endblock %}
+{% block javascripts %}
+
+<script src={{ asset('/js/CustomerProfile.js') }}></script>
+<script src={{ asset('/js/Product.js') }}></script>
+
+{% endblock %}

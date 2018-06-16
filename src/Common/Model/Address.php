@@ -2,14 +2,16 @@
 
 namespace Common\Model;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * Address
  *
  * @ORM\Table(name="address")
- * @ORM\Entity(repositoryClass="Common\Model\AddressRepository")
+ * @ORM\Entity(repositoryClass="Common\Model\Repository\AddressRepository")
  */
 class Address
 {
@@ -24,7 +26,6 @@ class Address
 
     /**
      * @var string
-     *
      * @ORM\Column(name="address_line1", type="string", length=255)
      */
     private $addressLine1;
@@ -32,7 +33,7 @@ class Address
     /**
      * @var string
      *
-     * @ORM\Column(name="address_line2", type="string", length=255, nullable=true)
+     * @ORM\Column(name="address_line2", type="string", length=255)
      */
     private $addressLine2;
 
@@ -55,7 +56,7 @@ class Address
 
     /**
      * @var int
-     *@Assert\Regex("/^[0-9]{5,6}$/", message="invalid pincode")
+     *@Assert\Regex("/^[0-9]{5,6}$/", message="Invalid pincode")
      * @ORM\Column(name="pincode", type="integer")
      */
     private $pincode;
@@ -74,11 +75,15 @@ class Address
      */
     private $updatedAt;
 
-    public function __construct()
-    {
-        $this->setUpdatedAt(new \DateTime());
+
+    public function __construct() {
+       
         $this->setCreatedAt(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
     }
+    
 
     /**
      * Get id

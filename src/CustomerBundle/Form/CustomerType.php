@@ -22,27 +22,31 @@ class CustomerType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('fname', TextType::class, array('label' => 'First Name:'))
-            ->add('lname', TextType::class, array('label' => 'Last Name:'))
-            ->add('email', TextType::class, array('label' => 'Email Id:'))
-            ->add('mobile_no', TextType::class, array('label' => 'Mobile Number:'))
+        $builder->add('fname', TextType::class, array('label' => 'First Name:', 'required'=>''))
+        ->add('lname', TextType::class, array('label' => 'Last Name:','required'=>false))
+            ->add('email', TextType::class, array('label' => 'Email Id:', 'required'=>''))
+            ->add('mobile_no', TextType::class, array('label' => 'Mobile Number:', 'required'=>''))
             ->add('password', RepeatedType::class, array(
                 'type' => PasswordType::class,
                 'first_options' => array('label' => 'Password:'),
                 'second_options' => array('label' => 'Confirm Password:'),
             ))
             ->add('address_line1', TextType::class, array('label' => 'Address_line1:'))
-            ->add('address_line2', TextType::class, array('label' => 'Address_line2:'))
-            ->add('state', EntityType::class, array('class' => 'Common\Model\State',
-                'choice_label' => function ($state) {
-                    return $state->getStateName();
-                }))
+            ->add('address_line2', TextType::class, array('label' => 'Address_line2:','required'=>false))
+           
             ->add('country', EntityType::class, array('class' => 'Common\Model\Country',
                 'choice_label' => function ($country) {
                     return $country->getCountryName();
-                }))
+                },'placeholder' => 'Choose an option'))
+                ->add('state', EntityType::class, array('class' => 'Common\Model\State',
+                    'choice_label' => function ($state) {
+                    return $state->getStateName();
+                    },'placeholder' => 'Choose an option'))
             ->add('pincode',TextType::class, array('label' => 'Pincode:'))
-            ->add('profile_photo', FileType::class, array('label' => 'Profile photo'))
+            ->add('profile_photo', FileType::class, array('label' => 'Profile photo', 'required'=>false))
+            ->add('question1',TextType::class,array('label'=>'what is your favourite color?'))
+            ->add('question2',TextType::class,array('label'=>'which is your favourite food?'))
+            
         ;
 
     }
