@@ -26,11 +26,11 @@ class SecretAnswerRepository extends \Doctrine\ORM\EntityRepository
        
     }
     
-    public function getQuestionAnswer($customerId) {
+    public function getQuestionAnswer($roleId) {
         $answer = $this->getEntityManager()
         ->createQuery(
-            'SELECT s FROM Model:SecretAnswer s where s.customerId=:cid')
-            ->setParameter('cid', $customerId)
+            'SELECT s FROM Model:SecretAnswer s where s.roleId=:id')
+            ->setParameter('id', $roleId)
             ->getResult();
             return $answer;
                         
