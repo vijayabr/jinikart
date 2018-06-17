@@ -13,26 +13,15 @@ use Common\Model\CartList;
 use Common\Model\ProductOrder;
 use Common\Model\ProductOrderDetail;
 use Common\Model\Product_Detail_List;
-use Doctrine\DBAL\Types\BigIntType;
-use CustomerBundle\Form\OrderType;
-use Ivory\GoogleMap\Service\Place\Autocomplete\PlaceAutocompleteService;
-use Ivory\GoogleMap\Service\Serializer\SerializerBuilder;
-use Http\Adapter\Guzzle6\Client;
-use Http\Message\MessageFactory\GuzzleMessageFactory;
-use Ivory\GoogleMap\Service\Place\Autocomplete\Request\PlaceAutocompleteRequest;
 use Common\Model\WishList;
-use Symfony\Component\Validator\Constraints\Length;
-use Ivory\GoogleMap\Service\Place\Autocomplete\Response\PlaceAutocompleteResponse;
-use Ivory\GoogleMap\Place\Autocomplete;
-use Ivory\GoogleMap\Helper\Builder\PlaceAutocompleteHelperBuilder;
-use Ivory\GoogleMap\Helper\Builder\ApiHelperBuilder;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class TransactionController extends Controller
 {
     /**
      * @Route("/customer/cart/{cid}/{id}", name="add_cart");
      * @param Request $request
+     * @Security("has_role('ROLE_CUSTOMER')");
      */
     public function addCartAction(Request $request,$cid,$id)
     {
@@ -106,6 +95,7 @@ class TransactionController extends Controller
     /**
      * @Route("/customer/wish/{cid}/{id}", name="wish_cart");
      * @param Request $request
+     * @Security("has_role('ROLE_CUSTOMER')");
      */
     public function addWishListAction(Request $request,$cid,$id)
     {
@@ -126,6 +116,7 @@ class TransactionController extends Controller
     /**
      * @Route("/customer/order/{cid}/{id}", name="place_order");
      * @param Request $request
+     * @Security("has_role('ROLE_CUSTOMER')");
      */
     public function placeOrderAction(Request $request,$cid,$id)
     {
@@ -163,6 +154,7 @@ class TransactionController extends Controller
     /**
      * @Route("/customer/delete/{cid}/{id}", name="delete_item");
      * @param Request $request
+     * @Security("has_role('ROLE_CUSTOMER')");
      */
     public function deleteAction(Request $request,$cid,$id)
     {

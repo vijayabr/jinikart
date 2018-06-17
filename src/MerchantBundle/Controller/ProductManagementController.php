@@ -16,6 +16,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use MerchantBundle\Form\UpdateProductType;
 use Common\Model\Merchant;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 
 
 class ProductManagementController extends Controller
@@ -23,6 +25,7 @@ class ProductManagementController extends Controller
     /**
      * @Route("/merchant/add",name="add_products");
      * @param Request $Request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
     public function addProductAction(Request $request){
         $merchant = $this->getUser();
@@ -102,6 +105,7 @@ class ProductManagementController extends Controller
     /**
      * @Route("/merchant/list/{id}",name="list_products");
      * @param Request $Request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
     
   public function listProductAction(Request $Request,$id){
@@ -119,6 +123,7 @@ class ProductManagementController extends Controller
     /**
      * @Route("/merchant/coupon/{id}",name="coupon");
      * @param Request $request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
     public function couponGenerateAction(Request $Request,$length = 6, $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',$id){
          
@@ -146,6 +151,7 @@ class ProductManagementController extends Controller
 /**
      * @Route("/merchant/update",name="update");
      * @param Request $request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
 public function updateAction(Request $request)
 {
@@ -213,6 +219,7 @@ public function updateAction(Request $request)
     /**
      * @Route("/merchant/details",name="company_details");
      * @param Request $request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
     public function detailAction(Request $request)
     {

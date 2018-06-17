@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Doctrine\ORM\Query\Expr\Math;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 
 
 class ReportController extends Controller
@@ -31,6 +33,7 @@ class ReportController extends Controller
     /**
      * @Route("/merchant/order",name="_order_page");
      * @param Request $request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
     public function OrderListAction(Request $request)
     {
@@ -82,6 +85,7 @@ class ReportController extends Controller
     /**
      * @Route("/merchant/invoice",name="invoicePdf_page");
      * @param Request $request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
     public function invoicePdfGeneratorAction(Request $request)
     {   $order="";
@@ -96,6 +100,7 @@ class ReportController extends Controller
 
      * @Route("/merchant/excel/{id}",name="excel_page");
      * @param Request $request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
     public function indexAction(Request $request,$id)
     {
@@ -169,6 +174,7 @@ class ReportController extends Controller
     /**
      * @Route("/merchant/orderInvoice/{order}",name="orderinvoicePdf_page");
      * @param Request $request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
     public function OrderPdfAction($order, Request $request)
     {   
@@ -183,6 +189,7 @@ class ReportController extends Controller
     /**
      * @Route("/merchant/orderaccept/{order}",name="orderaccept_page");
      * @param Request $request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
     public function OrderAcceptAction($order, Request $request)
     {
@@ -198,6 +205,7 @@ class ReportController extends Controller
     /**
      * @Route("/merchant/orderreject/{order}",name="orderreject_page");
      * @param Request $request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
     public function OrderRejectAction($order, Request $request)
     {
@@ -213,6 +221,7 @@ class ReportController extends Controller
     /**
      * @Route("/merchant/notification",name="ordernotification_page");
      * @param Request $request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
     public function notificationAction(Request $request)
     {   

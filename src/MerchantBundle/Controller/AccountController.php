@@ -13,6 +13,7 @@ use Common\Model\Merchant_plan;
 use Symfony\Component\HttpFoundation\Response;
 use Exception;
 use Common\Model\SecretAnswer;
+use Symfony\Component\ExpressionLanguage\Expression;
 
 class AccountController extends Controller
 {
@@ -162,7 +163,8 @@ class AccountController extends Controller
     
     public function merchantIndexAction(\Symfony\Component\HttpFoundation\Request $request)
     {
-        
+        $this->denyAccessUnlessGranted(new Expression(
+            '"ROLE_MERCHANT" in roles '));
         $merchant = $this->getUser();
       
         return $this->render("@Merchant/Default/homepage.html.twig",array('merchant'=>$merchant));

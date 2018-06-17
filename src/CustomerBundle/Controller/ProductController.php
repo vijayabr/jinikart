@@ -11,6 +11,8 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Proxies\__CG__\Common\Model\Brand;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\ExpressionLanguage\Expression;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 
 class ProductController extends Controller
@@ -50,7 +52,8 @@ class ProductController extends Controller
     
     public function customerIndexAction(Request $request)
     {
-        
+        $this->denyAccessUnlessGranted(new Expression(
+            '"ROLE_CUSTOMER" in roles '));
         $customer = $this->getUser();
         $productsearch=$this->formBuilding();
         $productsearch->handleRequest($request);
@@ -98,6 +101,7 @@ class ProductController extends Controller
      * @Route("/customer/product/details/{pName}",name="productdetails_page");
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
+     *  @Security("has_role('ROLE_CUSTOMER')");
      */
     
     
@@ -123,6 +127,7 @@ class ProductController extends Controller
      * @Route("/customer/products",name="advancedproductList_page");
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
+     * @Security("has_role('ROLE_CUSTOMER')");
      */       
     public function ProductAdvanceSearchAction(Request $request)
     {
