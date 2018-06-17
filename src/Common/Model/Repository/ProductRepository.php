@@ -66,20 +66,34 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         
     }
     
-    public function findProductDetailsById($id)
+    //reevan rest api
+    public function findProductById($id)
     {
-          $em = $this->getEntityManager();
 
-            $qb = $em->createQueryBuilder();
-            $qb->select('l')
-            ->from('Common\Model\Product_Detail_List','l')
-            ->join('l.productId','p')
-            ->join('p.productDescriptionId','d')
-            ->where('l.merchantId = ?1')   
-            ->setParameter(1,(int)$id);
-            $query=$qb->getQuery();
-            $result=$query->getResult();
-            return $result;
+        $products = $this->getEntityManager()
+        ->createQuery(
+            'SELECT p FROM Model:Product p WHERE p.id = :id ORDER BY p.productName ASC ')
+            ->setParameter('id',(int)$id)
+            ->getResult();
+            return $products;
+        
+    }
+
+    //reevan rest api update product
+    public function updateProductById($id)
+    {
+
+        // $products = $this->getEntityManager()
+        // ->createQuery(
+        //     'SELECT p FROM Model:Product p WHERE p.id = :id ORDER BY p.productName ASC ')
+        //     ->setParameter('id',(int)$id)
+        //     ->getResult();
+
+        // $products = $this->getEntityManager()
+        //         ->update('product')
+        //         ->set('product_name','nokia')
+        //         ->where('id'=$id);
+        //     return $products;
         
     }
 
