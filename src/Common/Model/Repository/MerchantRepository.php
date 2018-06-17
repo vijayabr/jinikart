@@ -10,6 +10,7 @@ namespace Common\Model\Repository;
  */
 class MerchantRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Retrieves product detail based on the merchant(Excel sheet)
     public function findAllDetails($id){
        
         $em = $this->getEntityManager();      
@@ -20,9 +21,8 @@ class MerchantRepository extends \Doctrine\ORM\EntityRepository
         ->where('p.merchantId = ?1')
         ->setParameter(1,(int)$id);
         $query=$qb->getQuery();
-      //  dump($query);die;
         $result=$query->getResult();
-     //  dump($result);die;
+     
         return $result;
           
     }

@@ -9,6 +9,8 @@ namespace  Common\Model\Repository;
  */
 class AddressRepository extends \Doctrine\ORM\EntityRepository
 {
+    
+    //To find address fields for User
     public function findAllAddress(){
         $query = $this->createQueryBuilder('a')
         ->select('a');

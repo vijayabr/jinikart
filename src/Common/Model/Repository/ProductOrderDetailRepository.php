@@ -10,7 +10,7 @@ namespace Common\Model\Repository;
  */
 class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
 {
-    
+    //Query to find(ALL) customer details and product ordered by the customer(Merchant's Reference:Homepage)
     public function productOrders($merchant){
         $query = $this->createQueryBuilder('pod')
         ->select('pod.id','pi.productIMEI','p.productName','p.productPrice','p.productDiscount','pd.color','pd.ramSize',
@@ -20,7 +20,7 @@ class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
         ->leftJoin('pod.cartListId', 'cl')
         ->leftJoin('pod.productOrderId', 'po')
         ->leftJoin('po.customerId', 'c')
-        ->leftJoin('cl.productImeiId', 'pi') //Changed
+        ->leftJoin('cl.productImeiId', 'pi')
         ->leftJoin('pi.productId', 'p')  
         ->leftJoin('po.deliveryAddress','a' )
         ->leftJoin('a.stateId', 's')
@@ -33,6 +33,7 @@ class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
         
     }
 
+    //Query to fetch details for Invoice generation (Excel sheet)
         public function findInvoiceDetails($id){
             
             $em = $this->getEntityManager();
@@ -58,7 +59,7 @@ class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
         }
     
 
-    
+    //Query to find particular customer details and product ordered by the customer (for Merchant reference)
     
     public function productOrder($merchant,$orderId){
         $query = $this->createQueryBuilder('pod')
@@ -83,6 +84,7 @@ class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
             return $query->getResult();
     }
     
+    //Query to Find product detail for merchant notification purpose
     public function productNotification($merchant){
         $query = $this->createQueryBuilder('pod')
         ->select('pod.id','pi.productIMEI','p.productName','c.fname','c.lname','pod.orderStatus')

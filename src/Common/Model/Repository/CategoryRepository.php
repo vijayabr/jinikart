@@ -10,6 +10,7 @@ namespace Common\Model\Repository;
  */
 class CategoryRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Retrives category information for a particular product
     public function Categoryinfo($id) {
         
         $productinfo = $this->getEntityManager()
@@ -18,6 +19,8 @@ class CategoryRepository extends \Doctrine\ORM\EntityRepository
         ->getResult();
         return $productinfo;
     }
+    
+    // Retrieves the list of all category names from the database
     public function categoryNameList() {
         
         $productinfo = $this->getEntityManager()

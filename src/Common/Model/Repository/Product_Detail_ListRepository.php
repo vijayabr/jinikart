@@ -10,6 +10,7 @@ namespace Common\Model\Repository;
  */
 class Product_Detail_ListRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Query for advanced search on products
     public function productAdvancedSearch($filterData)
     {
         $filterQuery = $this->createQueryBuilder('pdl')
@@ -120,22 +121,9 @@ class Product_Detail_ListRepository extends \Doctrine\ORM\EntityRepository
         $filterQuery = $filterQuery->getQuery()->useQueryCache(true);
         return $filterQuery->getResult();
     }
-    public function findIMEI($id) {
-      
-        $em = $this->getEntityManager();    
-        $qb = $em->createQueryBuilder();  
-        $qb->select('pi')
-        ->from('Common\Model\Product_Detail_List','pi')
-        ->join('pi.productId','p')
-        ->where('p.id= :id')
-        ->setParameter('id',(int)$id);
-        $query=$qb->getQuery();
-        
-        $result=$query->getResult();
     
-        return $result;
-        
-    }
+   
+    //To find the total number of products added by the merchant
     public function findCount($merchantId)
     {
        

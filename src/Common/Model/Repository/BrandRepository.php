@@ -10,6 +10,7 @@ namespace Common\Model\Repository;
  */
 class BrandRepository extends \Doctrine\ORM\EntityRepository
 {
+    // Retrieves the list of all brand names from the database
     public function brandNameList() {  
         $productinfo = $this->getEntityManager()
         ->createQuery('SELECT b.brandName FROM Model:Brand b')

@@ -11,6 +11,8 @@ namespace  Common\Model\Repository;
  */
 class SecretAnswerRepository extends \Doctrine\ORM\EntityRepository
 {
+    
+    //Fetch secret answer for a user (Used in Forgot Password Implemenation)
     public function getAnswerForAQuestion($questionId,$customerId,$role) {
         
         $answer = $this->getEntityManager()
@@ -25,7 +27,7 @@ class SecretAnswerRepository extends \Doctrine\ORM\EntityRepository
        
        
     }
-    
+    //Fetch secret answer for a user (Used in Customer Profile Updation)
     public function getQuestionAnswer($roleId) {
         $answer = $this->getEntityManager()
         ->createQuery(

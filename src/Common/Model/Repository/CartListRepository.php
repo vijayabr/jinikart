@@ -10,6 +10,7 @@ namespace Common\Model\Repository;
  */
 class CartListRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Retrive entire data of the entity from the DB
     public function findAllData(){
         $query = $this->createQueryBuilder('cl')
         ->select('cl');
@@ -17,9 +18,9 @@ class CartListRepository extends \Doctrine\ORM\EntityRepository
         return $query->getResult();
     }
     
-    
+    //To find the cartlist Id of a particular cart inorder to set it for another entity
     public function findCartListId($id){
-        //dump($id);die;
+       
         $em = $this->getEntityManager();
         $qb = $em->createQueryBuilder();
         $qb->select('cl.id')
@@ -27,9 +28,8 @@ class CartListRepository extends \Doctrine\ORM\EntityRepository
         ->where('cl.cartId= :id')
         ->setParameter('id',(int)$id);
         $query=$qb->getQuery();
-        
         $result=$query->getResult();
-       // dump($result);die;
+      
         return $result;
         
     }
