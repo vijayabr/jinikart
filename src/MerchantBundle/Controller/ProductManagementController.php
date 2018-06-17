@@ -16,6 +16,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use MerchantBundle\Form\UpdateProductType;
 use Common\Model\Merchant;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 
 
 class ProductManagementController extends Controller
@@ -23,18 +25,15 @@ class ProductManagementController extends Controller
     /**
      * @Route("/merchant/add",name="add_products");
      * @param Request $Request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
     public function addProductAction(Request $request){
         $merchant = $this->getUser();
         $form = $this->createForm(AddProductType::class);
-        $form->handleRequest($request);     
-        
+        $form->handleRequest($request);        
           try{     
-            //  $id="";
-            if ($form->isSubmitted() && $form->isValid()) {
-          
-                 $em = $this->getDoctrine()->getManager(); 
-              //   $product=$em->getRepository('Model:Product')->getDataForm($form);
+                 if ($form->isSubmitted() && $form->isValid()) {          
+                 $em = $this->getDoctrine()->getManager();            
                  $id=$form->getData()["merchantId"];
                  $name=$form->getData()["product_name"];
                  $price = $form->getData()["product_price"];
@@ -67,9 +66,7 @@ class ProductManagementController extends Controller
                  $product->setBrandId($brand);
                  $product->setCategoryId($category);
                  $product->setProductDescriptionId($descp);
-                 $product->setProductCount($count);
-                
-               
+                 $product->setProductCount($count);      
                  $em->persist($product);
                  $em->flush();
                 
@@ -79,57 +76,58 @@ class ProductManagementController extends Controller
                  $photo->setPhotoName($imageName);
                  $photo->setProductId($product);
                  $em->persist($photo);
-                 $em->flush();
-                  
+                 $em->flush();                  
                  $imei1= new Product_Detail_List();          
                  $imei1->setProductIMEI($imei);              
                  $imei1->setProductId($product); 
                  $imei1->setMerchantId($merchant);
                  $em->persist($imei1);
-                 $em->flush();
-                   
+                 $em->flush();                   
                  return $this->render("@Merchant/Default/homepage.html.twig",array('merchant'=>$merchant));
               
             }
             return $this->render("@Merchant/Default/add.html.twig",array('form'=> $form->createView(),'merchant'=>$merchant));
                  }catch(\Exception $exception){
  
-                    return new Response($exception->getMessage());
-                    die;
+                     echo " Error while adding products";
         }
   }
     
     /**
      * @Route("/merchant/list/{id}",name="list_products");
      * @param Request $Request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
     
   public function listProductAction(Request $Request,$id){
-            
+      try{
       $merchant = $this->getUser();
-    //  $merchantId = $Request->query->get('id');
-    //  dump($id);die;
+   
       $product = $this->getDoctrine()->getRepository('Model:Product')->findAllProductDetails($id);
-    //  dump($product);die;
+  
       $count= $this->getDoctrine()->getRepository('Model:Product_Detail_List')->findCount($id);
-    //  dump($count);die;
+   
       return $this->render("@Merchant/Default/list.html.twig",array('product'=>$product,'merchantId'=>$id,'merchant'=>$merchant,'count'=>$count));
+      }catch(\Exception $exception){
       
+      echo " Error while listing products";
+  }
     }
     
     /**
      * @Route("/merchant/coupon/{id}",name="coupon");
      * @param Request $request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
     public function couponGenerateAction(Request $Request,$length = 6, $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',$id){
-//              $id = $Request->request->get('id');
-            
+         
+        try{
              $charactersLength = strlen($characters);
              $randomString = '';
              for ($i = 0; $i < $length; $i++) {
              $randomString .= $characters[rand(0, $charactersLength - 1)];
              }
-             //return new Response($randomString);
+        
              $em=$this->getDoctrine()->getManager();
              $product= new Product();
              $product=$em->getRepository('Model:Product')->findOneBy(['id'=>$id] );
@@ -138,22 +136,24 @@ class ProductManagementController extends Controller
             
              $em->persist($product);
              $em->flush();
-             //dump("Hii");die;
+           
              $merchant=$em->getRepository('Model:Product_Detail_List')->findOneBy(['productId'=>$id]);
              $mid=$merchant->getMerchantId();
              return  $this->redirectToRoute("list_products",array('id'=>$mid->getId())); 
-             
+        }catch(\Exception $exception){            
+            echo " Error while generating coupon";
+        }
     }
 /**
      * @Route("/merchant/update",name="update");
      * @param Request $request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
 public function updateAction(Request $request)
 {
         $form = $this->createForm(UpdateProductType::class);      
         $form->handleRequest($request);                       
-           try{
-               
+           try{               
                 if ($form->isSubmitted() && $form->isValid()) 
                 {     
                   $em = $this->getDoctrine()->getManager();
@@ -171,42 +171,33 @@ public function updateAction(Request $request)
                   $ram = $form->getData()["ram_size"];
                   $cam = $form->getData()["camera"];
                   $info = $form->getData()["product_complete_info"];
-              //  $image = $form->getData()["product_photo"];
-          
+                  $image = $form->getData()["product_photo"];          
                   if($product->getProductName()!= $name||$product->getProductPrice()!= $price||
                       $product->getDiscount()!= $discount||$descp->getColor()!=$color||$descp->getRamSize()!=$ram||
-                      $descp->getCamera()!=$cam||$descp->getProductCompleteInfo()!=$info){
-                    
-                  $descp->setColor($color);
-                  $descp->setRamSize($ram);
-                  $descp->setCamera($cam);
-                  $descp->setProductCompleteInfo($info);
-                    
-                  $em->persist($descp);
-                  $em->flush();
-                   
+                      $descp->getCamera()!=$cam||$descp->getProductCompleteInfo()!=$info)
+                  {                    
+                    $descp->setColor($color);
+                    $descp->setRamSize($ram);
+                    $descp->setCamera($cam);
+                    $descp->setProductCompleteInfo($info);                    
+                    $em->persist($descp);
+                    $em->flush();                   
                 
-                  $product->setProductName($name);
-                  $product->setProductDiscount($discount);
-                  $product->setProductPrice($price);
-                  $product->setBrandId($brand);
-                  $product->setCategoryId($category);
-                  $product->setProductDescriptionId($descp);
-                    
-                  $em->persist($product);
-                  $em->flush();
+                    $product->setProductName($name);
+                    $product->setProductDiscount($discount);
+                    $product->setProductPrice($price);
+                    $product->setBrandId($brand);
+                    $product->setCategoryId($category);
+                    $product->setProductDescriptionId($descp);                     
+                    $em->persist($product);
+                    $em->flush();
                   }
-               return $this->render("@Merchant/Default/updated.html.twig",array('product'=>$product,'descp'=>$descp)
-                   );
+               return $this->render("@Merchant/Default/updated.html.twig",array('product'=>$product,'descp'=>$descp));
                }
-
-              return $this->render("@Merchant/Default/update.html.twig",array('form'=> $form->createView()));
-         
-              
+              return $this->render("@Merchant/Default/update.html.twig",array('form'=> $form->createView()));              
            }catch(\Exception $exception){
                   
-          return new Response($exception);
-          die;
+         echo "Error while updating product detail";
          }
       
     }
@@ -214,14 +205,15 @@ public function updateAction(Request $request)
     /**
      * @Route("/merchant/details",name="company_details");
      * @param Request $request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
     public function detailAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $merchant=$this->getUser();      
+    try{        
+        $merchant=$this->getUser();
         return $this->render("@Merchant/Account/detail.html.twig",array('merchant'=> $merchant));
-     
-  }
-  
-  
+    }catch(\Exception $exception){        
+        echo "Error in Merchant Details";
+    }
+  }    
 }

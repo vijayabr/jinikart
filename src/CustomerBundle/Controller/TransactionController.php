@@ -13,23 +13,15 @@ use Common\Model\CartList;
 use Common\Model\ProductOrder;
 use Common\Model\ProductOrderDetail;
 use Common\Model\Product_Detail_List;
-use Doctrine\DBAL\Types\BigIntType;
-use Ivory\GoogleMap\Service\Place\Autocomplete\PlaceAutocompleteService;
-use Ivory\GoogleMap\Service\Serializer\SerializerBuilder;
-use Ivory\GoogleMap\Service\Place\Autocomplete\Request\PlaceAutocompleteRequest;
 use Common\Model\WishList;
-use Symfony\Component\Validator\Constraints\Length;
-use Ivory\GoogleMap\Service\Place\Autocomplete\Response\PlaceAutocompleteResponse;
-use Ivory\GoogleMap\Place\Autocomplete;
-use Ivory\GoogleMap\Helper\Builder\PlaceAutocompleteHelperBuilder;
-use Ivory\GoogleMap\Helper\Builder\ApiHelperBuilder;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class TransactionController extends Controller
 {
     /**
      * @Route("/customer/cart/{cid}/{id}", name="add_cart");
      * @param Request $request
+     * @Security("has_role('ROLE_CUSTOMER')");
      */
     public function addCartAction(Request $request,$cid,$id)
     {
@@ -82,66 +74,41 @@ class TransactionController extends Controller
               $em->persist($wishlist);
               $em->flush();
              }
-             else
-             {
-                $wishlist->setWishlistStatus(Wishlist::OUT_OF_STOCK);
-                
-             }
-            
+             else{
+                 $wishlist->setWishlistStatus(Wishlist::OUT_OF_STOCK);
+             }            
            } 
-          // dump($product);die;
-       return $this->render("@Customer/Default/cart.html.twig",array('form'=>$form->createView(),'product'=>$product,'cid'=>$cid)); 
-         
-        } catch(\Exception $exception){
-            
-            return new Response($exception);
-            die;
-        }
-         
+           return $this->render("@Customer/Default/cart.html.twig",array('form'=>$form->createView(),'product'=>$product,'cid'=>$cid));         
+        } catch(\Exception $exception){            
+            echo "Error Occurred While adding to cart";
+        }         
     }
     
     /**
      * @Route("/customer/wish/{cid}/{id}", name="wish_cart");
      * @param Request $request
+     * @Security("has_role('ROLE_CUSTOMER')");
      */
     public function addWishListAction(Request $request,$cid,$id)
-    {
-       
+    {       
          try{
              $em=$this->getDoctrine()->getManager();
             $product= $em->getRepository('Model:Product')->findOneBy(['id'=>$id]);
             $wish=$em->getrepository('Model:WishList')->findBy(['customerId'=>$cid]);
             return $this->render("@Customer/Default/wishList.html.twig",array('product'=>$product,'wish'=>$wish));
-       
-          }catch(\Exception $exception){
-            
-            return new Response($exception);
-            die;
-         }
-        
+         }catch(\Exception $exception){          
+              echo "Error Occurred While adding to WishList";
+         }        
     }
+    
     /**
      * @Route("/customer/order/{cid}/{id}", name="place_order");
      * @param Request $request
+     * @Security("has_role('ROLE_CUSTOMER')");
      */
     public function placeOrderAction(Request $request,$cid,$id)
     {
-        return $this->render("@Customer/Default/placeOrder.html.twig");
-        
-//         $form=$this->createForm(OrderType::class);
-//         $form->handleRequest($request);
-        $autocomplete = new Autocomplete();
-        $autocomplete->setVariable('place_autocomplete');
-        //dump($autocomplete);die;
-        
-        $placeAutocompleteHelperBuilder = PlaceAutocompleteHelperBuilder::create();
-        $placeAutocompleteHelper = $placeAutocompleteHelperBuilder->build();
-       // dump($placeAutocompleteHelper);die;
-       echo  $placeAutocompleteHelper->renderHtml($autocomplete);
-       echo  $placeAutocompleteHelper->renderJavascript($autocomplete);
-        
-        $apiHelper = ApiHelperBuilder::create()->build();
-        echo    $apiHelper->render([$autocomplete]);
+        return $this->render("@Customer/Default/placeOrder.html.twig");     
         try{
             $em=$this->getDoctrine()->getManager();
             $customerId=$em->getRepository('Model:Customer')->findOneBy(['id'=>$cid]);
@@ -150,33 +117,31 @@ class TransactionController extends Controller
             $productOrder->setOrderedDate(new \DateTime());
             $productOrder->setCustomerId($customerId);             
             $em->persist($productOrder);
-            $em->flush();
-           
+            $em->flush();           
              $cart= new Cart();
-             $cartlist= new CartList();
-             
+             $cartlist= new CartList();             
              $cart=$em->getRepository('Model:Cart')->findBy(['customerId'=>$cid]);
-             $cartlist=$em->getRepository('Model:CartList')-> findOneBy(['cartId'=>$cart]);
-                     
+             $cartlist=$em->getRepository('Model:CartList')-> findOneBy(['cartId'=>$cart]);                     
              $productOrderDetail= new ProductOrderDetail();
              $productOrderDetail->setProductOrderId($productOrder);
              $productOrderDetail->setCartListId($cartlist);  
              $productOrderDetail->setDeliveryDate(new \DateTime());
              $em->persist($productOrderDetail);
-             $em->flush();
-        
-           }catch(\Exception $exception){
-            
-            return new Response($exception);
-            die;
+             $em->flush();        
+           }catch(\Exception $exception){            
+               echo "Error Occurred While placing the order";
        }
     }
+    
     /**
      * @Route("/customer/delete/{cid}/{id}", name="delete_item");
      * @param Request $request
+     * @Security("has_role('ROLE_CUSTOMER')");
      */
     public function deleteAction(Request $request,$cid,$id)
     {
+        try{
+            
         $em=$this->getDoctrine()->getManager();
         $cartId=$em->getRepository('Model:Cart')->findBy($cid);
         dump($cartId);
@@ -191,5 +156,9 @@ class TransactionController extends Controller
         $em->remove($wish);
         $em->flush();
         return $this->redirectToRoute("add_cart");
+    }catch(\Exception $exception){
+        
+        echo "Error Occurred While deleting";
+    }
     }
 }

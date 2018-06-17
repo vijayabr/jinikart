@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-// @Security("IS_AUTHENTICATED_REMEMBERED");
+
 
 class SecurityController extends Controller
 {
@@ -30,39 +30,29 @@ class SecurityController extends Controller
     public function merchantLoginAction(Request $request)
     { 
        
-        try {
-          
-          
+        try {          
             $authenticationUtils=$this->get('security.authentication_utils');
-
             // get the login error if there is one
             $error = $authenticationUtils->getLastAuthenticationError();
-
             // last username entered by the user
             $lastUsername = $authenticationUtils->getLastUsername();
-            //dump($this->get("request_stack"));die;
-
+          
             return $this->render('@Merchant/Account/login.html.twig',array(
                 'last_username' => $lastUsername,
                 'error'=> $error,
-            ));           
-                
+            ));   
             }
-        catch(\Exception $exception){
-            var_dump($exception);die;
+         catch(\Exception $exception){
+            echo "Error while logging in";
         }
     }
     
     /**
      * @Route("/merchant/logout", name="merchant_logout");
      */
-    public function logoutAction()
-    {
-       
+    public function logoutAction() {       
         return $this->redirectToRoute('merchant_login'); 
     }
-
-   
 
 }
 

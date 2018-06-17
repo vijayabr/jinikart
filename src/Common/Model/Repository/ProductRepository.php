@@ -17,6 +17,7 @@ use Common\Model\Merchant;
 class ProductRepository extends \Doctrine\ORM\EntityRepository
 {
 
+    //Query to filter and retrieve products based on brand, min price and max price 
     public function productsearchBasedonBrand($brand,$min,$max) {
             $products = $this->getEntityManager()
           ->createQuery(
@@ -29,7 +30,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
        
             
     }
-    
+    //Query for product search without criteria
     public function productsearch() {
         $products = $this->getEntityManager()
         ->createQuery(
@@ -37,6 +38,39 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             ->getResult();
             return $products;
     }
+    //Query for product search with brand
+    public function brandkeysearch($brand,$keyword) {
+       
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+        $qb->select('p.productName,p.productPrice,d.color,d.camera,d.ramSize,d.productCompleteInfo,br.brandName,cat.categoryName')
+        ->from('Common\Model\Product','p')
+        ->innerjoin('p.categoryId','cat')
+        ->innerjoin('p.brandId','br')
+        ->join('p.productDescriptionId','d')
+        ->Where('br.brandName=:brand')
+        ->orWhere('d.color LIKE :color')
+        ->orwhere('p.productName LIKE :name')
+        ->orWhere('p.productPrice LIKE :price')
+        ->orWhere('d.camera LIKE :cam') 
+        ->orWhere('cat.categoryName LIKE :cat')
+      
+        ->setParameter('cat',$keyword)
+        ->setParameter('price',$keyword)
+        ->setParameter('brand',$brand->getbrandName())
+        ->setParameter('name',$keyword)   
+        ->setParameter('color',$keyword)   
+        ->setParameter('cam',$keyword);
+        $query=$qb->getQuery();
+        dump($query);
+        $result=$query->getResult();
+        dump($result);die;
+        return $result;
+        
+    }
+    
+    /*query to fetch product detail in quick search using keyword for name,cam,brand,category(changes to be made)
+    Pending */
     public function keywordsearch($keyword) {
       
         $em = $this->getEntityManager();
@@ -49,7 +83,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         ->where('p.productName LIKE :name')
         ->orWhere('p.productPrice LIKE :price')
         ->orWhere('d.camera LIKE :cam')
-        ->orWhere('d.ramSize LIKE :size')
+        ->orWhere('d.ramSize LIKE :size') //not working
         ->orWhere('cat.categoryName LIKE :cat')
         ->orWhere('br.brandName LIKE :brand')
         ->setParameter('cat',$keyword)
@@ -65,6 +99,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         return $result;
     }
    
+    
     public function completeproductinfo($pName) {
 
         $productinfo = $this->getEntityManager()
@@ -74,11 +109,11 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
           return $productinfo;
     }
     
-    //Used in listing (Merchant)
+    //Used in listing Products in homepage (Merchant)
     public function findAllProductDetails($id)
     {
           $em = $this->getEntityManager();
-          // dump($id);die;
+        
             $qb = $em->createQueryBuilder();
             $qb->select('l')
             ->from('Common\Model\Product_Detail_List','l')
@@ -88,11 +123,12 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter(1,(int)$id);
             $query=$qb->getQuery();
             $result=$query->getResult();
-       //  dump($result);die;
+    
             return $result;
         
     }
     
+    //Query to fetch product details based on product Id
     public function findProductDetails($Id)
     {
         $em = $this->getEntityManager();
@@ -101,35 +137,14 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         $qb->select('p.productName,p.productPrice,d.color,d.ramSize,d.productCompleteInfo')
         ->from('Common\Model\Product','p')
         ->join('l.productDescriptionId','d')
-       // ->innerJoin('p.productDescriptionId','d')
         ->where('p.id = ?1')
         ->setParameter(1,(int)$Id);
-        $query=$qb->getQuery();
-       
+        $query=$qb->getQuery();  
         $result=$query->getResult();
-      //  dump($result);die;
+     
         return $result;
     }
- 
-    public function findIMEI($id) {
-        
-        $em = $this->getEntityManager();
-        
-        $qb = $em->createQueryBuilder();
-    
-        $qb->select('pi.productIMEI')
-        ->from('Common\Model\Product_Detail_List','pi')
-        ->join('pi.productId','p')
-        ->where('p.id= ?1')
-        ->setParameter(1,$id);
-        $query=$qb->getQuery();
-       
-        $result=$query->getResult();
-      
-        return $result;
-       
-    }
-    
+   
  
  }
 

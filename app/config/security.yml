@@ -73,7 +73,11 @@ security:
             pattern: ^/
             
     access_control:
-#            - { path: ^/customer, roles: [ROLE_CUSTOMER,IS_AUTHENTICATED_FULLY,IS_AUTHENTICATED_REMEMBERED] }
-#            - { path: ^/merchant, roles: [ROLE_MERCHANT,IS_AUTHENTICATED_REMEMBERED] }
-#           
+            - { path: ^/customer, roles: IS_AUTHENTICATED_ANONYMOUSLY}
+            - { path: ^/merchant, roles: IS_AUTHENTICATED_ANONYMOUSLY}
+            - { path: ^/customer/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
+            - { path: ^/merchant/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
+            - { path: ^/customer/index, roles: ROLE_CUSTOMER }
+            - { path: ^/merchant/index, roles: ROLE_MERCHANT }
+           
            

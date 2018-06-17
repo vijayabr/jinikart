@@ -10,13 +10,12 @@ namespace Common\Model\Repository;
  */
 class CartRepository extends \Doctrine\ORM\EntityRepository
 { 
+    //Retrive entire data of the entity from the DB
     public function findAllData(){
     $query = $this->createQueryBuilder('c')
     ->select('c');
     $query = $query->getQuery()->useQueryCache(true);
     return $query->getResult();
    }
-   
   
-   
 }

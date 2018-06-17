@@ -10,7 +10,7 @@ namespace Common\Model\Repository;
  */
 class StateRepository extends \Doctrine\ORM\EntityRepository
 {
-    
+    //Query to fetch state list for a particular Country
     public function stateListForCountry($country){
         $query = $this->createQueryBuilder('s')
         ->select('s')

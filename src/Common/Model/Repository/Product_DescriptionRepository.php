@@ -10,6 +10,7 @@ namespace Common\Model\Repository;
  */
 class Product_DescriptionRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Retrieves product description Id based on the ram size specified
     public function productdescIdBasedOnRamsize($ramsize) {
 
         $products = $this->getEntityManager()
@@ -22,7 +23,7 @@ class Product_DescriptionRepository extends \Doctrine\ORM\EntityRepository
             
             
     }
-    
+    //Retrieves product description Id based on the camera specified
     public function productdescIdBasedOnCamera($camera) {
         $products = $this->getEntityManager()
         ->createQuery(

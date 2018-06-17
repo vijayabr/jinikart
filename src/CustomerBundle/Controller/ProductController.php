@@ -11,6 +11,8 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Proxies\__CG__\Common\Model\Brand;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\ExpressionLanguage\Expression;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 
 class ProductController extends Controller
@@ -50,7 +52,8 @@ class ProductController extends Controller
     
     public function customerIndexAction(Request $request)
     {
-        
+        $this->denyAccessUnlessGranted(new Expression(
+            '"ROLE_CUSTOMER" in roles '));
         $customer = $this->getUser();
         $productsearch=$this->formBuilding();
         $productsearch->handleRequest($request);
@@ -60,35 +63,16 @@ class ProductController extends Controller
                 $min=$productsearch->getData()["min"];
                 $brand=$productsearch->getData()["brand"];
                 $keyword=$productsearch->getData()["keyword"];
-              
+         
                 $em = $this->getDoctrine()->getManager();
                 $merchant = $this->getDoctrine()->getRepository('Model:Merchant')->findAll();
                 $brands = $this->getDoctrine()->getRepository('Model:Brand')->brandNameList();
-                $categorys = $this->getDoctrine()->getRepository('Model:Category')->categoryNameList();
-//               
-                $productdescription1=$this->getDoctrine()->getRepository('Model:Product_Description')->findAll();
-               
-                //remove evrything and rewrite
-                if($brand){
-                    $products = $em->getRepository('Model:Product')->productsearchBasedonBrand($brand->getId(),$min,$max);
-                    return $this->render("@Customer/Default/productList.html.twig",array('customer'=> $customer,'products'=> $products,'brand'=>$brands,'category'=>$categorys,'merchants'=>$merchant));
-               }
-               elseif($keyword)
-               {
-                   $products = $em->getRepository('Model:Product')->keywordsearch($keyword);
-                  
-                   return $this->render("@Customer/Default/productList.html.twig",array('customer'=> $customer,'products'=> $products,'brand'=>$brands,'category'=>$categorys,'merchants'=>$merchant));
-               }
-                else{
-                    $products = $em->getRepository('Model:Product')->productsearch();
-                    return $this->render("@Customer/Default/productList.html.twig",
-                        array('customer'=> $customer,'products'=> $products,'brand'=>$brands,'category'=>$categorys,'merchants'=>$merchant));               
-                } 
-                //END
+                $categorys = $this->getDoctrine()->getRepository('Model:Category')->categoryNameList();        
+              
             }            
         }
         catch (\Exception $exception) {
-             var_dump($exception);die;
+            echo "Error Occured in Homepage";
          }
         return $this->render("@Customer/Default/homepage.html.twig",array('form' => $productsearch->createView(),'customer'=>$customer));      
       }
@@ -98,6 +82,7 @@ class ProductController extends Controller
      * @Route("/customer/product/details/{pName}",name="productdetails_page");
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
+     *  @Security("has_role('ROLE_CUSTOMER')");
      */
     
     
@@ -111,11 +96,10 @@ class ProductController extends Controller
 
         $category = $this->getDoctrine()->getRepository('Model:Category')->findAll();
         $productdescription=$this->getDoctrine()->getRepository('Model:Product_Description')->findAll();
-     /*    dump($product,$brand);
-        dump($product->getBrandId()->getbrandname());  */       
+   
         return $this->render("@Customer/Default/productinfo.html.twig",array('customer' => $customer,'product'=>$product));
          }catch (\Exception $exception) {
-            var_dump($exception->getMessage());die;
+             echo "Error Occured in Product Details";
         }
     }
     
@@ -124,6 +108,7 @@ class ProductController extends Controller
      * @Route("/customer/products",name="advancedproductList_page");
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
+     * @Security("has_role('ROLE_CUSTOMER')");
      */       
     public function ProductAdvanceSearchAction(Request $request)
     {
@@ -150,7 +135,7 @@ class ProductController extends Controller
         $msg=$msg."</div>";        
         return new Response($msg);
         }catch (\Exception $exception) {
-            var_dump($exception->getMessage());die;
+            echo "Error Occured in Advanced Search";
         }
     }   
 }

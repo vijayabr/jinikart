@@ -13,6 +13,7 @@ use Common\Model\Merchant_plan;
 use Symfony\Component\HttpFoundation\Response;
 use Exception;
 use Common\Model\SecretAnswer;
+use Symfony\Component\ExpressionLanguage\Expression;
 
 class AccountController extends Controller
 {
@@ -33,8 +34,8 @@ class AccountController extends Controller
             if ($form->isSubmitted()) {
                 $em = $this->getDoctrine()->getManager();
                 $merchantPlan = $em->getRepository('Model:Merchant_plan')->findOneBy(['id' =>Merchant_plan::DEFAULT_MERCHANT_PLAN]);
-                //get address
-               // $name=$form->getData()["companyName"];                
+               
+                $name=$form->getData()["companyName"];                
                 $addr1 = $form->getData()["address_line1"];
                 $addr2 = $form->getData()["address_line2"];
                 $pin = $form->getData()["pincode"];
@@ -149,8 +150,7 @@ class AccountController extends Controller
                     return $this->render("@Merchant/Account/register.html.twig", array('form' => $form->createView(),'message'=> '','errors'=>'', 'error1'=>''));
           
         } catch (\Exception $exception) {
-            return new  Response($exception);
-            die;
+            echo "Error occurred while registration";
     }
     
  }
@@ -162,11 +162,16 @@ class AccountController extends Controller
     
     public function merchantIndexAction(\Symfony\Component\HttpFoundation\Request $request)
     {
-        
+        $this->denyAccessUnlessGranted(new Expression(
+            '"ROLE_MERCHANT" in roles '));
+        try{
         $merchant = $this->getUser();
       
         return $this->render("@Merchant/Default/homepage.html.twig",array('merchant'=>$merchant));
-        
+        } catch (\Exception $exception) {
+        echo "Error occurred in homepage";
+      }
+    
     }
     /**
      * @Route("/merchant",name="merchant_landing");
@@ -175,8 +180,11 @@ class AccountController extends Controller
      */
     
     public function merchantLandingAction(Request $request){
-              
+        try{
         return $this->render("@Merchant/Default/landing.html.twig");
+        } catch (\Exception $exception) {
+        echo "Error occurred in landing page";
+      }
     }
     
     /**
@@ -233,7 +241,7 @@ class AccountController extends Controller
             }
         }
         catch (Exception $exception) {
-            var_dump($exception);die;
+            echo "Error while changing Password";
         }
         return $this->render("@Merchant/Account/forgotpassword.html.twig",array('message'=> '','question'=>$question));
     }

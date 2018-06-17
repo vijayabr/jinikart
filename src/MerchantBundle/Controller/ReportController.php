@@ -11,7 +11,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Doctrine\ORM\Query\Expr\Math;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Ivory\GoogleMap\Map;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
+
 
 
 class ReportController extends Controller
@@ -32,18 +35,23 @@ class ReportController extends Controller
     /**
      * @Route("/merchant/order",name="_order_page");
      * @param Request $request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
     public function OrderListAction(Request $request)
     {
-        
+        try{
         $merchant=$this->getUser();  
         $em = $this->getDoctrine()->getManager();
         $orders=$em->getRepository('Model:ProductOrderDetail')->productOrders($merchant);       
         return $this->render("@Merchant/Order/orderlist.html.twig",array('merchant'=> $merchant,'orders'=>$orders));
-        
+        }catch(\Exception $exception){
+            
+            echo " Error while listing orders";
+        }
     }
     
     public function invoicePdfGeneratorData($merchant,$order){
+        try{
         $em = $this->getDoctrine()->getManager();
         if($order){
             
@@ -77,34 +85,44 @@ class ReportController extends Controller
             $msg="No order placed";
         }
         return  $msg;
+        }catch(\Exception $exception){
+            
+            echo " Error in invoice generation data";
+        }
     }
     
     
     /**
      * @Route("/merchant/invoice",name="invoicePdf_page");
      * @param Request $request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
     public function invoicePdfGeneratorAction(Request $request)
     {  
-       /*  $map =new Map();
-        
-        dump($map);
-        die; */
-        $order="";
-        $merchant=$this->getUser();
-        $msg=$this->invoicePdfGeneratorData($merchant,$order);
-        $this->pdffilegenerator($msg,$merchant->getCompanyName());
-        return new Response("save the file");
-   
+
+      
+        try{
+            $order="";
+            $merchant=$this->getUser();
+            $msg=$this->invoicePdfGeneratorData($merchant,$order);
+            $this->pdffilegenerator($msg,$merchant->getCompanyName());
+        return new Response("save the file");   
+        }catch(\Exception $exception){
+            
+            echo " Error in invoice generation";
+        }
     }
     
     /**
 
      * @Route("/merchant/excel/{id}",name="excel_page");
      * @param Request $request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
     public function indexAction(Request $request,$id)
     {
+        try{
+      
         // ask the service for a Excel5
         $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
         $phpExcelObject->getDefaultStyle()->getFont()->setName('Arial Black');
@@ -116,7 +134,7 @@ class ReportController extends Controller
       
         $em = $this->getDoctrine()->getManager();     
         $product = $em->getRepository('Model:Merchant')->findAllDetails(['id'=> $id]);  
-       //  dump($product);die;
+     
         $phpExcelObject->setActiveSheetIndex(0);
         $sheet = $phpExcelObject->getActiveSheet(0);
         $sheet
@@ -134,11 +152,7 @@ class ReportController extends Controller
         }
            $objWorkSheet = $phpExcelObject->createSheet(1)->setTitle("Invoice");
            $objWorkSheet  = $phpExcelObject->getSheet(1);
-         /*  foreach(range('A','E') as $columnID) {
-               $objWorkSheet->getSheetState(1)->getColumnDimensionByColumn($columnID)
-               ->setAutoSize(true);
-           }*/
-           
+     
            $objWorkSheet->setCellValue('A1', 'Customer Name')
           ->setCellValue('B1', 'Product Name')
           ->setCellValue('C1', 'Price')
@@ -147,8 +161,7 @@ class ReportController extends Controller
           ->setCellValue('E1', 'Shipping Address');  
           $em = $this->getDoctrine()->getManager();
           $invoice = $em->getRepository('Model:ProductOrderDetail')->findInvoiceDetails(['id'=> $id]); 
-         // dump($invoice);die;
-          //dump($invoice['Product.productName']);die;
+    
           $rowCount = 2;
           foreach ($invoice as $value){
               $phpExcelObject->getSheet(1)->SetCellValue('A'.$rowCount, $value['fname']);
@@ -175,58 +188,79 @@ class ReportController extends Controller
         $response->headers->set('Content-Disposition', $dispositionHeader);
         
         return $response;
+        }catch(\Exception $exception){
+            
+            echo " Error in excel sheet generation";
+        }
     }
     
     /**
      * @Route("/merchant/orderInvoice/{order}",name="orderinvoicePdf_page");
      * @param Request $request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
     public function OrderPdfAction($order, Request $request)
     {   
+        try{
         $merchant=$this->getUser();
         $msg=$this->invoicePdfGeneratorData($merchant,$order);
         $this->pdffilegenerator($msg,$merchant->getcompanyName());
         return new Response("save the file");
-        
+        }catch(\Exception $exception){
+            
+            echo " Error while generating order pdf";
+        }
     } 
        
     /**
      * @Route("/merchant/orderaccept/{order}",name="orderaccept_page");
      * @param Request $request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
     public function OrderAcceptAction($order, Request $request)
     {
-        $time = new \DateTime();        
+        $time = new \DateTime();     
+        try{
         $em = $this->getDoctrine()->getManager();
         $productOrderDetail=$em->getRepository('Model:ProductOrderDetail')->find($order);
         $productOrderDetail->setOrderStatus("processed"); 
         $productOrderDetail->setDeliveryDate($time);
         $em->persist($productOrderDetail);
         $em->flush();
-        return $this->redirectToRoute('_order_page');        
+        return $this->redirectToRoute('_order_page'); 
+        }catch(\Exception $exception){            
+            echo " Error in order acception";
+        }
     }
     
     /**
      * @Route("/merchant/orderreject/{order}",name="orderreject_page");
      * @param Request $request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
     public function OrderRejectAction($order, Request $request)
     {
-        
+        try{
         $em = $this->getDoctrine()->getManager();
         $productOrderDetail=$em->getRepository('Model:ProductOrderDetail')->find($order);
         $productOrderDetail->setOrderStatus("rejected");
         $em->persist($productOrderDetail);
         $em->flush();
         return $this->redirectToRoute('_order_page');
+        }catch(\Exception $exception){
+            
+            echo " Error in order rejection";
+        }
     }    
    
     /**
      * @Route("/merchant/notification",name="ordernotification_page");
      * @param Request $request
+     * @Security("has_role('ROLE_MERCHANT')");
      */
-    public function notificationAction(Request $request)
-    {   
+  public function notificationAction(Request $request)
+  {  
+    try{
     $merchant=$this->getUser();
     $em = $this->getDoctrine()->getManager();
     $products= $em->getRepository('Model:ProductOrderDetail')->productNotification($merchant);
@@ -258,7 +292,10 @@ class ReportController extends Controller
     $result['data']['processedProductCount']=$processedProductCount;
     
     return new JsonResponse($result);
-    
-    }
+    }catch(\Exception $exception){
+        
+        echo " Error in notification";
+     }
+  }
     
 }

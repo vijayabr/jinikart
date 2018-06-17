@@ -125,7 +125,7 @@ class ProductOrder
     /**
      * Set orderStatus
      * @param string $orderStatus
-     * @return ProductOrderDetail
+     * @return ProductOrder
      */
     public function setOrderStatus($orderStatus)
     {

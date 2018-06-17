@@ -69,6 +69,7 @@ class AccountController extends Controller
                     if($address instanceof Address && $customer instanceof Customer){    
                         $q1=$em->getRepository('Model:SecretQuestion')->find(1);
                         $q2=$em->getRepository('Model:SecretQuestion')->find(2);
+
                         $qA1= new questionAnswerHelper($this->container);
                         $qA1->setQuestionAnswer($form->getData()["question1"], $q2,$customer->getId());
                         $qA2= new questionAnswerHelper($this->container);
@@ -82,11 +83,11 @@ class AccountController extends Controller
                     return $this->render("@Customer/Account/register.html.twig", array('form' => $form->createView(),'message'=> $infomessage,'errors'=>'', 'error1'=>'' ));
                 }
             }return $this->render("@Customer/Account/register.html.twig", array('form' => $form->createView(),'message'=> '','errors'=>'', 'error1'=>'' ));
-        }catch (\Exception $exception) {
-            var_dump($exception->getMessage().$exception->getLine().$exception->getFile());die;
+        }
+        catch (\Exception $exception) {
+           echo "Error Occured in Registration";
         }        
-    }
-    
+    }    
      /**
      * @Route("/customer",name="customer_landing");
      * @param Request $request
@@ -95,30 +96,27 @@ class AccountController extends Controller
      public function customerLandingAction(Request $request){
            return $this->render("@Customer/Default/landing.html.twig");
     }
-    
-    
+        
     /**
      * @Route("/customer/profile",name="customer_profile_page");
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    
-    public function customerProfileAction(Request $request){
+        public function customerProfileAction(Request $request){
         $customer= $this->getUser();
         $image1= $customer->getProfilePhoto();
         $form = $this->createForm(ProfileType::class);
         $form->handleRequest($request);
         $imageform = $this->createForm(profileImageuploadType::class);
         $imageform->handleRequest($request);
-        $em = $this->getDoctrine()->getManager();
-      
+        $em = $this->getDoctrine()->getManager();      
         try{
             if($imageform->isSubmitted()){                        
             /**
              * @var uplodedFile images
              */
                 if($image)
-                {  $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();
+               {  $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();
                 try {
                     $dest ='profileImage';
                     $fileUpload = new ImageUploader($this->container);
@@ -126,13 +124,13 @@ class AccountController extends Controller
                 }
                 catch (S3Exception $e) {
                     die('Error:' . $e->getMessage().$e->getLine().$e->getFile());
-                }
-                }
-               // $image->move($this->getParameter('image_directory'),$imageName); 
+                }               
+                $customer->setProfilePhoto($imageName);                
                 $customer->setProfilePhoto($imageName);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($customer); 
                 $entityManager->flush();
+                }
                 return $this->redirectToRoute("customer_profile_page");
             }
             if ($form->isSubmitted()) {
@@ -187,8 +185,11 @@ class AccountController extends Controller
         $form->get('question2')->setData($answers[1]->getanswer());        
         }
         catch (\Exception $exception) {
-            var_dump($exception); die;
-        } return $this->render("@Customer/Account/profile.html.twig",array('form' => $form->createView(),'imageform'=> $imageform->createView(),'message'=>"",'image'=>$image1));  
+
+            echo "Error Occured in Customer Profile Display";
+        }
+        return $this->render("@Customer/Account/profile.html.twig",array('form' => $form->createView(),'imageform'=> $imageform->createView(),'message'=>"",'image'=>$image1));  
+
     }    
         
     /**
@@ -238,7 +239,9 @@ class AccountController extends Controller
            }           
        }
        catch (Exception $exception) {
-           var_dump($exception);die;
-       }return $this->render("@Customer/Account/forgotpassword.html.twig",array('message'=> '','question'=>$question));         
+           echo "Error Occured in Change Password";
+       }       
+       return $this->render("@Customer/Account/forgotpassword.html.twig",array('message'=> '','question'=>$question));         
+
     }
  }
