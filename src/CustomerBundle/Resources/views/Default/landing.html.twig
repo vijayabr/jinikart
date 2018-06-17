@@ -3,12 +3,11 @@
     <div class="header" style="color-interpolation: linearRGB;background-color: #7DA0B1;color:white">
       <h1 align="center">Welcome to jinikart</h1>
     </div>  
-      <div class="customer" style="border">
+      <div class="customer" style="border" align="center">
       <h1>If you are customer?</h1>
       <input type="button" value="SignIn" onclick="window.location.href='{{ path('login') }}'" />
       <input type="button" value="Sign up" onclick="window.location.href='{{ path('customer_registration') }}'" />                 
-      </div>
-      <div class="customer" style="">
+     <br/>
       <a href='{{ path('merchant_landing') }}'>If you are merchant?</a>                
       </div>
 

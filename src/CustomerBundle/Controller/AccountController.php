@@ -27,6 +27,9 @@ use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
 use CommonServiceBundle\Helper\ImageUploader;
 use Gumlet\ImageResize;
+use CommonServiceBundle\Helper\addressHelper;
+use CustomerBundle\Helper\customerDataSetHelper;
+use CommonServiceBundle\Helper\questionAnswerHelper;
 
 
 class AccountController extends Controller
@@ -38,129 +41,43 @@ class AccountController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function customerRegistrationAction(Request $request)
-    {
-        
-        
+    {                
         $form = $this->createForm(CustomerType::class);
         $form->handleRequest($request);
-        $validator=$this->get('validator'); //validator service
-        
+        $validator=$this->get('validator'); //validator service        
         try {
-
-            if ($form->isSubmitted()) {     
-                $em = $this->getDoctrine()->getManager();           
+            $em = $this->getDoctrine()->getManager(); 
+            if ($form->isSubmitted()) {                                         
                 $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' => Customer_plan::DEFAULT_CUSTOMER_PLAN]);         
-                $addr1 = $form->getData()["address_line1"];
-                $pin = $form->getData()["pincode"];
-                $state = $form->getData()["state"];
-                $addr2 = $form->getData()["address_line2"];
-               $country = $form->getData()["country"];
-           
-                $address = new Address();
-                $address->setAddressLine1($addr1);
-                $address->setAddressLine2($addr2);
-                $address->setStateId($state);
-                $address->setCountryId($country);
-
-                $address->setPincode($pin); 
-               
-                $error1=$validator->validate($address);
-                if(!$error1){
-                 $em->persist($address);
-                 $em->flush();
-                }
                 $customerMobileNoExist =$em->getRepository('Model:Customer')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
                 $customerEmailExist =$em->getRepository('Model:Customer')->findOneBy(['email'=>$form->getData()["email"]]);
-                if(!$customerEmailExist && !$customerMobileNoExist) {
-                  
-                    $address = new Address();
-                    $customer = new Customer();
-                    $address->setAddressLine1($addr1);
-                    $address->setAddressLine2($addr2);
-                    $address->setStateId($state);
-                    $address->setCountryId($country);
-                    $address->setPincode($pin);
-                    $customer->setFname($form->getData()["fname"]);
-                    $customer->setLname($form->getData()["lname"]);
-                    $customer->setEmail($form->getData()["email"]);
-                    $customer->setMobileNo($form->getData()["mobile_no"]);
-                    $customer->setPassword($form->getData()["password"]);
-                    $customer->setCustomerPlanId($customerPlan);
-                    $customer->setCustomerStatus(Customer::ACTIVE);
-                    $customer->setCustomerRole(Customer::ROLE);
-                    $errors =$validator->validate($customer); 
-                    $error1=$validator->validate($address);
-                    $customer->setAddressId($address);
-                    $customer->setPassword($this->get('security.encoder_factory.generic')->getEncoder($customer)->encodePassword($form->getData()['password'], ''));
-                    $entityManager = $this->getDoctrine()->getManager();
-                   
-                    if(count($errors) > 0 || count($error1)>0){
-                        return $this->render("@Customer/Account/register.html.twig", array( 'form' => $form->createView(), 'message'=> '','errors'=>$errors, 'error1'=>$error1 ));
-                    }
-                    else {              
-                        $address->setAddressLine1($addr1);
-                        $address->setAddressLine2($addr2);
-                        $address->setStateId($state);
-                        $address->setCountryId($country);
-                        $address->setPincode($pin);
-                        
-                        $em->persist($address);
-                        $em->flush();    
-                        $entityManager->persist($customer);
-                        $entityManager->flush();
+                if(!$customerEmailExist && !$customerMobileNoExist) {                  
+                    $addr=new addressHelper($this->container);
+                    $address= $addr->setAddress($form->getData());                   
+                    /**
+                     * @var uplodedFile images
+                     */
+                    $image = $form->getData()["profile_photo"];
+                    if($image){
+                        $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();
+                        $dest ='profileImage';
+                        $fileUpload = new ImageUploader($this->container);
+                        $fileUpload->imageFileUpload($image,$imageName,$dest);                                              
+                    }                        
+                    $customerobj = new customerDataSetHelper($this->container);
+                    $customer=$customerobj->setCustomerObject($form,$address,$customerPlan,$imageName);           
+                    if($address instanceof Address && $customer instanceof Customer){    
                         $q1=$em->getRepository('Model:SecretQuestion')->find(1);
                         $q2=$em->getRepository('Model:SecretQuestion')->find(2);
-            
-                    
-                        $qA1= new SecretAnswer();
-                        $qA1->setAnswer($form->getData()['question1']);
-                        $em = $this->getDoctrine()->getManager();
-                        $qA1->setQuestionId($q1); 
-                        $qA1->setRole(Customer::ROLE);
-                        $qA1->setRoleId($customer);
-                        $em->persist($qA1);
-                        $em->flush();  
-                        
-                        $qA2= new SecretAnswer();
-                        $qA2->setAnswer($form->getData()['question2']);
-                        $qA2->setQuestionId($q2); 
-                        $qA2->setRole(Customer::ROLE);
-                        $qA2->setRoleId($customer);
-                        $em->persist($qA2);
-                        $em->flush();     
-     
-
-                        $entityManager = $this->getDoctrine()->getManager();
-                        $entityManager->persist($qA1);
-                        $entityManager->flush();                        
-                        $qA2->setAnswer($form->getData()['question2']);
-                        $entityManager = $this->getDoctrine()->getManager();
-                        $entityManager->persist($qA2);
-                        $entityManager->flush();                       
-                        $customer->setAddressId($address);
-                        $customer->setCustomerPlanId(Customer_plan::NONPRIME);
-                        $customer->setPassword($this->get('security.encoder_factory.generic')->getEncoder($customer)->encodePassword($form->getData()['password'], ''));
-
-                        /**
-                         * @var uplodedFile images
-                         */
-                        $image = $form->getData()["profile_photo"];
-                        if($image)
-                        {  $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();
-                        try {                            
-                            $dest ='profileImage';
-                            $fileUpload = new ImageUploader($this->container);
-                            $fileUpload->imageFileUpload($image,$imageName,$dest);                     
-                         }
-                         catch (S3Exception $e) {
-                            die('Error:' . $e->getMessage().$e->getLine().$e->getFile());
-                         }                
-                        // $image->move($this->getParameter('image_directory'),$imageName);
-                        $customer->setProfilePhoto($imageName);
-                        }
-                       
+                        $qA1= new questionAnswerHelper($container);
+                        $qA1->setQuestionAnswer($form, $q2);
+                        $qA2= new questionAnswerHelper($container);
+                        $qA2->setQuestionAnswer($form, $q2);
                         return $this->redirectToRoute("login");
-                    }
+                    }                                    
+                   else{
+                        return $this->render("@Customer/Account/register.html.twig", array( 'form' => $form->createView(), 'message'=> '','errors'=>$customer, 'error1'=>$address ));
+                   }                   
                 }
                 else{
                     $infomessage="you already have an account!!!";
