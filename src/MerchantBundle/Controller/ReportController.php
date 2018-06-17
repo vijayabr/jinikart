@@ -110,7 +110,7 @@ class ReportController extends Controller
       
         $em = $this->getDoctrine()->getManager();     
         $product = $em->getRepository('Model:Merchant')->findAllDetails(['id'=> $id]);  
-       //  dump($product);die;
+     
         $phpExcelObject->setActiveSheetIndex(0);
         $sheet = $phpExcelObject->getActiveSheet(0);
         $sheet
@@ -128,11 +128,7 @@ class ReportController extends Controller
         }
            $objWorkSheet = $phpExcelObject->createSheet(1)->setTitle("Invoice");
            $objWorkSheet  = $phpExcelObject->getSheet(1);
-         /*  foreach(range('A','E') as $columnID) {
-               $objWorkSheet->getSheetState(1)->getColumnDimensionByColumn($columnID)
-               ->setAutoSize(true);
-           }*/
-           
+     
            $objWorkSheet->setCellValue('A1', 'Customer Name')
           ->setCellValue('B1', 'Product Name')
           ->setCellValue('C1', 'Price')
@@ -141,8 +137,7 @@ class ReportController extends Controller
           ->setCellValue('E1', 'Shipping Address');  
           $em = $this->getDoctrine()->getManager();
           $invoice = $em->getRepository('Model:ProductOrderDetail')->findInvoiceDetails(['id'=> $id]); 
-         // dump($invoice);die;
-          //dump($invoice['Product.productName']);die;
+    
           $rowCount = 2;
           foreach ($invoice as $value){
               $phpExcelObject->getSheet(1)->SetCellValue('A'.$rowCount, $value['fname']);

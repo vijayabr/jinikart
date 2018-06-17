@@ -33,8 +33,8 @@ class AccountController extends Controller
             if ($form->isSubmitted()) {
                 $em = $this->getDoctrine()->getManager();
                 $merchantPlan = $em->getRepository('Model:Merchant_plan')->findOneBy(['id' =>Merchant_plan::DEFAULT_MERCHANT_PLAN]);
-                //get address
-               // $name=$form->getData()["companyName"];                
+               
+                $name=$form->getData()["companyName"];                
                 $addr1 = $form->getData()["address_line1"];
                 $addr2 = $form->getData()["address_line2"];
                 $pin = $form->getData()["pincode"];

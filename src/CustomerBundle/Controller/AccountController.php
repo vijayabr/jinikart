@@ -161,7 +161,7 @@ class AccountController extends Controller
                         } 
                         
                
-                       // $image->move($this->getParameter('image_directory'),$imageName);
+                      
                         $customer->setProfilePhoto($imageName);
                         }
                        
@@ -233,10 +233,10 @@ class AccountController extends Controller
                     }
                     
                     
-                    // $image->move($this->getParameter('image_directory'),$imageName);
+                    
                     $customer->setProfilePhoto($imageName);
                 }
-               // $image->move($this->getParameter('image_directory'),$imageName); 
+             
                 $customer->setProfilePhoto($imageName);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($customer); 

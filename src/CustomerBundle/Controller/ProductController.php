@@ -111,8 +111,7 @@ class ProductController extends Controller
 
         $category = $this->getDoctrine()->getRepository('Model:Category')->findAll();
         $productdescription=$this->getDoctrine()->getRepository('Model:Product_Description')->findAll();
-     /*    dump($product,$brand);
-        dump($product->getBrandId()->getbrandname());  */       
+   
         return $this->render("@Customer/Default/productinfo.html.twig",array('customer' => $customer,'product'=>$product));
          }catch (\Exception $exception) {
             var_dump($exception);die;

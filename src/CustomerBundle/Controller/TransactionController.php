@@ -92,7 +92,7 @@ class TransactionController extends Controller
              }
             
            } 
-          // dump($product);die;
+       
        return $this->render("@Customer/Default/cart.html.twig",array('form'=>$form->createView(),'product'=>$product,'cid'=>$cid)); 
          
         } catch(\Exception $exception){
@@ -130,21 +130,7 @@ class TransactionController extends Controller
     public function placeOrderAction(Request $request,$cid,$id)
     {
         return $this->render("@Customer/Default/placeOrder.html.twig");
-        
-//         $form=$this->createForm(OrderType::class);
-//         $form->handleRequest($request);
-        $autocomplete = new Autocomplete();
-        $autocomplete->setVariable('place_autocomplete');
-        //dump($autocomplete);die;
-        
-        $placeAutocompleteHelperBuilder = PlaceAutocompleteHelperBuilder::create();
-        $placeAutocompleteHelper = $placeAutocompleteHelperBuilder->build();
-       // dump($placeAutocompleteHelper);die;
-       echo  $placeAutocompleteHelper->renderHtml($autocomplete);
-       echo  $placeAutocompleteHelper->renderJavascript($autocomplete);
-        
-        $apiHelper = ApiHelperBuilder::create()->build();
-        echo    $apiHelper->render([$autocomplete]);
+     
         try{
             $em=$this->getDoctrine()->getManager();
             $customerId=$em->getRepository('Model:Customer')->findOneBy(['id'=>$cid]);
