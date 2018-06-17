@@ -43,11 +43,11 @@ class ReportController extends Controller
         $merchant=$this->getUser();  
         $em = $this->getDoctrine()->getManager();
         $orders=$em->getRepository('Model:ProductOrderDetail')->productOrders($merchant);       
-        return $this->render("@Merchant/Order/orderlist.html.twig",array('merchant'=> $merchant,'orders'=>$orders));
         }catch(\Exception $exception){
             
             echo " Error while listing orders";
         }
+        return $this->render("@Merchant/Order/orderlist.html.twig",array('merchant'=> $merchant,'orders'=>$orders));      
     }
     
     public function invoicePdfGeneratorData($merchant,$order){
@@ -83,12 +83,12 @@ class ReportController extends Controller
             }
         }else{
             $msg="No order placed";
-        }
-        return  $msg;
-        }catch(\Exception $exception){
+        }  
+       }catch(\Exception $exception){
             
             echo " Error in invoice generation data";
         }
+        return  $msg;
     }
     
     
@@ -99,18 +99,16 @@ class ReportController extends Controller
      */
     public function invoicePdfGeneratorAction(Request $request)
     {  
-
-      
         try{
             $order="";
             $merchant=$this->getUser();
             $msg=$this->invoicePdfGeneratorData($merchant,$order);
-            $this->pdffilegenerator($msg,$merchant->getCompanyName());
-        return new Response("save the file");   
+            $this->pdffilegenerator($msg,$merchant->getCompanyName());   
         }catch(\Exception $exception){
             
             echo " Error in invoice generation";
         }
+        return new Response("save the file");
     }
     
     /**
@@ -204,12 +202,11 @@ class ReportController extends Controller
         try{
         $merchant=$this->getUser();
         $msg=$this->invoicePdfGeneratorData($merchant,$order);
-        $this->pdffilegenerator($msg,$merchant->getcompanyName());
-        return new Response("save the file");
-        }catch(\Exception $exception){
-            
+        $this->pdffilegenerator($msg,$merchant->getcompanyName());       
+        }catch(\Exception $exception){          
             echo " Error while generating order pdf";
         }
+        return new Response("save the file");
     } 
        
     /**
@@ -227,10 +224,10 @@ class ReportController extends Controller
         $productOrderDetail->setDeliveryDate($time);
         $em->persist($productOrderDetail);
         $em->flush();
-        return $this->redirectToRoute('_order_page'); 
         }catch(\Exception $exception){            
             echo " Error in order acception";
         }
+        return $this->redirectToRoute('_order_page'); 
     }
     
     /**
@@ -246,11 +243,11 @@ class ReportController extends Controller
         $productOrderDetail->setOrderStatus("rejected");
         $em->persist($productOrderDetail);
         $em->flush();
-        return $this->redirectToRoute('_order_page');
         }catch(\Exception $exception){
             
             echo " Error in order rejection";
         }
+        return $this->redirectToRoute('_order_page');
     }    
    
     /**
@@ -259,7 +256,7 @@ class ReportController extends Controller
      * @Security("has_role('ROLE_MERCHANT')");
      */
   public function notificationAction(Request $request)
-  {  
+  { $result[]=array(); 
     try{
     $merchant=$this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -290,12 +287,10 @@ class ReportController extends Controller
     $result['data']['requestedProductCount']=$requestedProductCount;
     $result['data']['deliveredProductCount']=$deliveredProductCount;
     $result['data']['processedProductCount']=$processedProductCount;
-    
-    return new JsonResponse($result);
     }catch(\Exception $exception){
         
         echo " Error in notification";
      }
-  }
-    
+     return new JsonResponse($result);
+  }    
 }

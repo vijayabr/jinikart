@@ -100,19 +100,16 @@ class ProductManagementController extends Controller
      */
     
   public function listProductAction(Request $Request,$id){
+      
       try{
       $merchant = $this->getUser();
-   
       $product = $this->getDoctrine()->getRepository('Model:Product')->findAllProductDetails($id);
-  
-      $count= $this->getDoctrine()->getRepository('Model:Product_Detail_List')->findCount($id);
-   
-      return $this->render("@Merchant/Default/list.html.twig",array('product'=>$product,'merchantId'=>$id,'merchant'=>$merchant,'count'=>$count));
-      }catch(\Exception $exception){
-      
+      $count= $this->getDoctrine()->getRepository('Model:Product_Detail_List')->findCount($id);  
+      }catch(\Exception $exception){      
       echo " Error while listing products";
-  }
-    }
+     }
+     return $this->render("@Merchant/Default/list.html.twig",array('product'=>$product,'merchantId'=>$id,'merchant'=>$merchant,'count'=>$count));   
+ }
     
     /**
      * @Route("/merchant/coupon/{id}",name="coupon");
@@ -139,10 +136,11 @@ class ProductManagementController extends Controller
            
              $merchant=$em->getRepository('Model:Product_Detail_List')->findOneBy(['productId'=>$id]);
              $mid=$merchant->getMerchantId();
-             return  $this->redirectToRoute("list_products",array('id'=>$mid->getId())); 
+             
         }catch(\Exception $exception){            
             echo " Error while generating coupon";
         }
+        return  $this->redirectToRoute("list_products",array('id'=>$mid->getId())); 
     }
 /**
      * @Route("/merchant/update",name="update");
@@ -152,7 +150,8 @@ class ProductManagementController extends Controller
 public function updateAction(Request $request)
 {
         $form = $this->createForm(UpdateProductType::class);      
-        $form->handleRequest($request);                       
+        $form->handleRequest($request); 
+        $merchant=$this->getUser();
            try{               
                 if ($form->isSubmitted() && $form->isValid()) 
                 {     
@@ -192,14 +191,14 @@ public function updateAction(Request $request)
                     $em->persist($product);
                     $em->flush();
                   }
-               return $this->render("@Merchant/Default/updated.html.twig",array('product'=>$product,'descp'=>$descp));
+                  return $this->render("@Merchant/Default/updated.html.twig",array('product'=>$product,'descp'=>$descp,'merchant'=>$merchant));
                }
-              return $this->render("@Merchant/Default/update.html.twig",array('form'=> $form->createView()));              
+              
            }catch(\Exception $exception){
                   
          echo "Error while updating product detail";
          }
-      
+         return $this->render("@Merchant/Default/update.html.twig",array('form'=> $form->createView(),'merchant'=>$merchant)); 
     }
   
     /**
@@ -211,9 +210,10 @@ public function updateAction(Request $request)
     {
     try{        
         $merchant=$this->getUser();
-        return $this->render("@Merchant/Account/detail.html.twig",array('merchant'=> $merchant));
+        
     }catch(\Exception $exception){        
         echo "Error in Merchant Details";
     }
+    return $this->render("@Merchant/Account/detail.html.twig",array('merchant'=> $merchant));
   }    
 }
