@@ -39,8 +39,7 @@ class SecurityController extends Controller
           
             return $this->render('@Merchant/Account/login.html.twig',array(
                 'last_username' => $lastUsername,
-                'error'=> $error,
-            ));   
+                'error'=> $error));   
             }
          catch(\Exception $exception){
             echo "Error while logging in";

@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use MerchantBundle\Form\UpdateProductType;
 use Common\Model\Merchant;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use CommonServiceBundle\Helper\ImageUploader;
 
 
 
@@ -71,8 +72,15 @@ class ProductManagementController extends Controller
                  $em->flush();
                 
                  $photo= new Product_Photo();
-                 $imageName =  $product->getProductName(). '.' . $image->guessExtension();
-                 $image->move($this->getParameter('product_image_directory'),$imageName);
+            
+              
+                 if($image){
+                     $imageName =  $product->getProductName(). '.' . $image->guessExtension();                     
+                     $dest ='productImage';
+                     $fileUpload = new ImageUploader($this->container);
+                     $fileUpload->imageFileUpload($image,$imageName,$dest);
+                 }    
+                 //$image->move($this->getParameter('product_image_directory'),$imageName);
                  $photo->setPhotoName($imageName);
                  $photo->setProductId($product);
                  $em->persist($photo);
@@ -83,12 +91,10 @@ class ProductManagementController extends Controller
                  $imei1->setMerchantId($merchant);
                  $em->persist($imei1);
                  $em->flush();                   
-                 return $this->render("@Merchant/Default/homepage.html.twig",array('merchant'=>$merchant));
-              
+                 return $this->render("@Merchant/Default/homepage.html.twig",array('merchant'=>$merchant));              
             }
             return $this->render("@Merchant/Default/add.html.twig",array('form'=> $form->createView(),'merchant'=>$merchant));
-                 }catch(\Exception $exception){
- 
+                 }catch(\Exception $exception){ 
                      echo " Error while adding products";
         }
   }
@@ -123,20 +129,15 @@ class ProductManagementController extends Controller
              $randomString = '';
              for ($i = 0; $i < $length; $i++) {
              $randomString .= $characters[rand(0, $charactersLength - 1)];
-             }
-        
+             }        
              $em=$this->getDoctrine()->getManager();
              $product= new Product();
-             $product=$em->getRepository('Model:Product')->findOneBy(['id'=>$id] );
-            
-             $product->setCoupon($randomString);
-            
+             $product=$em->getRepository('Model:Product')->findOneBy(['id'=>$id] );            
+             $product->setCoupon($randomString);            
              $em->persist($product);
-             $em->flush();
-           
+             $em->flush();           
              $merchant=$em->getRepository('Model:Product_Detail_List')->findOneBy(['productId'=>$id]);
-             $mid=$merchant->getMerchantId();
-             
+             $mid=$merchant->getMerchantId();             
         }catch(\Exception $exception){            
             echo " Error while generating coupon";
         }
