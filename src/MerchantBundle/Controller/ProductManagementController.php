@@ -97,8 +97,7 @@ class ProductManagementController extends Controller
             return $this->render("@Merchant/Default/add.html.twig",array('form'=> $form->createView(),'merchant'=>$merchant));
                  }catch(\Exception $exception){
  
-                    return new Response($exception->getMessage());
-                    die;
+                     echo " Error while adding products";
         }
   }
     
@@ -109,7 +108,7 @@ class ProductManagementController extends Controller
      */
     
   public function listProductAction(Request $Request,$id){
-            
+      try{
       $merchant = $this->getUser();
    
       $product = $this->getDoctrine()->getRepository('Model:Product')->findAllProductDetails($id);
@@ -117,7 +116,10 @@ class ProductManagementController extends Controller
       $count= $this->getDoctrine()->getRepository('Model:Product_Detail_List')->findCount($id);
    
       return $this->render("@Merchant/Default/list.html.twig",array('product'=>$product,'merchantId'=>$id,'merchant'=>$merchant,'count'=>$count));
+      }catch(\Exception $exception){
       
+      echo " Error while listing products";
+  }
     }
     
     /**
@@ -127,7 +129,7 @@ class ProductManagementController extends Controller
      */
     public function couponGenerateAction(Request $Request,$length = 6, $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',$id){
          
-            
+        try{
              $charactersLength = strlen($characters);
              $randomString = '';
              for ($i = 0; $i < $length; $i++) {
@@ -146,7 +148,10 @@ class ProductManagementController extends Controller
              $merchant=$em->getRepository('Model:Product_Detail_List')->findOneBy(['productId'=>$id]);
              $mid=$merchant->getMerchantId();
              return  $this->redirectToRoute("list_products",array('id'=>$mid->getId())); 
-             
+        }catch(\Exception $exception){
+            
+            echo " Error while generating coupon";
+        }
     }
 /**
      * @Route("/merchant/update",name="update");
@@ -210,8 +215,7 @@ public function updateAction(Request $request)
               
            }catch(\Exception $exception){
                   
-          return new Response($exception);
-          die;
+         echo "Error while updating product detail";
          }
       
     }
@@ -223,12 +227,15 @@ public function updateAction(Request $request)
      */
     public function detailAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+        try{
+        
         $merchant=$this->getUser();
-       
-       
+      
         return $this->render("@Merchant/Account/detail.html.twig",array('merchant'=> $merchant));
-     
+    }catch(\Exception $exception){
+        
+        echo "Error in Merchant Details";
+    }
   }
   
   

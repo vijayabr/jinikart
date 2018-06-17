@@ -29,7 +29,7 @@ class SecurityController extends Controller
             ));
         }        
         catch(Exception $exception){
-            var_dump($exception);die;
+            echo "Error Occurred While logging in";
         }
     }
     

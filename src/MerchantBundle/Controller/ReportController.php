@@ -37,15 +37,19 @@ class ReportController extends Controller
      */
     public function OrderListAction(Request $request)
     {
-        
+        try{
         $merchant=$this->getUser();  
         $em = $this->getDoctrine()->getManager();
         $orders=$em->getRepository('Model:ProductOrderDetail')->productOrders($merchant);       
         return $this->render("@Merchant/Order/orderlist.html.twig",array('merchant'=> $merchant,'orders'=>$orders));
-        
+        }catch(\Exception $exception){
+            
+            echo " Error while listing orders";
+        }
     }
     
     public function invoicePdfGeneratorData($merchant,$order){
+        try{
         $em = $this->getDoctrine()->getManager();
         if($order){
             
@@ -79,6 +83,10 @@ class ReportController extends Controller
             $msg="No order placed";
         }
         return  $msg;
+        }catch(\Exception $exception){
+            
+            echo " Error in invoice generation data";
+        }
     }
     
     
@@ -88,12 +96,18 @@ class ReportController extends Controller
      * @Security("has_role('ROLE_MERCHANT')");
      */
     public function invoicePdfGeneratorAction(Request $request)
-    {   $order="";
+    {  
+        try{
+            $order="";
+        
         $merchant=$this->getUser();
         $msg=$this->invoicePdfGeneratorData($merchant,$order);
         $this->pdffilegenerator($msg,$merchant->getCompanyName());
         return new Response("save the file");
-        
+        }catch(\Exception $exception){
+            
+            echo " Error in invoice generation";
+        }
     }
     
     /**
@@ -104,6 +118,8 @@ class ReportController extends Controller
      */
     public function indexAction(Request $request,$id)
     {
+        try{
+      
         // ask the service for a Excel5
         $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
         $phpExcelObject->getDefaultStyle()->getFont()->setName('Arial Black');
@@ -169,6 +185,10 @@ class ReportController extends Controller
         $response->headers->set('Content-Disposition', $dispositionHeader);
         
         return $response;
+        }catch(\Exception $exception){
+            
+            echo " Error in excel sheet generation";
+        }
     }
     
     /**
@@ -178,11 +198,15 @@ class ReportController extends Controller
      */
     public function OrderPdfAction($order, Request $request)
     {   
+        try{
         $merchant=$this->getUser();
         $msg=$this->invoicePdfGeneratorData($merchant,$order);
         $this->pdffilegenerator($msg,$merchant->getcompanyName());
         return new Response("save the file");
-        
+        }catch(\Exception $exception){
+            
+            echo " Error while generating order pdf";
+        }
     } 
     
     
@@ -193,13 +217,17 @@ class ReportController extends Controller
      */
     public function OrderAcceptAction($order, Request $request)
     {
+        try{
         $em = $this->getDoctrine()->getManager();
         $productOrderDetail=$em->getRepository('Model:ProductOrderDetail')->find($order);
         $productOrderDetail->setOrderStatus("accept");      
         $em->persist($productOrderDetail);
         $em->flush();
         return $this->redirectToRoute('_order_page');        
-        
+        }catch(\Exception $exception){
+            
+            echo " Error in order acception";
+        }
     }
     
     /**
@@ -209,13 +237,17 @@ class ReportController extends Controller
      */
     public function OrderRejectAction($order, Request $request)
     {
-        
+        try{
         $em = $this->getDoctrine()->getManager();
         $productOrderDetail=$em->getRepository('Model:ProductOrderDetail')->find($order);
         $productOrderDetail->setOrderStatus("reject");
         $em->persist($productOrderDetail);
         $em->flush();
         return $this->redirectToRoute('_order_page');
+        }catch(\Exception $exception){
+            
+            echo " Error in order rejection";
+        }
     }    
    
     /**
@@ -223,8 +255,9 @@ class ReportController extends Controller
      * @param Request $request
      * @Security("has_role('ROLE_MERCHANT')");
      */
-    public function notificationAction(Request $request)
-    {   
+  public function notificationAction(Request $request)
+  {  
+    try{
     $merchant=$this->getUser();
     $em = $this->getDoctrine()->getManager();
     $products= $em->getRepository('Model:ProductOrderDetail')->productNotification($merchant);
@@ -255,7 +288,10 @@ class ReportController extends Controller
     $result['data']['processedProductCount']=$processedProductCount;
     
     return new JsonResponse($result);
-    
-    }
+    }catch(\Exception $exception){
+        
+        echo " Error in notification";
+     }
+  }
     
 }

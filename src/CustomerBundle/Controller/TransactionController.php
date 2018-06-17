@@ -86,8 +86,7 @@ class TransactionController extends Controller
          
         } catch(\Exception $exception){
             
-            return new Response($exception);
-            die;
+            echo "Error Occurred While adding to cart";
         }
          
     }
@@ -108,8 +107,7 @@ class TransactionController extends Controller
        
           }catch(\Exception $exception){
             
-            return new Response($exception);
-            die;
+              echo "Error Occurred While adding to WishList";
          }
         
     }
@@ -147,8 +145,7 @@ class TransactionController extends Controller
         
            }catch(\Exception $exception){
             
-            return new Response($exception);
-            die;
+               echo "Error Occurred While placing the order";
        }
     }
     /**
@@ -158,6 +155,8 @@ class TransactionController extends Controller
      */
     public function deleteAction(Request $request,$cid,$id)
     {
+        try{
+            
         $em=$this->getDoctrine()->getManager();
         $cartId=$em->getRepository('Model:Cart')->findBy($cid);
         dump($cartId);
@@ -172,5 +171,9 @@ class TransactionController extends Controller
         $em->remove($wish);
         $em->flush();
         return $this->redirectToRoute("add_cart");
+    }catch(\Exception $exception){
+        
+        echo "Error Occurred While deleting";
+    }
     }
 }

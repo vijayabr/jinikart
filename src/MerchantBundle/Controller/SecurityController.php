@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-// @Security("IS_AUTHENTICATED_REMEMBERED");
+
 
 class SecurityController extends Controller
 {
@@ -33,10 +33,8 @@ class SecurityController extends Controller
         try {
           
             $authenticationUtils=$this->get('security.authentication_utils');
-
             // get the login error if there is one
             $error = $authenticationUtils->getLastAuthenticationError();
-
             // last username entered by the user
             $lastUsername = $authenticationUtils->getLastUsername();
           
@@ -44,12 +42,10 @@ class SecurityController extends Controller
                 'last_username' => $lastUsername,
                 'error'=> $error,
             ));
-           
-      
             
             }
-        catch(\Exception $exception){
-            var_dump($exception);die;
+         catch(\Exception $exception){
+            echo "Error while logging in";
         }
     }
     

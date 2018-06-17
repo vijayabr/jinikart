@@ -91,7 +91,7 @@ class ProductController extends Controller
             }            
         }
         catch (\Exception $exception) {
-             var_dump($exception);die;
+            echo "Error Occured in Homepage";
          }
         return $this->render("@Customer/Default/homepage.html.twig",array('form' => $productsearch->createView(),'customer'=>$customer));      
       }
@@ -118,7 +118,7 @@ class ProductController extends Controller
    
         return $this->render("@Customer/Default/productinfo.html.twig",array('customer' => $customer,'product'=>$product));
          }catch (\Exception $exception) {
-            var_dump($exception);die;
+             echo "Error Occured in Product Details";
         }
     }
     
@@ -154,7 +154,7 @@ class ProductController extends Controller
         $msg=$msg."</div>";        
         return new Response($msg);
         }catch (\Exception $exception) {
-            var_dump($exception);die;
+            echo "Error Occured in Advanced Search";
         }
     }   
 }

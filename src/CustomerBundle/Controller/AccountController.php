@@ -176,8 +176,7 @@ class AccountController extends Controller
             return $this->render("@Customer/Account/register.html.twig", array('form' => $form->createView(),'message'=> '','errors'=>'', 'error1'=>'' ));
         }
         catch (\Exception $exception) {
-            var_dump($exception->getMessage().$exception->getLine().$exception->getFile());
-            die;
+           echo "Error Occured in Registration";
         }        
     }
 
@@ -229,7 +228,7 @@ class AccountController extends Controller
                         $fileUpload->imageFileUpload($keyName, $file);
                         
                     } catch (S3Exception $e) {
-                        die('Error:' . $e->getMessage().$e->getLine().$e->getFile());
+                        echo "Error Occured";
                     }
                     
                     
@@ -240,7 +239,7 @@ class AccountController extends Controller
                 $customer->setProfilePhoto($imageName);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($customer); 
-               // $entityManager->flush();
+                $entityManager->flush();
                 return $this->redirectToRoute("customer_profile_page");
             }
             if ($form->isSubmitted()) {
@@ -327,8 +326,7 @@ class AccountController extends Controller
         $form->get('question2')->setData($answers[1]->getanswer());        
         }
         catch (\Exception $exception) {
-            var_dump($exception);
-            die;
+            echo "Error Occured in Customer Profile Display";
         }
         return $this->render("@Customer/Account/profile.html.twig",array('form' => $form->createView(),'imageform'=> $imageform->createView(),'message'=>"",'image'=>$image1));  
     }    
@@ -383,7 +381,7 @@ class AccountController extends Controller
            }           
        }
        catch (Exception $exception) {
-           var_dump($exception);die;
+           echo "Error Occured in Change Password";
        }       
        return $this->render("@Customer/Account/forgotpassword.html.twig",array('message'=> '','question'=>$question));         
     }
