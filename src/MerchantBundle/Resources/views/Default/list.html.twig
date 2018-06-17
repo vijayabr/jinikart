@@ -2,8 +2,11 @@
 {% block body %}
 <h2>Added Products</h2>
 <div class="container" align="center" padding="50px 30px 50px 80px">
+  
+     {% if (count>0) %}
+   
       <table style="border: 2px solid black;text-align:center;">
-      <tr>
+      <tr  style="border: 2px solid black;">
         <th>Product Name</th>
          <th>Price</th> 
         <th>Coupon</th>      
@@ -14,6 +17,7 @@
         <th></th>
       </tr>
       {% for pro in product %}  
+        <tr  style="border: 2px solid black;">
         <td>{{ pro.productId.productName }}</td>
         <td>{{ pro.productId.productPrice }}</td>
         <td>{{pro.productId.coupon}}</td>   
@@ -21,8 +25,9 @@
         <td>{{ pro.productId.productDescriptionId.ramSize }}</td>
         <td>{{ pro.productId.productDescriptionId.productCompleteInfo }}</td>
          <th><a href="{{ path('update') }}">Update</a></th>     
-         <td><button type="submit"  onclick="window.location.href='{{ path('coupon',{'id' :pro.merchantId.id}) }}'">Generate Coupon</button></td> 
+         <td><button type="submit"  onclick="window.location.href='{{ path('coupon',{'id' :pro.productId.id}) }}'">Generate Coupon</button></td> 
       </tr>   
+
  {% endfor %} 
  </table>
 </div>
@@ -30,5 +35,6 @@
 
 {% block javascripts %}
 <script src={{ asset('/js/merchant.js') }}></script>
+
 {% endblock %}
 

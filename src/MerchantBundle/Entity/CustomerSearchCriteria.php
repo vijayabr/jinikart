@@ -1,40 +1,39 @@
 <?php
 
-namespace Common\Model;
+namespace MerchantBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Cart
- * @ORM\Table(name="cart")
- * @ORM\Entity(repositoryClass="Common\Model\Repository\CartRepository")
+ * CustomerSearchCriteria
+ *
+ * @ORM\Table(name="customer_search_criteria")
+ * @ORM\Entity(repositoryClass="MerchantBundle\Repository\CustomerSearchCriteriaRepository")
  */
-class Cart
+class CustomerSearchCriteria
 {
-    const DEFAULT_CART_STATUS=0;// 0: EMPTY CART
-    const FULL= 1;
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
-
     /**
      * @var int
-     * @ORM\ManyToOne(targetEntity="Common\Model\Customer")
-     * @ORM\JoinColumn(name="customerId", referencedColumnName="id")
+     *
+     * @ORM\Column(name="customer_id", type="integer")
      */
     private $customerId;
-   
+
     /**
-     * @var bool
+     * @var string
      *
-     * @ORM\Column(name="cart_status", type="boolean")
+     * @ORM\Column(name="keyword", type="string", length=255)
      */
-    private $cartStatus;
+    private $keyword;
 
     /**
      * @var \DateTime
@@ -50,15 +49,9 @@ class Cart
      */
     private $updatedAt;
 
-    public function __construct() {
-        
-        $this->setCreatedAt(new \DateTime());
-        if ($this->getUpdatedAt() == null) {
-            $this->setUpdatedAt(new \DateTime());
-        }
-    }
+
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -67,13 +60,12 @@ class Cart
         return $this->id;
     }
 
-    
     /**
-     * Set customerId
+     * Set customerId.
      *
-     * @param integer $customerId
+     * @param int $customerId
      *
-     * @return Cart
+     * @return CustomerSearchCriteria
      */
     public function setCustomerId($customerId)
     {
@@ -83,7 +75,7 @@ class Cart
     }
 
     /**
-     * Get customerId
+     * Get customerId.
      *
      * @return int
      */
@@ -91,35 +83,37 @@ class Cart
     {
         return $this->customerId;
     }
+
     /**
-     * Set cartStatus
+     * Set keyword.
      *
-     * @param boolean $cartStatus
+     * @param string $keyword
      *
-     * @return Cart
+     * @return CustomerSearchCriteria
      */
-    public function setCartStatus($cartStatus)
+    public function setKeyword($keyword)
     {
-        $this->cartStatus = $cartStatus;
-        
+        $this->keyword = $keyword;
+
         return $this;
-    }
-    /**
-     * Get cartStatus
-     *
-     * @return bool
-     */
-    public function getCartStatus()
-    {
-        return $this->cartStatus;
     }
 
     /**
-     * Set createdAt
+     * Get keyword.
+     *
+     * @return string
+     */
+    public function getKeyword()
+    {
+        return $this->keyword;
+    }
+
+    /**
+     * Set createdAt.
      *
      * @param \DateTime $createdAt
      *
-     * @return Cart
+     * @return CustomerSearchCriteria
      */
     public function setCreatedAt($createdAt)
     {
@@ -129,7 +123,7 @@ class Cart
     }
 
     /**
-     * Get createdAt
+     * Get createdAt.
      *
      * @return \DateTime
      */
@@ -139,11 +133,11 @@ class Cart
     }
 
     /**
-     * Set updatedAt
+     * Set updatedAt.
      *
      * @param \DateTime $updatedAt
      *
-     * @return Cart
+     * @return CustomerSearchCriteria
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -153,7 +147,7 @@ class Cart
     }
 
     /**
-     * Get updatedAt
+     * Get updatedAt.
      *
      * @return \DateTime
      */
@@ -162,4 +156,3 @@ class Cart
         return $this->updatedAt;
     }
 }
-

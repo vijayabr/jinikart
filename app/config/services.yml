@@ -19,23 +19,3 @@ services:
         exclude: '../../src/CommonServiceBundle/{Entity,Repository}'
     
     
-#    httplug:
-#    classes:
-#        client: Http\Adapter\Guzzle6\Client
-#        message_factory: Http\Message\MessageFactory\GuzzleMessageFactory
-#    clients:
-#        acme:
-#            factory: httplug.factory.guzzle6
-#            
-#    ivory_google_map:
-#    place_autocomplete:
-#        client: httplug.client.default
-#        message_factory: httplug.message_factory.default
-#    
-#    ivory_google_map:
-#    place_autocomplete:
-#        format: json
-#        
-#    ivory_google_map:
-#    place_autocomplete:
-#        api_key: ~

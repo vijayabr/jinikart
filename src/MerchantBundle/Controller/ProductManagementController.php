@@ -32,7 +32,7 @@ class ProductManagementController extends Controller
           try{     
             //  $id="";
             if ($form->isSubmitted() && $form->isValid()) {
-   
+          
                  $em = $this->getDoctrine()->getManager(); 
               //   $product=$em->getRepository('Model:Product')->getDataForm($form);
                  $id=$form->getData()["merchantId"];
@@ -45,6 +45,7 @@ class ProductManagementController extends Controller
                  $color = $form->getData()["color"];
                  $ram = $form->getData()["ram_size"];
                  $cam = $form->getData()["camera"];
+                 $count=$form->getData()["product_count"];
                  $info = $form->getData()["product_complete_info"];
                  $image = $form->getData()["product_photo"];
                  
@@ -66,6 +67,7 @@ class ProductManagementController extends Controller
                  $product->setBrandId($brand);
                  $product->setCategoryId($category);
                  $product->setProductDescriptionId($descp);
+                 $product->setProductCount($count);
                 
                
                  $em->persist($product);
@@ -85,10 +87,8 @@ class ProductManagementController extends Controller
                  $imei1->setMerchantId($merchant);
                  $em->persist($imei1);
                  $em->flush();
-                
-               
-              return new Response("Added to Database");
-              return $this->render("@Merchant/Default/homepage.html.twig");
+                   
+                 return $this->render("@Merchant/Default/homepage.html.twig",array('merchant'=>$merchant));
               
             }
             return $this->render("@Merchant/Default/add.html.twig",array('form'=> $form->createView(),'merchant'=>$merchant));
@@ -107,11 +107,14 @@ class ProductManagementController extends Controller
   public function listProductAction(Request $Request,$id){
             
       $merchant = $this->getUser();
-      $merchantId = $Request->request->get('id');         
-      $product = $this->getDoctrine()->getRepository('Model:Product')->findAllProductDetails(['id'=>$merchantId]);
-        
-      return $this->render("@Merchant/Default/list.html.twig",array('product'=>$product,'merchant'=>$id,'merchant'=>$merchant));
-        //'imei'=>$imei,'cat'=>$cat,'brand'=>$brand,'descp'=>$descp));
+    //  $merchantId = $Request->query->get('id');
+    //  dump($id);die;
+      $product = $this->getDoctrine()->getRepository('Model:Product')->findAllProductDetails($id);
+    //  dump($product);die;
+      $count= $this->getDoctrine()->getRepository('Model:Product_Detail_List')->findCount($id);
+    //  dump($count);die;
+      return $this->render("@Merchant/Default/list.html.twig",array('product'=>$product,'merchantId'=>$id,'merchant'=>$merchant,'count'=>$count));
+      
     }
     
     /**
@@ -120,6 +123,7 @@ class ProductManagementController extends Controller
      */
     public function couponGenerateAction(Request $Request,$length = 6, $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',$id){
 //              $id = $Request->request->get('id');
+            
              $charactersLength = strlen($characters);
              $randomString = '';
              for ($i = 0; $i < $length; $i++) {
@@ -129,12 +133,15 @@ class ProductManagementController extends Controller
              $em=$this->getDoctrine()->getManager();
              $product= new Product();
              $product=$em->getRepository('Model:Product')->findOneBy(['id'=>$id] );
+            
              $product->setCoupon($randomString);
-           
+            
              $em->persist($product);
              $em->flush();
-             
-             return  $this->redirectToRoute("list_products",array('id'=>$id)); 
+             //dump("Hii");die;
+             $merchant=$em->getRepository('Model:Product_Detail_List')->findOneBy(['productId'=>$id]);
+             $mid=$merchant->getMerchantId();
+             return  $this->redirectToRoute("list_products",array('id'=>$mid->getId())); 
              
     }
 /**

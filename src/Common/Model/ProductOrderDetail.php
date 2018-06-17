@@ -20,8 +20,6 @@ class ProductOrderDetail
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-
     
     /**
      * @var int
@@ -45,6 +43,7 @@ class ProductOrderDetail
      * @ORM\Column(name="delivery_date", type="datetime")
      */
     private $deliveryDate;   
+
 
     /**
      * @var \DateTime
