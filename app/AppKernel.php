@@ -20,7 +20,7 @@ class AppKernel extends Kernel
             new MerchantBundle\MerchantBundle(),
             new AdminBundle\AdminBundle(),
             new CommonServiceBundle\CommonServiceBundle()
-
+            
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

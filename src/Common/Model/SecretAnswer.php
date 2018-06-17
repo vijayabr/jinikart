@@ -31,14 +31,20 @@ class SecretAnswer
      * @ORM\JoinColumn(name="questionId", referencedColumnName="id")
      */
     private $questionId;
-
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="role", type="string", length=20)
+     */
+    private $role;
+    
     /**
      * @var int
-     * @ORM\ManyToOne(targetEntity="Common\Model\Customer")
-     * @ORM\JoinColumn(name="customerId", referencedColumnName="id")    
+     * @ORM\Column(name="role_id", type="integer", length=20)
      */
-    private $customerId;
-
+    private $roleId;
+    
     /**
      * @var string
      *
@@ -68,8 +74,6 @@ class SecretAnswer
         }
     }
     
-
-
     /**
      * Get id.
      *
@@ -103,29 +107,53 @@ class SecretAnswer
     {
         return $this->questionId;
     }
-
     /**
-     * Set customerId.
+     * Set role
      *
-     * @param int $customerId
+     * @param string $role
      *
      * @return SecretAnswer
      */
-    public function setCustomerId($customerId)
+    public function setRole($role)
     {
-        $this->customerId = $customerId;
+        $this->role = $role;
+        
+        return $this;
+    }
+    
+    /**
+     * Get role
+     *
+     * @return string
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+    
+    
+    /**
+     * Set roleId.
+     *
+     * @param int $roleId
+     *
+     * @return SecretAnswer
+     */
+    public function setRoleId($roleId)
+    {
+        $this->roleId =$roleId;
 
         return $this;
     }
 
     /**
-     * Get customerId.
+     * Get roleId.
      *
      * @return int
      */
-    public function getCustomerId()
+    public function getRoleId()
     {
-        return $this->customerId;
+        return $this->roleId;
     }
 
     /**

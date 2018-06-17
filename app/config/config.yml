@@ -86,11 +86,7 @@ swiftmailer:
     password: jini1234
     encryption: tls
     
-ivory_google_map:
-    map:
-        debug: "%kernel.debug%"  
-        language: "%locale%"
-        api_key: AizaSyC4a0KhjBisDPt5PTPnHn3Rmparpt4BX18  
+
 
     
     

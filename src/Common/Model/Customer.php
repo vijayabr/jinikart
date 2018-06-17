@@ -42,7 +42,7 @@ class Customer implements UserInterface
     /**
      * @var string
      * @Assert\Regex("/^[A-Z a-z]+$/", message="Last name should only contain  alphabets")
-     * @ORM\Column(name="lname", type="string", length=10)
+     * @ORM\Column(name="lname", type="string", length=10,nullable=true)
      */
     private $lname;
 
@@ -50,7 +50,7 @@ class Customer implements UserInterface
     /**
      * @var int
      *one customer has one default address
-     * @ORM\OneToOne(targetEntity="Common\Model\Address")
+     * @ORM\ManyToOne(targetEntity="Common\Model\Address",cascade={"persist"})
      * @ORM\JoinColumn(name="addressId", referencedColumnName="id")
      */
     private $addressId;
@@ -73,7 +73,7 @@ class Customer implements UserInterface
 
     /**
      * @var string
-     * @ORM\Column(name="profile_photo", type="string", length=50)
+     * @ORM\Column(name="profile_photo", type="string", length=50,nullable=true)
      */
     private $profilePhoto;
 

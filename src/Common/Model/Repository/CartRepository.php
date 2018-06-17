@@ -15,6 +15,8 @@ class CartRepository extends \Doctrine\ORM\EntityRepository
     ->select('c');
     $query = $query->getQuery()->useQueryCache(true);
     return $query->getResult();
-}
-
+   }
+   
+  
+   
 }

@@ -21,7 +21,16 @@ class ProductOrderDetail
      */
     private $id;
 
-     
+
+    
+    /**
+     * @var int
+     * @ORM\ManyToOne(targetEntity="Common\Model\CartList",cascade={"all","persist"},fetch="EAGER")
+     * @ORM\JoinColumn(name="cartListId", referencedColumnName="id")
+     */
+    private $cartListId;
+    
+
     /**
      * @var int
      * @ORM\ManyToOne(targetEntity="Common\Model\ProductOrder",cascade={"all"},fetch="EAGER")
@@ -35,21 +44,7 @@ class ProductOrderDetail
      *
      * @ORM\Column(name="delivery_date", type="datetime")
      */
-    private $deliveryDate;
-    
-    /**
-     * @var string
-     * @ORM\Column(name="order_status", type="string")
-     */
-    private $orderStatus;
-    
-    
-    /**
-     * @var int
-     * @ORM\ManyToOne(targetEntity="Common\Model\CartList",cascade={"all"},fetch="EAGER")
-     * @ORM\JoinColumn(name="cartListId", referencedColumnName="id")
-     */
-    private $cartListId;
+    private $deliveryDate;   
 
     /**
      * @var \DateTime
@@ -64,7 +59,14 @@ class ProductOrderDetail
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-
+    
+    public function __construct() {
+        
+        $this->setCreatedAt(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
 
     /**
      * Get id
@@ -100,26 +102,7 @@ class ProductOrderDetail
         return $this->cartListId;
     }
     
-    /**
-     * Set orderStatus
-     * @param string $orderStatus
-     * @return ProductOrderDetail
-     */
-    public function setOrderStatus($orderStatus)
-    {
-        $this->orderStatus = $orderStatus;
-        
-        return $this;
-    }
-    
-    /**
-     * Get orderStatus
-     * @return string
-     */
-    public function getOrderStatus()
-    {
-        return $this->orderStatus;
-    }
+   
     /**
      * Set productOrderId
      *
@@ -127,7 +110,7 @@ class ProductOrderDetail
      *
      * @return ProductOrderDetail
      */
-    public function setProductOrderIdId($productOrderId)
+    public function setProductOrderId($productOrderId)
     {
         $this->productOrderId = $productOrderId;
         

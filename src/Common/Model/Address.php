@@ -26,7 +26,6 @@ class Address
 
     /**
      * @var string
-     *
      * @ORM\Column(name="address_line1", type="string", length=255)
      */
     private $addressLine1;
@@ -34,7 +33,7 @@ class Address
     /**
      * @var string
      *
-     * @ORM\Column(name="address_line2", type="string", length=255, nullable=true)
+     * @ORM\Column(name="address_line2", type="string", length=255)
      */
     private $addressLine2;
 

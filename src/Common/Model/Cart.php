@@ -11,7 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Cart
 {
-    const DEFAULT_CART_STATUS=0; // 0: EMPTY CART
+    const DEFAULT_CART_STATUS=0;// 0: EMPTY CART
+    const FULL= 1;
     /**
      * @var int
      * @ORM\Column(name="id", type="integer")
@@ -49,7 +50,13 @@ class Cart
      */
     private $updatedAt;
 
-
+    public function __construct() {
+        
+        $this->setCreatedAt(new \DateTime());
+        if ($this->getUpdatedAt() == null) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+    }
     /**
      * Get id
      *

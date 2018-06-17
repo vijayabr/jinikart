@@ -17,7 +17,7 @@
 {{ form_end(form) }}
 <div style="margin:10em; padding: 35px 70px 50px 50px">
 <button type="button">Delete</button>
-<button type="submit" onclick="window.location.href='{{ path('place_order',{'id':product.id}) }}'">Proceed To Checkout</button>
+<button type="submit" onclick="window.location.href='{{ path('place_order',{'id':product.id,'cid': cid}) }}'">Proceed To Checkout</button>
 <button type="button" onclick="window.location.href='{{ path('index_page') }}'">Continue Shopping</button>
 </div>
 </div>
