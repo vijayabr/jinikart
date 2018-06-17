@@ -38,6 +38,36 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             ->getResult();
             return $products;
     }
+    //Query for product search with brand
+    public function brandkeysearch($brand,$keyword) {
+       
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+        $qb->select('p.productName,p.productPrice,d.color,d.camera,d.ramSize,d.productCompleteInfo,br.brandName,cat.categoryName')
+        ->from('Common\Model\Product','p')
+        ->innerjoin('p.categoryId','cat')
+        ->innerjoin('p.brandId','br')
+        ->join('p.productDescriptionId','d')
+        ->Where('br.brandName=:brand')
+        ->orWhere('d.color LIKE :color')
+        ->orwhere('p.productName LIKE :name')
+        ->orWhere('p.productPrice LIKE :price')
+        ->orWhere('d.camera LIKE :cam') 
+        ->orWhere('cat.categoryName LIKE :cat')
+      
+        ->setParameter('cat',$keyword)
+        ->setParameter('price',$keyword)
+        ->setParameter('brand',$brand->getbrandName())
+        ->setParameter('name',$keyword)   
+        ->setParameter('color',$keyword)   
+        ->setParameter('cam',$keyword);
+        $query=$qb->getQuery();
+        dump($query);
+        $result=$query->getResult();
+        dump($result);die;
+        return $result;
+        
+    }
     
     /*query to fetch product detail in quick search using keyword for name,cam,brand,category(changes to be made)
     Pending */

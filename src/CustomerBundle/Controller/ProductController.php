@@ -63,31 +63,12 @@ class ProductController extends Controller
                 $min=$productsearch->getData()["min"];
                 $brand=$productsearch->getData()["brand"];
                 $keyword=$productsearch->getData()["keyword"];
-              
+         
                 $em = $this->getDoctrine()->getManager();
                 $merchant = $this->getDoctrine()->getRepository('Model:Merchant')->findAll();
                 $brands = $this->getDoctrine()->getRepository('Model:Brand')->brandNameList();
-                $categorys = $this->getDoctrine()->getRepository('Model:Category')->categoryNameList();
-//               
-                $productdescription1=$this->getDoctrine()->getRepository('Model:Product_Description')->findAll();
-               
-                //remove evrything and rewrite
-                if($brand){
-                    $products = $em->getRepository('Model:Product')->productsearchBasedonBrand($brand->getId(),$min,$max);
-                    return $this->render("@Customer/Default/productList.html.twig",array('customer'=> $customer,'products'=> $products,'brand'=>$brands,'category'=>$categorys,'merchants'=>$merchant));
-               }
-               elseif($keyword)
-               {
-                   $products = $em->getRepository('Model:Product')->keywordsearch($keyword);
-                  
-                   return $this->render("@Customer/Default/productList.html.twig",array('customer'=> $customer,'products'=> $products,'brand'=>$brands,'category'=>$categorys,'merchants'=>$merchant));
-               }
-                else{
-                    $products = $em->getRepository('Model:Product')->productsearch();
-                    return $this->render("@Customer/Default/productList.html.twig",
-                        array('customer'=> $customer,'products'=> $products,'brand'=>$brands,'category'=>$categorys,'merchants'=>$merchant));               
-                } 
-                //END
+                $categorys = $this->getDoctrine()->getRepository('Model:Category')->categoryNameList();        
+              
             }            
         }
         catch (\Exception $exception) {
