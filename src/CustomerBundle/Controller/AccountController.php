@@ -26,7 +26,7 @@ use CustomerBundle\Form\profileImageuploadType;
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
 use CommonServiceBundle\Helper\ImageUploader;
-use Gumlet\ImageResize;
+use \Gumlet\ImageResize;
 use CommonServiceBundle\Helper\addressHelper;
 use CustomerBundle\Helper\customerDataSetHelper;
 use CommonServiceBundle\Helper\questionAnswerHelper;
@@ -44,7 +44,6 @@ class AccountController extends Controller
     {                
         $form = $this->createForm(CustomerType::class);
         $form->handleRequest($request);
-        $validator=$this->get('validator'); //validator service        
         try {
             $em = $this->getDoctrine()->getManager(); 
             if ($form->isSubmitted()) {                                         
@@ -58,6 +57,7 @@ class AccountController extends Controller
                      * @var uplodedFile images
                      */
                     $image = $form->getData()["profile_photo"];
+                    $imageName="";
                     if($image){
                         $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();
                         $dest ='profileImage';
@@ -65,33 +65,27 @@ class AccountController extends Controller
                         $fileUpload->imageFileUpload($image,$imageName,$dest);                                              
                     }                        
                     $customerobj = new customerDataSetHelper($this->container);
-                    $customer=$customerobj->setCustomerObject($form,$address,$customerPlan,$imageName);           
+                    $customer=$customerobj->setCustomerObject($form->getData(),$address,$customerPlan,$imageName);           
                     if($address instanceof Address && $customer instanceof Customer){    
                         $q1=$em->getRepository('Model:SecretQuestion')->find(1);
                         $q2=$em->getRepository('Model:SecretQuestion')->find(2);
-                        $qA1= new questionAnswerHelper($container);
-                        $qA1->setQuestionAnswer($form, $q2);
-                        $qA2= new questionAnswerHelper($container);
-                        $qA2->setQuestionAnswer($form, $q2);
+                        $qA1= new questionAnswerHelper($this->container);
+                        $qA1->setQuestionAnswer($form->getData()["question1"], $q2,$customer->getId());
+                        $qA2= new questionAnswerHelper($this->container);
+                        $qA2->setQuestionAnswer($form->getData()["question1"], $q2,$customer->getId());
                         return $this->redirectToRoute("login");
-                    }                                    
-                   else{
+                    }else{
                         return $this->render("@Customer/Account/register.html.twig", array( 'form' => $form->createView(), 'message'=> '','errors'=>$customer, 'error1'=>$address ));
                    }                   
-                }
-                else{
+                }else{
                     $infomessage="you already have an account!!!";
                     return $this->render("@Customer/Account/register.html.twig", array('form' => $form->createView(),'message'=> $infomessage,'errors'=>'', 'error1'=>'' ));
                 }
-            } 
-            return $this->render("@Customer/Account/register.html.twig", array('form' => $form->createView(),'message'=> '','errors'=>'', 'error1'=>'' ));
-        }
-        catch (\Exception $exception) {
-            var_dump($exception->getMessage().$exception->getLine().$exception->getFile());
-            die;
+            }return $this->render("@Customer/Account/register.html.twig", array('form' => $form->createView(),'message'=> '','errors'=>'', 'error1'=>'' ));
+        }catch (\Exception $exception) {
+            var_dump($exception->getMessage().$exception->getLine().$exception->getFile());die;
         }        
     }
-
     
      /**
      * @Route("/customer",name="customer_landing");
@@ -142,69 +136,37 @@ class AccountController extends Controller
                 return $this->redirectToRoute("customer_profile_page");
             }
             if ($form->isSubmitted()) {
-            $customerPlan =$form->getData()["plan"];
-            $state=$form->getData()["state"];
-            $country=$form->getData()["country"];                    
-            $q1=$em->getRepository('Model:SecretQuestion')->find(1);
-            $q2=$em->getRepository('Model:SecretQuestion')->find(2);
-            $qA1=$em->getRepository('Model:SecretAnswer')->findOneBy(['questionId'=>$q1]);
-            $qA2=$em->getRepository('Model:SecretAnswer')->findOneBy(['questionId'=>$q2]);            
-            $customerMobileNoExist =$em->getRepository('Model:Customer')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
-            $customerEmailExist =$em->getRepository('Model:Customer')->findOneBy(['email'=>$form->getData()["email"]]);     
-            if($customerEmailExist || $customerMobileNoExist) {                       
-                 if(($customer->getEmail()== $form->getData()["email"]) && ($customer->getMobileNo()== $form->getData()["mobile_no"]) ){
-                    $address =$em->getRepository('Model:Address')->findOneBy(['id' => $customer->getAddressId()]);
-                    $address->setAddressLine1($form->getData()["address_line1"]);
-                    $address->setAddressLine2($form->getData()["address_line2"]);
-                    $address->setStateId($state);
-                    $address->setCountryId($country);
-                    $address->setPincode($form->getData()["pincode"]);
-                    $em->persist($address);
-                    $em->flush();
-                    $customer->setFname($form->getData()["fname"]);
-                    $customer->setLname($form->getData()["lname"]);
-                    $customer->setEmail($form->getData()["email"]);
-                    $customer->setMobileNo($form->getData()["mobile_no"]);
-                    $customer->setAddressId($address);
-                    $customer->setCustomerPlanId($customerPlan);
-                    $entityManager = $this->getDoctrine()->getManager();
-                    $entityManager->persist($customer);
-                    $entityManager->flush();                    
-                    $qA1->setAnswer($form->getData()['question1']);
-                    $entityManager->persist($qA1);
-                    $entityManager->flush();
-                    $qA2->setAnswer($form->getData()['question2']);
-                    $entityManager->persist($qA2);
-                    $entityManager->flush();                    
-                    return $this->redirectToRoute("customer_profile_page");
-                }
-                else{
-                $infomessage="you already have an account!!!";
-                return $this->render("@Customer/Account/profile.html.twig", 
-                    array('form' => $form->createView(),'imageform'=> $imageform->createView(),
-                        'message'=> $infomessage, 'image'=> $image1));
-                }
-            }
-            else
-            {
-            $customer->setFname($form->getData()["fname"]);
-            $customer->setLname($form->getData()["lname"]);
-            $customer->setEmail($form->getData()["email"]);
-            $customer->setMobileNo($form->getData()["mobile_no"]);
-            $customer->setAddressId($address);
-            $customer->setCustomerPlanId($customerPlan);
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($customer);
-            $entityManager->flush();            
-            $qA1->setAnswer($form->getData()['question1']);
-            $entityManager->persist($qA1);
-            $entityManager->flush();            
-            $qA2->setAnswer($form->getData()['question2']);
-            $entityManager->persist($qA2);
-            $entityManager->flush();            
-            return $this->redirectToRoute("customer_profile_page");            
-           }
-       }                 
+                $customerPlan =$form->getData()["plan"];
+                $state=$form->getData()["state"];
+                $country=$form->getData()["country"];                    
+                $q1=$em->getRepository('Model:SecretQuestion')->find(1);
+                $q2=$em->getRepository('Model:SecretQuestion')->find(2);
+                $qA1=$em->getRepository('Model:SecretAnswer')->findOneBy(['questionId'=>$q1]);
+                $qA2=$em->getRepository('Model:SecretAnswer')->findOneBy(['questionId'=>$q2]);            
+                $address =$em->getRepository('Model:Address')->findOneBy(['id' => $customer->getAddressId()]);
+                $address->setAddressLine1($form->getData()["address_line1"]);
+                $address->setAddressLine2($form->getData()["address_line2"]);
+                $address->setStateId($state);
+                $address->setCountryId($country);
+                $address->setPincode($form->getData()["pincode"]);
+                $em->persist($address);
+                $em->flush();
+                $customer->setFname($form->getData()["fname"]);
+                $customer->setLname($form->getData()["lname"]);
+                $customer->setAddressId($address);
+                $customer->setCustomerPlanId($customerPlan);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($customer);
+                $entityManager->flush();                    
+                $qA1->setAnswer($form->getData()['question1']);
+                $entityManager->persist($qA1);
+                $entityManager->flush();
+                $qA2->setAnswer($form->getData()['question2']);
+                $entityManager->persist($qA2);
+                $entityManager->flush();                    
+                return $this->redirectToRoute("customer_profile_page");
+            }   
+            
         $form->get('fname')->setData($customer->getFname());
         $form->get('lname')->setData($customer->getLname());
         $form->get('email')->setData($customer->getemail());
@@ -225,10 +187,8 @@ class AccountController extends Controller
         $form->get('question2')->setData($answers[1]->getanswer());        
         }
         catch (\Exception $exception) {
-            var_dump($exception);
-            die;
-        }
-        return $this->render("@Customer/Account/profile.html.twig",array('form' => $form->createView(),'imageform'=> $imageform->createView(),'message'=>"",'image'=>$image1));  
+            var_dump($exception); die;
+        } return $this->render("@Customer/Account/profile.html.twig",array('form' => $form->createView(),'imageform'=> $imageform->createView(),'message'=>"",'image'=>$image1));  
     }    
         
     /**
@@ -267,22 +227,18 @@ class AccountController extends Controller
                   }
                   else{
                    return $this->render("@Customer/Account/forgotpassword.html.twig",array('message'=> 'Please answer the question again?',
-                       'question'=>$question));
-                   }
+                       'question'=>$question));}
                  }
                  else{
                    return $this->render("@Customer/Account/forgotpassword.html.twig",array('message'=>'This emailid is not registered please try again..',
-                       'question'=>$question));                   
-                  }
+                       'question'=>$question));}
                 }else{
                     return $this->render("@Customer/Account/forgotpassword.html.twig",array('message'=>'password and confirm password is not matched, please try again..',
-                        'question'=>$question));
-                 }
+                        'question'=>$question));}
            }           
        }
        catch (Exception $exception) {
            var_dump($exception);die;
-       }       
-       return $this->render("@Customer/Account/forgotpassword.html.twig",array('message'=> '','question'=>$question));         
+       }return $this->render("@Customer/Account/forgotpassword.html.twig",array('message'=> '','question'=>$question));         
     }
  }

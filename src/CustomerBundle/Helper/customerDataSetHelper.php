@@ -21,21 +21,22 @@ class customerDataSetHelper{
             $em = $this->container->get('doctrine')->getEntityManager();
             $validator=$this->container->get('validator');
             $customer= new Customer();
-            $customer->setFname($form->getData()["fname"]);
-            $customer->setLname($form->getData()["lname"]);
-            $customer->setEmail($form->getData()["email"]);
-            $customer->setMobileNo($form->getData()["mobile_no"]);
-            $customer->setPassword($form->getData()["password"]);
+            $customer->setFname($form["fname"]);
+            $customer->setLname($form["lname"]);
+            $customer->setEmail($form["email"]);
+            $customer->setMobileNo($form["mobile_no"]);
+            $customer->setPassword($form["password"]);
             $customer->setCustomerPlanId($customerPlan);
             $customer->setCustomerStatus(Customer::ACTIVE);
             $customer->setCustomerRole(Customer::ROLE);
             $customer->setAddressId($address);
-            $customer->setProfilePhoto($imageName);
-            $customer->setPassword($this->container->get('security.encoder_factory.generic')->getEncoder($customer)->encodePassword($form->getData()['password'], ''));
+            if($imageName){
+                $customer->setProfilePhoto($imageName);}
+            $customer->setPassword($this->container->get('security.encoder_factory.generic')->getEncoder($customer)->encodePassword($form['password'], ''));
             $error1 =$validator->validate($customer); 
             if(!count($error1)){
                 $em->persist($customer);
-               // $em->flush();
+                $em->flush();
                 return $customer;
             }else{
                  return $error1;
@@ -48,5 +49,6 @@ class customerDataSetHelper{
 
         }
     }
+    
         
 }

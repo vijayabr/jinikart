@@ -29,7 +29,7 @@ class addressHelper{
             $error1=$validator->validate($address);
             if(!count($error1)){
                 $em->persist($address);
-                //$em->flush();
+                $em->flush();
                 return $address;
             }else{
                  return $error1;

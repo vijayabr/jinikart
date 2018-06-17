@@ -17,13 +17,13 @@ class questionAnswerHelper{
         $this->container=$container;             
     }
     
-    public function setQuestionAnswer($form,$question){
+    public function setQuestionAnswer($answer,$question,$customer){
         try{ 
             $em = $this->container->get('doctrine')->getEntityManager();
             $questionAnser= new SecretAnswer();
-            $questionAnser->setAnswer($form['question1']);
-            $em = $this->getDoctrine()->getManager();
-            $questionAnser->setQuestionId($q1);
+            $questionAnser->setAnswer($answer);
+            $em = $this->container->get('doctrine')->getManager();
+            $questionAnser->setQuestionId($question);
             $questionAnser->setRole(Customer::ROLE);
             $questionAnser->setRoleId($customer);
             $em->persist($questionAnser);
