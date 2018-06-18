@@ -15,6 +15,7 @@ use Common\Model\ProductOrderDetail;
 use Common\Model\Product_Detail_List;
 use Common\Model\WishList;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Model\Product;
 
 class TransactionController extends Controller
 {
@@ -33,8 +34,11 @@ class TransactionController extends Controller
             $em=$this->getDoctrine()->getManager();
             $product=$em->getRepository('Model:Product')->findOneBy(['id'=>$id]);
             $customerId=$em->getRepository('Model:Customer')->findOneBy(['id'=>$cid]);
-            
-           if($product){      
+            $quantity=1;
+          
+            if ($form->isSubmitted()) { 
+       
+            if($product){      
             $cart= new Cart();
             $cart=$em->getRepository('Model:Cart')->findOneBy(['customerId'=>$cid]);   
             if($cart!=null)    //if cart already exists for customer
@@ -66,18 +70,19 @@ class TransactionController extends Controller
                 $wishlist->setWishlistStatus(Wishlist::IN_STOCK);
                 $wishlist->setProductId($product);
                 $wishlist->setCustomerId($customerId);
-              
-              $em->persist($wishlist);
-              $em->flush();
+                $em->persist($wishlist);
+                $em->flush();
              }
              else{
                  $wishlist->setWishlistStatus(Wishlist::OUT_OF_STOCK);
-             }            
-           } 
-           return $this->render("@Customer/Default/cart.html.twig",array('form'=>$form->createView(),'product'=>$product,'cid'=>$cid));         
-        } catch(\Exception $exception){            
+             }   
+                
+           }
+            }
+       } catch(\Exception $exception){            
             echo "Error Occurred While adding to cart";
-        }         
+       }
+       return $this->render("@Customer/Default/cart.html.twig",array('form'=>$form->createView(),'product'=>$product,'cid'=>$cid,'quant'=>$quantity));               
     }
     //Function for displaying product in wishlist
     /**
@@ -104,7 +109,7 @@ class TransactionController extends Controller
      */
     public function placeOrderAction(Request $request,$cid,$id)
     {
-        return $this->render("@Customer/Default/placeOrder.html.twig");     
+       
         try{
             $em=$this->getDoctrine()->getManager();
             $customerId=$em->getRepository('Model:Customer')->findOneBy(['id'=>$cid]);
@@ -114,19 +119,22 @@ class TransactionController extends Controller
             $productOrder->setCustomerId($customerId);             
             $em->persist($productOrder);
             $em->flush();           
-             $cart= new Cart();
-             $cartlist= new CartList();             
-             $cart=$em->getRepository('Model:Cart')->findBy(['customerId'=>$cid]);
-             $cartlist=$em->getRepository('Model:CartList')-> findOneBy(['cartId'=>$cart]);                     
-             $productOrderDetail= new ProductOrderDetail(); //setting data to Product Order Detail Table
-             $productOrderDetail->setProductOrderId($productOrder);
-             $productOrderDetail->setCartListId($cartlist);  
-             $productOrderDetail->setDeliveryDate(new \DateTime());
-             $em->persist($productOrderDetail);
-             $em->flush();        
+            $cart= new Cart();
+            $cartlist= new CartList();             
+            $cart=$em->getRepository('Model:Cart')->findBy(['customerId'=>$cid]);
+            $cartlist=$em->getRepository('Model:CartList')-> findOneBy(['cartId'=>$cart]);                     
+            $productOrderDetail= new ProductOrderDetail(); //setting data to Product Order Detail Table
+            $productOrderDetail->setProductOrderId($productOrder);
+            $productOrderDetail->setCartListId($cartlist);  
+            $productOrderDetail->setDeliveryDate(new \DateTime());
+            $em->persist($productOrderDetail);
+            $em->flush();    
+             
+          
            }catch(\Exception $exception){            
                echo "Error Occurred While placing the order";
        }
+       return $this->render("@Customer/Default/placeOrder.html.twig");     
     }
     //Function for deleting item from the cart and wishlist
     /**
