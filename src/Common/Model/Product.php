@@ -30,7 +30,7 @@ class Product
     /**
      * @var int
      * One Product can has one description Id.
-     * @ORM\OneToOne(targetEntity="Common\Model\Product_Description")
+     * @ORM\OneToOne(targetEntity="Common\Model\Product_Description",cascade={"persist"})
      * @ORM\JoinColumn(name="productDescriptionId", referencedColumnName="id")
      */
     private $productDescriptionId;
@@ -73,7 +73,7 @@ class Product
     private $brandId;
     /**
      * @var int
-     * @ORM\Column(name="product_count", type="integer")
+     * @ORM\Column(name="product_count", type="integer",nullable=true)
      */
     private $productCount;
     
