@@ -51,11 +51,8 @@ class ReportController extends Controller
     public function invoicePdfGeneratorData($merchant,$order){
         try{
         $em = $this->getDoctrine()->getManager();
-        if($order){
-            
-            $orders=$em->getRepository('Model:ProductOrderDetail')->productOrder($merchant,$order);
-         
-            
+        if($order){            
+            $orders=$em->getRepository('Model:ProductOrderDetail')->productOrder($merchant,$order);            
         }
         else {
             $orders=$em->getRepository('Model:ProductOrderDetail')->productOrders($merchant);   

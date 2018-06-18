@@ -4,7 +4,7 @@
  <div class="container" style="padding:50px 15px 15px 30px;margin-left:35%">
 {{ form_start(form) }}
 {{ form_widget(form) }}
-<button type="submit"  >Add</button>
+<button type="submit"  >Add product</button>
 <button type="Reset">Clear</button>
 
 <br/>
@@ -13,4 +13,5 @@
 {% endblock %}
 {% block javascripts %}
 <script src={{ asset('/js/merchant.js') }}></script>
+<script src={{ asset('/js/addProduct.js') }}></script>
 {% endblock %}

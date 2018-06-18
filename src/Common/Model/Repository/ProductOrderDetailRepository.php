@@ -33,7 +33,7 @@ class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
         
     }
 
-   
+
     //Query to find particular customer details and product ordered by the customer (for Merchant reference)
     
     public function productOrder($merchant,$orderId){

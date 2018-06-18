@@ -1,4 +1,31 @@
 $(document).ready(function(){
+	$('#min').on('input', function() {
+		var input=$(this);
+		var rec = /^\d*$/;
+		var is_no=rec.test(input.val());
+		if(!is_no){
+			$("#checkmin").text("price should be numeric");
+		}else{
+			$("#checkmin").text("");
+		}
+		if(input >= 0){
+			$("#checkmin").text("price should be greater then 0");
+		}
+	});
+	
+	$('#max').on('input', function() {
+		var input=$(this);
+		var rec = /^\d*$/;
+		var is_no=rec.test(input.val());
+		if(!is_no){
+			$("#checkmax").text("price should be numeric");
+		}else{
+			$("#checkmax").text("");
+		}
+		if(input <= 100000){
+			$("#checkmin").text("price should be lesser then 100000");
+		}
+	});
 	
 		$("#search").click(function(){
  	    
@@ -20,8 +47,7 @@ $(document).ready(function(){
 			"discount":discount,
 			"ramsize":ramsize,
 			"camera":camera,
-			"merchant":merchant
-				
+			"merchant":merchant				
 		}
 					
 		var dataUrl=$('#url').val();
@@ -31,7 +57,6 @@ $(document).ready(function(){
 			   url: dataUrl ,
 			   success: function(data){
 			     $('#productsList').html(data);
-
 			     }
         }); 			
 	  });
