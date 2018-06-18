@@ -52,11 +52,8 @@ class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
             ->join('pd.productId','p')
             ->where('pl.merchantId= ?1')
             ->setParameter('1',(int)$id);    
-            $query=$qb->getQuery(); 
-            dump($query);
+            $query=$qb->getQuery();            
             $result= $query->getResult();
-            dump($result);
-            die;
             return $result;
         }
     

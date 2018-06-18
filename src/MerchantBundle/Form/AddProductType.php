@@ -15,13 +15,17 @@ class AddProductType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('merchantId',NUmberType::class,array('label' => 'Merchant Id: '))
-        ->add('product_name',TextType::class,array('label' => 'Product Name: '))
-        ->add('product_price',TextType::class,array('label' => 'Product Price: '))
-        ->add('productIMEI',TextType::class,array('attr'=> array('class' => 'Model:Product_Detail_List',
-            'label'=> 'IMEI:'),'constraints'=>array(new Length(array('min'=>15))),'required'=>''
-         ))
-        ->add('product_discount',PercentType::class,array('label' => 'Discount:'))
+        $builder->add('merchantId',NUmberType::class,array('attr'=> array('class' => 'Model:Product_Detail_List','placeholder'=>"number",
+            'label' => 'Merchant Id: ')))
+            ->add('product_name',TextType::class,array('attr'=> array('class' => 'Model:Product_Detail_List','placeholder'=>"product name",
+                'label' => 'Product Name: ')))
+                ->add('product_price',TextType::class,array('attr'=> array('class' => 'Model:Product_Detail_List','placeholder'=>"price in rupees",
+                    'label' => 'Product Price: ')))
+        ->add('productIMEI',TextType::class,array('attr'=> array('class' => 'Model:Product_Detail_List','placeholder'=>"15 digit unique number",
+            
+            'label'=> 'IMEI:'),'constraints'=>array(new Length(array('min'=>15))),'required'=>''))
+            ->add('product_discount',PercentType::class,array('attr'=> array('class' => 'Model:Product_Detail_List','placeholder'=>"percentage in digits",
+                'label' => 'Discount:')))
         ->add('categoryName',EntityType::class,array('class' => 'Common\Model\Category',
             'choice_label'=> function($cat){
             return $cat->getCategoryName();
