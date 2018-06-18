@@ -37,8 +37,8 @@ class ProductManagementController extends Controller
               //if form is successfully submitted
                  if ($form->isSubmitted() && $form->isValid()) {  
                      //fetching data from the form
-                 $em = $this->getDoctrine()->getManager();            
-                 $id=$form->getData()["merchantId"];
+                 $em = $this->getDoctrine()->getManager();         
+
                  $name=$form->getData()["product_name"];
                  $price = $form->getData()["product_price"];
                  $imei = $form->getData()["productIMEI"];  
@@ -47,8 +47,7 @@ class ProductManagementController extends Controller
                  $brand = $form->getData()["brandName"];
                  $color = $form->getData()["color"];
                  $ram = $form->getData()["ram_size"];
-                 $cam = $form->getData()["camera"];
-                 $count=$form->getData()["product_count"];
+                 $cam = $form->getData()["camera"];               
                  $info = $form->getData()["product_complete_info"];
                  $image = $form->getData()["product_photo"];
                  
@@ -69,8 +68,7 @@ class ProductManagementController extends Controller
                  $product->setProductPrice($price);
                  $product->setBrandId($brand);
                  $product->setCategoryId($category);
-                 $product->setProductDescriptionId($descp);
-                 $product->setProductCount($count);      
+                 $product->setProductDescriptionId($descp); 
                  $em->persist($product);
                  $em->flush();
                 

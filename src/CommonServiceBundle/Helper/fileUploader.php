@@ -5,8 +5,7 @@ use Symfony\Component\DependencyInjection\Container;
 use Aws\S3\S3Client;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Aws\S3\Exception\S3Exception;
-use Gumlet\ImageResize;
-use Symfony\Component\HttpFoundation\File\File;
+
 
 class fileUploader{
     public $bucketName;
@@ -45,16 +44,17 @@ class fileUploader{
                 'ACL'  => 'public-read'
             )
             );
+        return $result;
         }
         catch (S3Exception $e){
             die('Error:'.$e->getMessage());
         }
     }
-    
-   public function pdfFileUpload($file, $file){
+     public function pdfFileUpload($filename,$dest){
             try {
-           
-            
+                $temp = $this->container->getParameter('product_file_directory')."/temp.pdf";
+                $keyName = $dest.'/'. basename($filename);
+                $this->fileUploading($keyName,$temp);              
         }
         catch (Exception $e) {
             die('Error:' . $e->getMessage().$e->getLine().$e->getFile());

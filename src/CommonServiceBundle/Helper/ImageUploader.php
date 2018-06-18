@@ -45,6 +45,7 @@ class ImageUploader{
                 'ACL'  => 'public-read'
             )
             );
+            return  $result;
         }
         catch (S3Exception $e){
             die('Error:'.$e->getMessage());
