@@ -121,8 +121,7 @@ class ReportController extends Controller
      */
     public function indexAction(Request $request,$id)
     {
-        try{
-      
+        try{   
         // ask the service for a Excel5
         $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
         $phpExcelObject->getDefaultStyle()->getFont()->setName('Arial Black');
@@ -131,7 +130,7 @@ class ReportController extends Controller
        
         ->setSubject("Product Document")
         ->setDescription("Stock Document, generated using PHP classes.");
-      
+      //For stock report
         $em = $this->getDoctrine()->getManager();     
         $product = $em->getRepository('Model:Merchant')->findAllDetails(['id'=> $id]);  
      
@@ -150,6 +149,7 @@ class ReportController extends Controller
              $phpExcelObject->getActiveSheet(0)->SetCellValue('C'.$rowCount, $value['productCount']);     
              $rowCount++;
         }
+        //For invoice report
            $objWorkSheet = $phpExcelObject->createSheet(1)->setTitle("Invoice");
            $objWorkSheet  = $phpExcelObject->getSheet(1);
      
@@ -157,11 +157,10 @@ class ReportController extends Controller
           ->setCellValue('B1', 'Product Name')
           ->setCellValue('C1', 'Price')
           ->setCellValue('D1', 'Ordered Date')
-         
-          ->setCellValue('E1', 'Shipping Address');  
+          ->setCellValue('E1', 'Shipping Address'); 
+           
           $em = $this->getDoctrine()->getManager();
           $invoice = $em->getRepository('Model:ProductOrderDetail')->findInvoiceDetails(['id'=> $id]); 
-    
           $rowCount = 2;
           foreach ($invoice as $value){
               $phpExcelObject->getSheet(1)->SetCellValue('A'.$rowCount, $value['fname']);

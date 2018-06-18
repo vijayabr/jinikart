@@ -40,22 +40,19 @@ class AccountController extends Controller
                 if(!$merchantEmailExist && !$merchantMobileNoExist) { 
                     $addr=new addressHelper($this->container);
                     $address= $addr->setAddress($form->getData());      
-                    /**
-                     *@var uplodedFile images
-                     */
+                   //Uploading image to s3
                     $image = $form->getData()["companylogo"];
                     if($image){
                         $imageName = $form->getData()["companyName"]. '.' . $image->guessExtension();
                         $dest ='companyLogo';
                         $fileUpload = new ImageUploader($this->container);
-                        $fileUpload->imageFileUpload($image,$imageName,$dest);
-                        // $image->move($this->getParameter('company_image_directory'),$imageName);
-                    
+                        $fileUpload->imageFileUpload($image,$imageName,$dest);    
                     }  
                     $customerobj = new merchantDataSetHelper($this->container);
                     $customer=$customerobj->setMerchantObject($form->getData(),$address,$merchantPlan,$imageName);                                
                                    
                     if($address instanceof Address && $merchant instanceof Merchant){
+                        //Secret question and answer for forgot password implementation   
                         $q1=$em->getRepository('Model:SecretQuestion')->find(1);
                         $q2=$em->getRepository('Model:SecretQuestion')->find(2);
                         

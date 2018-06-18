@@ -108,7 +108,7 @@ class TransactionController extends Controller
         try{
             $em=$this->getDoctrine()->getManager();
             $customerId=$em->getRepository('Model:Customer')->findOneBy(['id'=>$cid]);
-            $productOrder= new ProductOrder();
+            $productOrder= new ProductOrder(); //setting data to Product Order Table
             $productOrder->setOrderStatus("Requested");
             $productOrder->setOrderedDate(new \DateTime());
             $productOrder->setCustomerId($customerId);             
@@ -118,7 +118,7 @@ class TransactionController extends Controller
              $cartlist= new CartList();             
              $cart=$em->getRepository('Model:Cart')->findBy(['customerId'=>$cid]);
              $cartlist=$em->getRepository('Model:CartList')-> findOneBy(['cartId'=>$cart]);                     
-             $productOrderDetail= new ProductOrderDetail();
+             $productOrderDetail= new ProductOrderDetail(); //setting data to Product Order Detail Table
              $productOrderDetail->setProductOrderId($productOrder);
              $productOrderDetail->setCartListId($cartlist);  
              $productOrderDetail->setDeliveryDate(new \DateTime());
