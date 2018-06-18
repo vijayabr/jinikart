@@ -17,6 +17,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class ProductController extends Controller
 { 
+    
+    //Function for quick search form
     public function formBuilding(){
         $productsearch = $this->createFormBuilder()
         ->add('brand', EntityType::class, array('class' => 'Common\Model\Brand',
@@ -44,6 +46,7 @@ class ProductController extends Controller
             return $productsearch;
     }
     
+    // Function for customer homepage with quick search embedded
     /**
      * @Route("/customer/index",name="index_page");
      * @param Request $request
@@ -77,7 +80,7 @@ class ProductController extends Controller
         return $this->render("@Customer/Default/homepage.html.twig",array('form' => $productsearch->createView(),'customer'=>$customer));      
       }
     
-     
+      //Function for display product info
     /**
      * @Route("/customer/product/details/{pName}",name="productdetails_page");
      * @param Request $request
@@ -103,7 +106,7 @@ class ProductController extends Controller
         }
     }
     
-    
+    //Function for advanced product search
     /**
      * @Route("/customer/products",name="advancedproductList_page");
      * @param Request $request

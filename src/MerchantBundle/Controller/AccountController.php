@@ -1,12 +1,10 @@
 <?php
 
 namespace MerchantBundle\Controller;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use MerchantBundle\Form\MerchantType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Common\Model\Address;
 use Common\Model\Merchant;
 use Common\Model\Merchant_plan;
@@ -21,6 +19,7 @@ use MerchantBundleBundle\Helper\merchantDataSetHelper;
 
 class AccountController extends Controller
 {
+    //Function for merchant registration
      /**
      * @Route("/merchant/registration", name="merchant_registration");
      * @param Request $request
@@ -32,8 +31,6 @@ class AccountController extends Controller
         
         $form = $this->createForm(MerchantType::class);
         $form->handleRequest($request);
-        $validator=$this->get('validator');
-        
         try {
             if ($form->isSubmitted()) {
                 $em = $this->getDoctrine()->getManager();
@@ -48,12 +45,12 @@ class AccountController extends Controller
                      */
                     $image = $form->getData()["companylogo"];
                     if($image){
-                        $imageName =  $merchant->getCompanyName(). '.' . $image->guessExtension();
+                        $imageName = $form->getData()["companyName"]. '.' . $image->guessExtension();
                         $dest ='companyLogo';
                         $fileUpload = new ImageUploader($this->container);
                         $fileUpload->imageFileUpload($image,$imageName,$dest);
                         // $image->move($this->getParameter('company_image_directory'),$imageName);
-                        
+                    
                     }  
                     $customerobj = new merchantDataSetHelper($this->container);
                     $customer=$customerobj->setMerchantObject($form->getData(),$address,$merchantPlan,$imageName);                                
@@ -81,7 +78,7 @@ class AccountController extends Controller
             echo "Error occurred while registration";
     }    
  }
-   
+ //Function for displaying homepage
  /**
      * @Route("/merchant/index", name="merchant_index");
      * @param Request $request
@@ -101,6 +98,7 @@ class AccountController extends Controller
       }
     
     }
+    //Function for sign in or sign up
     /**
      * @Route("/merchant",name="merchant_landing");
      * @param Request $request
@@ -114,7 +112,7 @@ class AccountController extends Controller
         echo "Error occurred in landing page";
       }
     }
-    
+    //Function for forgot password (changing password)
     /**
      * @Route("/merchant/forgotpassword",name="merchant_forgotpassword_page");
      * @param Request $request

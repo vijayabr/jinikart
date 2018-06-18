@@ -23,6 +23,7 @@ use CommonServiceBundle\Helper\ImageUploader;
 
 class ProductManagementController extends Controller
 {
+    //Function for merchant to add products
     /**
      * @Route("/merchant/add",name="add_products");
      * @param Request $Request
@@ -98,7 +99,7 @@ class ProductManagementController extends Controller
                      echo " Error while adding products";
         }
   }
-    
+  //Function for listing added products
     /**
      * @Route("/merchant/list/{id}",name="list_products");
      * @param Request $Request
@@ -116,7 +117,7 @@ class ProductManagementController extends Controller
      }
      return $this->render("@Merchant/Default/list.html.twig",array('product'=>$product,'merchantId'=>$id,'merchant'=>$merchant,'count'=>$count));   
  }
-    
+ //Function for generating coupon 
     /**
      * @Route("/merchant/coupon/{id}",name="coupon");
      * @param Request $request
@@ -143,6 +144,7 @@ class ProductManagementController extends Controller
         }
         return  $this->redirectToRoute("list_products",array('id'=>$mid->getId())); 
     }
+    //Function for updating products added
 /**
      * @Route("/merchant/update",name="update");
      * @param Request $request
@@ -201,7 +203,7 @@ public function updateAction(Request $request)
          }
          return $this->render("@Merchant/Default/update.html.twig",array('form'=> $form->createView(),'merchant'=>$merchant)); 
     }
-  
+    //Function for displaying merchant info
     /**
      * @Route("/merchant/details",name="company_details");
      * @param Request $request

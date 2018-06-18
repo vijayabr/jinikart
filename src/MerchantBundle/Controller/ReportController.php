@@ -19,6 +19,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class ReportController extends Controller
 {
+    //Function for generating pdf file
     public function pdffilegenerator($data,$merchant){
         $filename=$merchant.".pdf";
         
@@ -31,7 +32,7 @@ class ReportController extends Controller
 
     }
         
-   
+   //Function for viewing placed orders
     /**
      * @Route("/merchant/order",name="_order_page");
      * @param Request $request
@@ -50,6 +51,7 @@ class ReportController extends Controller
         return $this->render("@Merchant/Order/orderlist.html.twig",array('merchant'=> $merchant,'orders'=>$orders));      
     }
     
+    //Function for data generation for pdf
     public function invoicePdfGeneratorData($merchant,$order){
         try{
         $em = $this->getDoctrine()->getManager();
@@ -91,7 +93,7 @@ class ReportController extends Controller
         return  $msg;
     }
     
-    
+    //Function for invoice pdf generation
     /**
      * @Route("/merchant/invoice",name="invoicePdf_page");
      * @param Request $request
@@ -110,7 +112,7 @@ class ReportController extends Controller
         }
         return new Response("save the file");
     }
-    
+    //Function for excel sheet (stock &invoice ) for merchant cron
     /**
 
      * @Route("/merchant/excel/{id}",name="excel_page");
@@ -191,7 +193,7 @@ class ReportController extends Controller
             echo " Error in excel sheet generation";
         }
     }
-    
+    //Function for generating order pdf info
     /**
      * @Route("/merchant/orderInvoice/{order}",name="orderinvoicePdf_page");
      * @param Request $request
@@ -208,7 +210,7 @@ class ReportController extends Controller
         }
         return new Response("save the file");
     } 
-       
+    //Function for accepting customer order
     /**
      * @Route("/merchant/orderaccept/{order}",name="orderaccept_page");
      * @param Request $request
@@ -229,7 +231,7 @@ class ReportController extends Controller
         }
         return $this->redirectToRoute('_order_page'); 
     }
-    
+    //Function for rejecting customer order
     /**
      * @Route("/merchant/orderreject/{order}",name="orderreject_page");
      * @param Request $request
@@ -249,7 +251,7 @@ class ReportController extends Controller
         }
         return $this->redirectToRoute('_order_page');
     }    
-   
+    //Function for generating order notifications
     /**
      * @Route("/merchant/notification",name="ordernotification_page");
      * @param Request $request

@@ -21,6 +21,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class SecurityController extends Controller
 {
+    //Functions for merchant login and logout
      /**
       * @Route ("/merchant/login",name="merchant_login");
       * @param Request $request
