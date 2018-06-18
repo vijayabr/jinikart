@@ -20,14 +20,6 @@ class UpdateProductType extends AbstractType
         ->add('product_price',TextType::class,array('label' => 'Product Price: ','required'=>false))
         
         ->add('product_discount',PercentType::class,array('label' => 'Discount:','required'=>false))
-        ->add('categoryName',EntityType::class,array('class' => 'Common\Model\Category',
-            'choice_label'=> function($cat){
-            return $cat->getCategoryName();
-            }, 'placeholder' => 'Choose an option','label' =>'Category Name:'))
-            ->add('brandName',EntityType::class,array('class' => 'Common\Model\Brand',
-                'choice_label'=> function($brand){
-                return $brand->getBrandName();
-                },'placeholder' => 'Choose an option','label' =>'Brand Name:'))
         ->add('color',TextType::class,array('attr'=> array('class' => 'Model:Product_Description',
             'label'=> 'Color:'),'required'=>false
                 ))

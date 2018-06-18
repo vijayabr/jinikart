@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new MerchantBundle\MerchantBundle(),
             new AdminBundle\AdminBundle(),
             new CommonServiceBundle\CommonServiceBundle(),  
+            new Liuggio\ExcelBundle\LiuggioExcelBundle(),
             new Ivory\GoogleMapBundle\IvoryGoogleMapBundle(),
             new Ivory\SerializerBundle\IvorySerializerBundle(),
             new Http\HttplugBundle\HttplugBundle()           
