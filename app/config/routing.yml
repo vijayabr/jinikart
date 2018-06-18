@@ -36,4 +36,5 @@ sonata_user_admin_resetting:
     prefix: /admin/resetting
 
 
-       
+api_login_check:
+    path: /api/login_check

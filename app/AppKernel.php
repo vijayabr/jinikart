@@ -38,7 +38,7 @@ class AppKernel extends Kernel
             new Nelmio\CorsBundle\NelmioCorsBundle(),  
             new Ivory\GoogleMapBundle\IvoryGoogleMapBundle(),
             new Ivory\SerializerBundle\IvorySerializerBundle(),
-
+            new Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

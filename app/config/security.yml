@@ -97,6 +97,28 @@ security:
                 target:         /admin/login
             anonymous:          true
 
+
+        jwt_login:
+            pattern:  ^/api/login
+            provider:   customer_db
+            stateless: true
+            anonymous: true
+            form_login:
+                username_parameter: email
+                password_parameter: password
+                check_path:               /api/login_check
+                success_handler:          lexik_jwt_authentication.handler.authentication_success
+                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+                require_previous_session: false
+
+        jwt_api:
+            pattern:   ^/api
+            provider:   customer_db
+            stateless: true
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+
         # -> end custom configuration
 
         # default login area for standard users
@@ -132,3 +154,5 @@ security:
             # Change these rules to adapt them to your needs
             - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
             - { path: ^/.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
