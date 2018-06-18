@@ -35,10 +35,11 @@ class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
 
     //Query to fetch details for Invoice generation (Excel sheet)
         public function findInvoiceDetails($id){
-            
+           
             $em = $this->getEntityManager();
             $qb = $em->createQueryBuilder();
-            $qb->select('pod','po.orderedDate','cl','pd,p.productName','p.productPrice','ct','c.fname','a.addressLine1','s.stateName','cy.countryName')
+            $qb->select('po.orderedDate','p.productName','p.productPrice','c.fname',
+                'a.addressLine1','s.stateName','cy.countryName')
             ->from('Common\Model\ProductOrderDetail','pod')
             ->join('pod.productOrderId','po')
             ->join('pod.cartListId','cl')
@@ -47,14 +48,15 @@ class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
             ->join('c.addressId','a')
             ->innerJoin('a.stateId','s')
             ->innerJoin('a.countryId','cy')
-            ->join('cl.productIMEI','pd')
+            ->join('cl.productImeiID','pl')
             ->join('pd.productId','p')
-            ->where('p.id= ?1')
-            ->setParameter('1',(int)$id);
-            
-            $query=$qb->getQuery();
-            $result=$query->getResult();
-         //  dump($result);die;
+            ->where('pl.merchantId= ?1')
+            ->setParameter('1',(int)$id);    
+            $query=$qb->getQuery(); 
+            dump($query);
+            $result= $query->getResult();
+            dump($result);
+            die;
             return $result;
         }
     

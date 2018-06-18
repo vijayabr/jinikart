@@ -18,6 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class TransactionController extends Controller
 {
+    //Function for adding product to cart
     /**
      * @Route("/customer/cart/{cid}/{id}", name="add_cart");
      * @param Request $request
@@ -33,19 +34,16 @@ class TransactionController extends Controller
             $product=$em->getRepository('Model:Product')->findOneBy(['id'=>$id]);
             $customerId=$em->getRepository('Model:Customer')->findOneBy(['id'=>$cid]);
             
-           if($product){
-            
+           if($product){      
             $cart= new Cart();
-            $cart=$em->getRepository('Model:Cart')->findOneBy(['customerId'=>$cid]);
-             
-            if($cart!=null)
+            $cart=$em->getRepository('Model:Cart')->findOneBy(['customerId'=>$cid]);   
+            if($cart!=null)    //if cart already exists for customer
             {
             $cart->setCartStatus(Cart::FULL); //OCCUPIED
             $em->persist($cart);
             $em->flush();
-            }
-            else{
-                $cart= new Cart();
+            }else{
+                $cart= new Cart();   //Create new cart instance for the customer
                 
                 $cart->setCustomerId($customerId);
                 $cart->setCartStatus(Cart::FULL);
@@ -55,17 +53,15 @@ class TransactionController extends Controller
             }
             $imei=new Product_Detail_List();
             $imei=$em->getRepository('Model:Product_Detail_List')->findOneBy(['productId'=>$product->getId()]);
-        
-      
+   
             $cartlist= new CartList();
             $cartlist->setProductImeiId($imei); 
             $cartlist->setCartId($cart);
             $em->persist($cartlist);
             $em->flush();
-           
-            $count= $em->getRepository('Model:Product')->findOneBy(['id'=>$id]);
-           
-            $wishlist= new WishList();
+     
+            $count= $em->getRepository('Model:Product')->findOneBy(['id'=>$id]); 
+            $wishlist= new WishList();  //Adding products to wishlist 
             if($count->getProductCount()){
                 $wishlist->setWishlistStatus(Wishlist::IN_STOCK);
                 $wishlist->setProductId($product);
@@ -83,7 +79,7 @@ class TransactionController extends Controller
             echo "Error Occurred While adding to cart";
         }         
     }
-    
+    //Function for displaying product in wishlist
     /**
      * @Route("/customer/wish/{cid}/{id}", name="wish_cart");
      * @param Request $request
@@ -100,7 +96,7 @@ class TransactionController extends Controller
               echo "Error Occurred While adding to WishList";
          }        
     }
-    
+    //Function for placing an order
     /**
      * @Route("/customer/order/{cid}/{id}", name="place_order");
      * @param Request $request
@@ -112,7 +108,7 @@ class TransactionController extends Controller
         try{
             $em=$this->getDoctrine()->getManager();
             $customerId=$em->getRepository('Model:Customer')->findOneBy(['id'=>$cid]);
-            $productOrder= new ProductOrder();
+            $productOrder= new ProductOrder(); //setting data to Product Order Table
             $productOrder->setOrderStatus("Requested");
             $productOrder->setOrderedDate(new \DateTime());
             $productOrder->setCustomerId($customerId);             
@@ -122,7 +118,7 @@ class TransactionController extends Controller
              $cartlist= new CartList();             
              $cart=$em->getRepository('Model:Cart')->findBy(['customerId'=>$cid]);
              $cartlist=$em->getRepository('Model:CartList')-> findOneBy(['cartId'=>$cart]);                     
-             $productOrderDetail= new ProductOrderDetail();
+             $productOrderDetail= new ProductOrderDetail(); //setting data to Product Order Detail Table
              $productOrderDetail->setProductOrderId($productOrder);
              $productOrderDetail->setCartListId($cartlist);  
              $productOrderDetail->setDeliveryDate(new \DateTime());
@@ -132,7 +128,7 @@ class TransactionController extends Controller
                echo "Error Occurred While placing the order";
        }
     }
-    
+    //Function for deleting item from the cart and wishlist
     /**
      * @Route("/customer/delete/{cid}/{id}", name="delete_item");
      * @param Request $request

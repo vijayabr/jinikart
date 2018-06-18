@@ -17,11 +17,13 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use MerchantBundle\Form\UpdateProductType;
 use Common\Model\Merchant;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use CommonServiceBundle\Helper\ImageUploader;
 
 
 
 class ProductManagementController extends Controller
 {
+    //Function for merchant to add products
     /**
      * @Route("/merchant/add",name="add_products");
      * @param Request $Request
@@ -32,7 +34,9 @@ class ProductManagementController extends Controller
         $form = $this->createForm(AddProductType::class);
         $form->handleRequest($request);        
           try{     
-                 if ($form->isSubmitted() && $form->isValid()) {          
+              //if form is successfully submitted
+                 if ($form->isSubmitted() && $form->isValid()) {  
+                     //fetching data from the form
                  $em = $this->getDoctrine()->getManager();            
                  $id=$form->getData()["merchantId"];
                  $name=$form->getData()["product_name"];
@@ -51,7 +55,7 @@ class ProductManagementController extends Controller
                  $merchant= new Merchant();
                  $merchant=$em->getRepository('Model:Merchant')->findOneBy(['id'=>$id]);
                
-                 $descp = new Product_Description();
+                 $descp = new Product_Description();  //setting product description(Product Description Table)
                  $descp->setColor($color);
                  $descp->setRamSize($ram);
                  $descp->setCamera($cam);
@@ -59,7 +63,7 @@ class ProductManagementController extends Controller
                  $em->persist($descp);
                  $em->flush();           
                  
-                 $product= new Product();
+                 $product= new Product();    //setting product info(Product Table)
                  $product->setProductName($name);
                  $product->setProductDiscount($discount);
                  $product->setProductPrice($price);
@@ -71,28 +75,33 @@ class ProductManagementController extends Controller
                  $em->flush();
                 
                  $photo= new Product_Photo();
-                 $imageName =  $product->getProductName(). '.' . $image->guessExtension();
-                 $image->move($this->getParameter('product_image_directory'),$imageName);
+            
+                 //Uploading image
+                 if($image){
+                     $imageName =  $product->getProductName(). '.' . $image->guessExtension();                     
+                     $dest ='productImage';
+                     $fileUpload = new ImageUploader($this->container);
+                     $fileUpload->imageFileUpload($image,$imageName,$dest);
+                 }    
+                 //$image->move($this->getParameter('product_image_directory'),$imageName);
                  $photo->setPhotoName($imageName);
                  $photo->setProductId($product);
                  $em->persist($photo);
                  $em->flush();                  
-                 $imei1= new Product_Detail_List();          
+                 $imei1= new Product_Detail_List();   //setting product details(Product Detail List Table)
                  $imei1->setProductIMEI($imei);              
                  $imei1->setProductId($product); 
                  $imei1->setMerchantId($merchant);
                  $em->persist($imei1);
                  $em->flush();                   
-                 return $this->render("@Merchant/Default/homepage.html.twig",array('merchant'=>$merchant));
-              
+                 return $this->render("@Merchant/Default/homepage.html.twig",array('merchant'=>$merchant));              
             }
             return $this->render("@Merchant/Default/add.html.twig",array('form'=> $form->createView(),'merchant'=>$merchant));
-                 }catch(\Exception $exception){
- 
+                 }catch(\Exception $exception){ 
                      echo " Error while adding products";
         }
   }
-    
+  //Function for listing added products
     /**
      * @Route("/merchant/list/{id}",name="list_products");
      * @param Request $Request
@@ -110,7 +119,7 @@ class ProductManagementController extends Controller
      }
      return $this->render("@Merchant/Default/list.html.twig",array('product'=>$product,'merchantId'=>$id,'merchant'=>$merchant,'count'=>$count));   
  }
-    
+ //Function for generating coupon 
     /**
      * @Route("/merchant/coupon/{id}",name="coupon");
      * @param Request $request
@@ -122,26 +131,22 @@ class ProductManagementController extends Controller
              $charactersLength = strlen($characters);
              $randomString = '';
              for ($i = 0; $i < $length; $i++) {
-             $randomString .= $characters[rand(0, $charactersLength - 1)];
-             }
-        
+             $randomString .= $characters[rand(0, $charactersLength - 1)]; //random string generation
+             }        
              $em=$this->getDoctrine()->getManager();
-             $product= new Product();
-             $product=$em->getRepository('Model:Product')->findOneBy(['id'=>$id] );
-            
-             $product->setCoupon($randomString);
-            
+             $product= new Product();  //setting coupon to product table
+             $product=$em->getRepository('Model:Product')->findOneBy(['id'=>$id] );            
+             $product->setCoupon($randomString);            
              $em->persist($product);
-             $em->flush();
-           
+             $em->flush();           
              $merchant=$em->getRepository('Model:Product_Detail_List')->findOneBy(['productId'=>$id]);
-             $mid=$merchant->getMerchantId();
-             
+             $mid=$merchant->getMerchantId();             
         }catch(\Exception $exception){            
             echo " Error while generating coupon";
         }
         return  $this->redirectToRoute("list_products",array('id'=>$mid->getId())); 
     }
+    //Function for updating products added
 /**
      * @Route("/merchant/update",name="update");
      * @param Request $request
@@ -160,7 +165,7 @@ public function updateAction(Request $request)
                   $product=$em->getRepository('Model:Product')->findOneBy(['id'=>'1']);
                   $descp=new Product_Description();
                   $descp=$em->getRepository('Model:Product_Description')->findOneBy(['id'=>'1']);
-                   
+                  //getting data from update form 
                   $name=$form->getData()["product_name"];
                   $price = $form->getData()["product_price"];
                   $discount = $form->getData()["product_discount"];
@@ -170,7 +175,8 @@ public function updateAction(Request $request)
                   $ram = $form->getData()["ram_size"];
                   $cam = $form->getData()["camera"];
                   $info = $form->getData()["product_complete_info"];
-                  $image = $form->getData()["product_photo"];          
+                  $image = $form->getData()["product_photo"];    
+                  //if new data entered then persist
                   if($product->getProductName()!= $name||$product->getProductPrice()!= $price||
                       $product->getDiscount()!= $discount||$descp->getColor()!=$color||$descp->getRamSize()!=$ram||
                       $descp->getCamera()!=$cam||$descp->getProductCompleteInfo()!=$info)
@@ -200,7 +206,7 @@ public function updateAction(Request $request)
          }
          return $this->render("@Merchant/Default/update.html.twig",array('form'=> $form->createView(),'merchant'=>$merchant)); 
     }
-  
+    //Function for displaying merchant info
     /**
      * @Route("/merchant/details",name="company_details");
      * @param Request $request

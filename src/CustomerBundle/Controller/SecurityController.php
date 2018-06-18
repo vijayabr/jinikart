@@ -12,6 +12,8 @@ use Symfony\Bridge\Doctrine\Security\RememberMe;
 
 class SecurityController extends Controller
 {
+    
+    //Functions for Customer Login and logout
     /**
      * @Route("/customer/login", name="login");
      * @param Request $request

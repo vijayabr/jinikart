@@ -34,7 +34,7 @@ use CommonServiceBundle\Helper\questionAnswerHelper;
 
 class AccountController extends Controller
 {
-    
+    //Function for customer registration
     /**
      * @Route("/customer/registration",name="customer_registration");
      * @param Request $request
@@ -46,10 +46,12 @@ class AccountController extends Controller
         $form->handleRequest($request);
         try {
             $em = $this->getDoctrine()->getManager(); 
+            //if form is successfully submitted 
             if ($form->isSubmitted()) {                                         
                 $customerPlan = $em->getRepository('Model:Customer_plan')->findOneBy(['id' => Customer_plan::DEFAULT_CUSTOMER_PLAN]);         
                 $customerMobileNoExist =$em->getRepository('Model:Customer')->findOneBy(['mobileNo'=>$form->getData()["mobile_no"]]);
                 $customerEmailExist =$em->getRepository('Model:Customer')->findOneBy(['email'=>$form->getData()["email"]]);
+               //If account doesnot exist create
                 if(!$customerEmailExist && !$customerMobileNoExist) {                  
                     $addr=new addressHelper($this->container);
                     $address= $addr->setAddress($form->getData());                   
@@ -59,7 +61,7 @@ class AccountController extends Controller
                     $image = $form->getData()["profile_photo"];
                     $imageName="";
                     if($image){
-                        $imageName = $customer->getFname() . $customer->getLname() . '.' . $image->guessExtension();
+                        $imageName = $form->getData()["fname"].$form->getData()["lname"]. '.' . $image->guessExtension();
                         $dest ='profileImage';
                         $fileUpload = new ImageUploader($this->container);
                         $fileUpload->imageFileUpload($image,$imageName,$dest);                                              
@@ -67,6 +69,7 @@ class AccountController extends Controller
                     $customerobj = new customerDataSetHelper($this->container);
                     $customer=$customerobj->setCustomerObject($form->getData(),$address,$customerPlan,$imageName);           
                     if($address instanceof Address && $customer instanceof Customer){    
+                        //Secret question and answer for forgot password implementation      
                         $q1=$em->getRepository('Model:SecretQuestion')->find(1);
                         $q2=$em->getRepository('Model:SecretQuestion')->find(2);
 
@@ -88,6 +91,8 @@ class AccountController extends Controller
            echo "Error Occured in Registration";
         }        
     }    
+    
+    //Function for sign in or sign up
      /**
      * @Route("/customer",name="customer_landing");
      * @param Request $request
@@ -96,7 +101,8 @@ class AccountController extends Controller
      public function customerLandingAction(Request $request){
            return $this->render("@Customer/Default/landing.html.twig");
     }
-        
+     
+    //Function for displaying profile info
     /**
      * @Route("/customer/profile",name="customer_profile_page");
      * @param Request $request
@@ -104,13 +110,14 @@ class AccountController extends Controller
      */
         public function customerProfileAction(Request $request){
         $customer= $this->getUser();
-        $image1= $customer->getProfilePhoto();
+        $image= $customer->getProfilePhoto();
         $form = $this->createForm(ProfileType::class);
         $form->handleRequest($request);
         $imageform = $this->createForm(profileImageuploadType::class);
         $imageform->handleRequest($request);
         $em = $this->getDoctrine()->getManager();      
         try{
+            //if form is successfully submitted 
             if($imageform->isSubmitted()){                        
             /**
              * @var uplodedFile images
@@ -132,7 +139,7 @@ class AccountController extends Controller
                 $entityManager->flush();
                 }
                 return $this->redirectToRoute("customer_profile_page");
-            }
+            } //if form is successfully submitted 
             if ($form->isSubmitted()) {
                 $customerPlan =$form->getData()["plan"];
                 $state=$form->getData()["state"];
@@ -163,8 +170,8 @@ class AccountController extends Controller
                 $entityManager->persist($qA2);
                 $entityManager->flush();                    
                 return $this->redirectToRoute("customer_profile_page");
-            }   
-            
+            }     
+         //fetch and set the data in the form
         $form->get('fname')->setData($customer->getFname());
         $form->get('lname')->setData($customer->getLname());
         $form->get('email')->setData($customer->getemail());
@@ -191,7 +198,7 @@ class AccountController extends Controller
         return $this->render("@Customer/Account/profile.html.twig",array('form' => $form->createView(),'imageform'=> $imageform->createView(),'message'=>"",'image'=>$image1));  
 
     }    
-        
+    //Function for forgot password (changing password)
     /**
      * @Route("/customer/forgotpassword",name="customer_forgotpassword_page");
      * @param Request $request
@@ -239,9 +246,7 @@ class AccountController extends Controller
            }           
        }
        catch (Exception $exception) {
-           echo "Error Occured in Change Password";
-       }       
+           echo "Error Occured in Change Password";}       
        return $this->render("@Customer/Account/forgotpassword.html.twig",array('message'=> '','question'=>$question));         
-
     }
  }

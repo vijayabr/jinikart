@@ -6,7 +6,7 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 use Common\Model\Address;
 use Symfony\Component\HttpFoundation\Response;
 use Common\Model\Customer;
-
+//Helper to set customer data into Db
 
 class customerDataSetHelper{
    
@@ -31,7 +31,8 @@ class customerDataSetHelper{
             $customer->setCustomerRole(Customer::ROLE);
             $customer->setAddressId($address);
             if($imageName){
-                $customer->setProfilePhoto($imageName);}
+                $customer->setProfilePhoto($imageName);
+            }
             $customer->setPassword($this->container->get('security.encoder_factory.generic')->getEncoder($customer)->encodePassword($form['password'], ''));
             $error1 =$validator->validate($customer); 
             if(!count($error1)){

@@ -21,6 +21,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class SecurityController extends Controller
 {
+    //Functions for merchant login and logout
      /**
       * @Route ("/merchant/login",name="merchant_login");
       * @param Request $request
@@ -39,8 +40,7 @@ class SecurityController extends Controller
           
             return $this->render('@Merchant/Account/login.html.twig',array(
                 'last_username' => $lastUsername,
-                'error'=> $error,
-            ));   
+                'error'=> $error));   
             }
          catch(\Exception $exception){
             echo "Error while logging in";
