@@ -117,24 +117,18 @@ class ReportController extends Controller
      */
     public function indexAction(Request $request,$id)
     { 
-       $response=""; 
-        try{   
+      
         // ask the service for a Excel5    
-       $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
-        
-//         $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
-//         $writer->save('stock-invoice-file.xls');
-   
+        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
         $phpExcelObject->getDefaultStyle()->getFont()->setName('Arial Black');
         $phpExcelObject->getDefaultStyle()->getFont()->setSize(12);
         $phpExcelObject->getProperties()->setCreator("liuggio")    
         ->setSubject("Product Document")
         ->setDescription("Stock Document, generated using PHP classes.");
        
-      //For stock report
+        //For stock report
         $em = $this->getDoctrine()->getManager();     
         $product = $em->getRepository('Model:Merchant')->findAllDetails(['id'=> $id]);  
-       
         $phpExcelObject->setActiveSheetIndex(0);
         $sheet = $phpExcelObject->getActiveSheet(0);
         $sheet
@@ -142,7 +136,7 @@ class ReportController extends Controller
         ->setCellValue('B1', 'ProductIMEI')
         ->setCellValue('C1', 'ProductCount')
         ->setCellValue('D1', 'Remaining');    
-        $sheet->setTitle("Stock");
+        $sheet->setTitle("Stock"); 
         $rowCount = 2;
         foreach ($product as $value){
              $phpExcelObject->getActiveSheet(0)->SetCellValue('A'.$rowCount, $value['productName']);
@@ -153,15 +147,13 @@ class ReportController extends Controller
         //For invoice report
            $objWorkSheet = $phpExcelObject->createSheet(1)->setTitle("Invoice");
            $objWorkSheet  = $phpExcelObject->getSheet(1);
-     
            $objWorkSheet->setCellValue('A1', 'Customer Name')
           ->setCellValue('B1', 'Product Name')
           ->setCellValue('C1', 'Price')
           ->setCellValue('D1', 'Ordered Date')
           ->setCellValue('E1', 'Shipping Address');   
           $em = $this->getDoctrine()->getManager();
-          $invoice = $em->getRepository('Model:ProductOrderDetail')->findInvoiceDetails(['id'=> $id]); 
-          dump($invoice);die;
+          $invoice = $em->getRepository('Model:Merchant')->findInvoiceDetails(['id'=> $id]);  
           $rowCount = 2;
           foreach ($invoice as $value){
               $phpExcelObject->getSheet(1)->SetCellValue('A'.$rowCount, $value['fname']);
@@ -173,7 +165,7 @@ class ReportController extends Controller
           }
         // create the writer
         $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5'); 
-       // $writer->save('web/temp.php/stock-invoice-file.xls');
+        $writer->save('temp/stock-invoice-file1.xls');
         // create the response
         $response = $this->get('phpexcel')->createStreamedResponse($writer);
         // adding headers
@@ -182,13 +174,10 @@ class ReportController extends Controller
         $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
         $response->headers->set('Pragma', 'public');
         $response->headers->set('Cache-Control', 'maxage=1');
-
         $response->headers->set('Content-Disposition', $dispositionHeader);   
+      
+        return new Response("Excel sheet generated");
         return $response; 
-        }catch(\Exception $exception){        
-            echo " Error in excel sheet generation";
-        } 
-       return new Response("hii");    
     }
     //Function for generating order pdf info
     /**
