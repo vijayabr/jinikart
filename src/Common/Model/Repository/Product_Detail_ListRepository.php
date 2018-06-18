@@ -21,9 +21,8 @@ class Product_Detail_ListRepository extends \Doctrine\ORM\EntityRepository
         ->leftJoin('p.brandId', 'b')
         ->leftJoin('p.productDescriptionId', 'pd')
         ->orderBy('p.createdAt', 'desc');
-        
-        foreach ($filterData as $filter => $data) {
-            if (isset($data) && !empty($data) ) {
+            foreach ($filterData as $filter => $data) {
+            if (isset($data) && !empty($data) ) {                
                 switch ($filter) {
                     case 'minprice':
                         $filterQuery = $filterQuery->andWhere('p.productPrice  >=:minprice')

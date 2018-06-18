@@ -57,22 +57,33 @@ class ProductController extends Controller
         $customer = $this->getUser();
         $productsearch=$this->formBuilding();
         $productsearch->handleRequest($request);
+    
         try{         
             if($productsearch->isSubmitted()){
+                
                 $max=$productsearch->getData()["max"];
                 $min=$productsearch->getData()["min"];
                 $brand=$productsearch->getData()["brand"];
                 $keyword=$productsearch->getData()["keyword"];
-         
+                if($brand){
+                    $brandId=$brand->getId();
+                }
+                else{
+                    $brandId =null;
+                }
+                
+       
                 $em = $this->getDoctrine()->getManager();
                 $merchant = $this->getDoctrine()->getRepository('Model:Merchant')->findAll();
                 $brands = $this->getDoctrine()->getRepository('Model:Brand')->brandNameList();
-                $categorys = $this->getDoctrine()->getRepository('Model:Category')->categoryNameList();        
-              
+                $categorys = $this->getDoctrine()->getRepository('Model:Category')->categoryNameList(); 
+                $sortedlist= array('brand'=>$brandId,'min'=>$min,'max'=>$max,'keyword'=>$keyword);
+                $products = $em->getRepository('Model:Product')->quicksearch($sortedlist);
+                return $this->render("@Customer/Default/productList.html.twig",array('customer'=> $customer,'products'=> $products,'brand'=>$brands,'category'=>$categorys,'merchants'=>$merchant));
             }            
         }
         catch (\Exception $exception) {
-            echo "Error Occured in Homepage";
+            echo "Error Occured in quick product search";
          }
         return $this->render("@Customer/Default/homepage.html.twig",array('form' => $productsearch->createView(),'customer'=>$customer));      
       }

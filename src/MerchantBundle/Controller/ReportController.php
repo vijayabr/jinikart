@@ -185,11 +185,12 @@ class ReportController extends Controller
         $response->headers->set('Cache-Control', 'maxage=1');
         $response->headers->set('Content-Disposition', $dispositionHeader);
         
-        return $response;
+        
         }catch(\Exception $exception){
             
             echo " Error in excel sheet generation";
         }
+        return new Response("success");
     }
     
     /**

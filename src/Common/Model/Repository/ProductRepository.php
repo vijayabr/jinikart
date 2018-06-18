@@ -16,56 +16,45 @@ use Common\Model\Merchant;
  */
 class ProductRepository extends \Doctrine\ORM\EntityRepository
 {
-
-    //Query to filter and retrieve products based on brand, min price and max price 
-    public function productsearchBasedonBrand($brand,$min,$max) {
-            $products = $this->getEntityManager()
-          ->createQuery(
-            'SELECT p FROM Model:Product p WHERE p.brandId =:brand AND p.productPrice >=:min AND p.productPrice <= :max ORDER BY p.productName ASC')
-            ->setParameter('brand', $brand)
-            ->setParameter('min', $min)
-            ->setParameter('max', $max)
-           ->getResult();
-            return $products;
-       
-            
-    }
-    //Query for product search without criteria
-    public function productsearch() {
-        $products = $this->getEntityManager()
-        ->createQuery(
-            'SELECT p FROM Model:Product p ORDER BY p.productName ASC')
-            ->getResult();
-            return $products;
-    }
-    //Query for product search with brand
-    public function brandkeysearch($brand,$keyword) {
-       
+    //Query for product search quick
+    public function quicksearch($filterData) {
         $em = $this->getEntityManager();
-        $qb = $em->createQueryBuilder();
-        $qb->select('p.productName,p.productPrice,d.color,d.camera,d.ramSize,d.productCompleteInfo,br.brandName,cat.categoryName')
+        $filterQuery = $em->createQueryBuilder()
+               ->select('p.productName,p.productPrice,d.color,d.camera,d.ramSize,d.productCompleteInfo,br.brandName,cat.categoryName')
         ->from('Common\Model\Product','p')
         ->innerjoin('p.categoryId','cat')
         ->innerjoin('p.brandId','br')
-        ->join('p.productDescriptionId','d')
-        ->Where('br.brandName=:brand')
-        ->orWhere('d.color LIKE :color')
-        ->orwhere('p.productName LIKE :name')
-        ->orWhere('p.productPrice LIKE :price')
-        ->orWhere('d.camera LIKE :cam') 
-        ->orWhere('cat.categoryName LIKE :cat')
-      
-        ->setParameter('cat',$keyword)
-        ->setParameter('price',$keyword)
-        ->setParameter('brand',$brand->getbrandName())
-        ->setParameter('name',$keyword)   
-        ->setParameter('color',$keyword)   
-        ->setParameter('cam',$keyword);
-        $query=$qb->getQuery();
-        dump($query);
-        $result=$query->getResult();
-        dump($result);die;
-        return $result;
+        ->join('p.productDescriptionId','d');
+        
+        foreach ($filterData as $filter => $data) {
+            if (isset($data) && !empty($data) ) {
+                switch ($filter) {                  
+                    case 'min':
+                        $filterQuery = $filterQuery->andWhere('p.productPrice  >=:minprice')
+                        ->setParameter('minprice', $data);
+                        break;         
+                    case 'max':
+                        $filterQuery = $filterQuery->andWhere('p.productPrice  <=:maxprice')
+                        ->setParameter('maxprice', $data);
+                        break;  
+                    case 'brand':
+                        $filterQuery=$filterQuery->andWhere('p.brandId =:brand')
+                        ->setParameter('brand', $data);
+                        break;
+                    case 'keyword':
+                            $filterQuery = $filterQuery                            
+                            ->andWhere('p.productName = :keyword 
+                              or d.color = :keyword 
+                              or cat.categoryName = :keyword
+                              or d.productCompleteInfo LIKE :keyword
+                              or d.ramSize = :keyword')        
+                            ->setParameter('keyword',$data);                           
+                      break;
+                  }
+            } 
+        }        
+        $filterQuery = $filterQuery->getQuery()->useQueryCache(true);
+        return $filterQuery->getResult();
         
     }
     
