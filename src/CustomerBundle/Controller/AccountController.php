@@ -196,8 +196,8 @@ class AccountController extends Controller
 
             echo "Error Occured in Customer Profile Display";
         }
-        return $this->render("@Customer/Account/profile.html.twig",array('form' => $form->createView(),'imageform'=> $imageform->createView(),'message'=>"",'image'=>$image));  
 
+        return $this->render("@Customer/Account/profile.html.twig",array('form' => $form->createView(),'imageform'=> $imageform->createView(),'message'=>"",'image'=>$image));  
     }    
     //Function for forgot password (changing password)
     /**

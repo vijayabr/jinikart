@@ -58,7 +58,7 @@ class ReportController extends Controller
         }
         return new Response("save the file");
     }
-     
+
     //Function for generating order pdf info
     /**
      * @Route("/merchant/orderInvoice/{order}",name="orderinvoicePdf_page");

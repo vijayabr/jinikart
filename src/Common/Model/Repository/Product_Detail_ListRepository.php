@@ -138,4 +138,18 @@ class Product_Detail_ListRepository extends \Doctrine\ORM\EntityRepository
         
         return $result;
     }
+    //To find the total number of products added by the product id
+    public function findProductCount($productId)
+    {
+    
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+        $qb->select('count(pi.productId)')
+        ->from('Common\Model\Product_Detail_List','pi')
+        ->where('pi.productId=:id')
+        ->setParameter('id',(int)$productId);
+        $query=$qb->getQuery();
+        $result=$query->getResult();
+        return $result;
+    }
 }

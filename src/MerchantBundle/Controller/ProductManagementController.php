@@ -37,7 +37,7 @@ class ProductManagementController extends Controller
               //if form is successfully submitted
                  if ($form->isSubmitted() && $form->isValid()) {  
                      //fetching data from the form
-                 $em = $this->getDoctrine()->getManager();         
+                 $em = $this->getDoctrine()->getManager();        
 
                  $name=$form->getData()["product_name"];
                  $price = $form->getData()["product_price"];
@@ -47,13 +47,9 @@ class ProductManagementController extends Controller
                  $brand = $form->getData()["brandName"];
                  $color = $form->getData()["color"];
                  $ram = $form->getData()["ram_size"];
-                 $cam = $form->getData()["camera"];               
+                 $cam = $form->getData()["camera"];          
                  $info = $form->getData()["product_complete_info"];
                  $image = $form->getData()["product_photo"];
-                 
-                 $merchant= new Merchant();
-                 $merchant=$em->getRepository('Model:Merchant')->findOneBy(['id'=>$id]);
-               
                  $descp = new Product_Description();  //setting product description(Product Description Table)
                  $descp->setColor($color);
                  $descp->setRamSize($ram);
@@ -61,9 +57,10 @@ class ProductManagementController extends Controller
                  $descp->setProductCompleteInfo($info);            
                  $em->persist($descp);
                  $em->flush();           
-                 
+                
                  $product= new Product();    //setting product info(Product Table)
                  $product->setProductName($name);
+                
                  $product->setProductDiscount($discount);
                  $product->setProductPrice($price);
                  $product->setBrandId($brand);
@@ -71,17 +68,16 @@ class ProductManagementController extends Controller
                  $product->setProductDescriptionId($descp); 
                  $em->persist($product);
                  $em->flush();
-                
+              
                  $photo= new Product_Photo();
-            
-                 //Uploading image
-                 if($image){
-                     $imageName =  $product->getProductName(). '.' . $image->guessExtension();                     
-                     $dest ='productImage';
+                  //Uploading image
+                  if($image){
+                      $imageName =  $product->getProductName(). '.' . $image->guessExtension();                     
+                      $dest ='productImage';
                      $fileUpload = new ImageUploader($this->container);
                      $fileUpload->imageFileUpload($image,$imageName,$dest);
-                 }    
-                 //$image->move($this->getParameter('product_image_directory'),$imageName);
+                  }    
+                 $image->move($this->getParameter('product_image_directory'),$imageName);
                  $photo->setPhotoName($imageName);
                  $photo->setProductId($product);
                  $em->persist($photo);
@@ -91,14 +87,20 @@ class ProductManagementController extends Controller
                  $imei1->setProductId($product); 
                  $imei1->setMerchantId($merchant);
                  $em->persist($imei1);
-                 $em->flush();                   
+                 $em->flush();    
+                 
+                 $count=$em->getRepository('Model:Product_Detail_list')->findProductcount(['productId'=>$product->getId()]);
+                 $product->setProductCount((int)$count);        
+                 $em->persist($product);         
+                 $em->flush();
+              
                  return $this->render("@Merchant/Default/homepage.html.twig",array('merchant'=>$merchant));              
-            }
-            return $this->render("@Merchant/Default/add.html.twig",array('form'=> $form->createView(),'merchant'=>$merchant));
+               }    
                  }catch(\Exception $exception){ 
                      echo " Error while adding products";
-        }
-  }
+                 }
+                 return $this->render("@Merchant/Default/add.html.twig",array('form'=> $form->createView(),'merchant'=>$merchant));
+    }
   //Function for listing added products
     /**
      * @Route("/merchant/list/{id}",name="list_products");

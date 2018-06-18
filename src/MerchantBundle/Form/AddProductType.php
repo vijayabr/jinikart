@@ -15,9 +15,7 @@ class AddProductType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('merchantId',NUmberType::class,array('attr'=> array('class' => 'Model:Product_Detail_List','placeholder'=>"number",
-            'label' => 'Merchant Id: ')))
-            ->add('product_name',TextType::class,array('attr'=> array('class' => 'Model:Product_Detail_List','placeholder'=>"product name",
+        $builder->add('product_name',TextType::class,array('attr'=> array('class' => 'Model:Product_Detail_List','placeholder'=>"product name",
                 'label' => 'Product Name: ')))
                 ->add('product_price',TextType::class,array('attr'=> array('class' => 'Model:Product_Detail_List','placeholder'=>"price in rupees",
                     'label' => 'Product Price: ')))
@@ -43,7 +41,6 @@ class AddProductType extends AbstractType
         ->add('camera',TextType::class,array('attr'=> array('class' => 'Model:Product_Description',
             'label'=> 'Camera:'),
         ))
-        ->add('product_count',TextType::class,array('label'=> 'Product Count:'))
         ->add('product_complete_info',TextareaType::class,array('attr'=> array('class' => 'Model:Product_Description',
             'label'=> 'Description:'),
         ))
