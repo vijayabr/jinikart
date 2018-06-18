@@ -90,10 +90,9 @@ class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('pod.cartListId', 'cl')
             ->leftJoin('pod.productOrderId', 'po')
             ->leftJoin('po.customerId', 'c')
-            ->leftJoin('cl.productIMEI', 'pi')
-            ->leftJoin('pi.productId', 'p')
-         
-            ->andWhere('pi.merchantId=:merchant')
+            ->leftJoin('cl.productImeiId', 'pi')
+            ->leftJoin('pi.productId', 'p')         
+            ->andWhere('pi.merchantId = :merchant')
             ->setParameter('merchant', $merchant);
             $query = $query->getQuery()->useQueryCache(true);
             return $query->getResult();
@@ -105,9 +104,9 @@ class ProductOrderDetailRepository extends \Doctrine\ORM\EntityRepository
         ->leftJoin('pod.cartListId', 'cl')
         ->leftJoin('pod.productOrderId', 'po')
         ->leftJoin('po.customerId', 'c')
-        ->leftJoin('cl.productIMEI', 'pi')
+        ->leftJoin('cl.productImeiId', 'pi')
         ->leftJoin('pi.productId', 'p')
-        ->andWhere('pod.orderStatus=:status')
+        ->andWhere('po.orderStatus=:status')
         ->setParameter('status', 'processed')
         ->andWhere('pod.deliveryDate=:date')
         ->setParameter('date', $time);        

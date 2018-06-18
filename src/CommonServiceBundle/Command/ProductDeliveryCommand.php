@@ -23,10 +23,10 @@ class ProductDeliveryCommand extends ContainerAwareCommand
        $datetime= $datetime->sub(new \DateInterval('P1D'));
        $productOrderDetail=$em->getRepository('Model:ProductOrderDetail')->productDelivered($datetime);
        foreach ($productOrderDetail as $productOrder){
-           $productOrderDetail=$em->getRepository('Model:ProductOrderDetail')->find($productOrder);
-           $productOrderDetail->setOrderStatus("Delivered");
-           $productOrderDetail->setDeliveryDate($time);
-           $em->persist($productOrderDetail);
+           $productOrder=$em->getRepository('Model:ProductOrderDetail')->find($productOrder);
+           $productOrder->setOrderStatus("Delivered");
+           $productOrder->setDeliveryDate($time);
+           $em->persist($productOrder);
            $em->flush();
        }
        $productOrderDetail=$em->getRepository('Model:ProductOrderDetail')->productDelivered($time);

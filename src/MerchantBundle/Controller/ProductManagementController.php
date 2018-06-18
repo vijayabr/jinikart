@@ -164,38 +164,27 @@ public function updateAction(Request $request)
                   $product= new Product();
                   $product=$em->getRepository('Model:Product')->findOneBy(['id'=>'1']);
                   $descp=new Product_Description();
-                  $descp=$em->getRepository('Model:Product_Description')->findOneBy(['id'=>'1']);
-                  //getting data from update form 
-                  $name=$form->getData()["product_name"];
-                  $price = $form->getData()["product_price"];
-                  $discount = $form->getData()["product_discount"];
-                  $category = $form->getData()["categoryName"];
-                  $brand = $form->getData()["brandName"];
-                  $color = $form->getData()["color"];
-                  $ram = $form->getData()["ram_size"];
-                  $cam = $form->getData()["camera"];
-                  $info = $form->getData()["product_complete_info"];
-                  $image = $form->getData()["product_photo"];    
+                  $descp=$em->getRepository('Model:Product_Description')->findOneBy(['id'=>'1']);     
                   //if new data entered then persist
                   if($product->getProductName()!= $name||$product->getProductPrice()!= $price||
                       $product->getDiscount()!= $discount||$descp->getColor()!=$color||$descp->getRamSize()!=$ram||
                       $descp->getCamera()!=$cam||$descp->getProductCompleteInfo()!=$info)
-                  {                    
-                    $descp->setColor($color);
-                    $descp->setRamSize($ram);
-                    $descp->setCamera($cam);
-                    $descp->setProductCompleteInfo($info);                    
-                    $em->persist($descp);
-                    $em->flush();                   
+                     {                    
+                      $descp->setColor($form->getData()["color"]);
+                      $descp->setRamSize($form->getData()["ram_size"]);
+                      $descp->setCamera($form->getData()["camera"]);
+                      $descp->setProductCompleteInfo($form->getData()["product_complete_info"]);                    
+                      $em->persist($descp);
+                      $em->flush();                   
                 
-                    $product->setProductName($name);
-                    $product->setProductDiscount($discount);
-                    $product->setProductPrice($price);
-                    $product->setBrandId($brand);
-                    $product->setCategoryId($category);
-                    $product->setProductDescriptionId($descp);                     
-                    $em->persist($product);
-                    $em->flush();
+                       $product->setProductName($form->getData()["product_name"]);
+                       $product->setProductDiscount($form->getData()["product_discount"]);
+                       $product->setProductPrice($form->getData()["product_price"]);
+                       $product->setBrandId($form->getData()["brandName"]);
+                       $product->setCategoryId($form->getData()["categoryName"]);
+                       $product->setProductDescriptionId($descp);                     
+                       $em->persist($product);
+                       $em->flush();
                   }
                   return $this->render("@Merchant/Default/updated.html.twig",array('product'=>$product,'descp'=>$descp,'merchant'=>$merchant));
                }
